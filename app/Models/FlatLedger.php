@@ -5,12 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RentalAgreementDetails extends Model
+class FlatLedger extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'rental_agreement_id',
+        'client_id',
+        'auth_id',
+        'agreement_id',
         'tenant_id',
         'flat_id',
+        'rent',
+        'service_charge',
+        'utility_bill',
+        'date',
     ];
 }

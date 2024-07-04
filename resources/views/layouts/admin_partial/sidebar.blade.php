@@ -184,7 +184,7 @@
                         </ul>
                     </li>
                     {{-- Building Management ends here --}}
-                    
+
                     {{-- flat Management ends here --}}
                     <li
                         class="nav-item {{ Request::routeIs('flat.index') || Request::routeIs('flat.create') ? 'menu-open active' : '' }}">
@@ -243,34 +243,63 @@
                     </li>
                     {{-- tenant Management ends here --}}
 
-                      {{-- Rental Agreement ends here --}}
-                      <li
-                      class="nav-item {{ Request::routeIs('rental-agreement.index') || Request::routeIs('rental-agreement.create') ? 'menu-open active' : '' }}">
-                      <a href="#" class="nav-link">
-                          <i class="nav-icon fas fa-circle"></i>
-                          <p>
-                              Rental Agreement
-                              <i class="right fas fa-angle-left"></i>
-                          </p>
-                      </a>
-                      <ul class="nav nav-treeview ml-3">
-                          <li class="nav-item">
-                              <a href="{{ route('rental-agreement.create') }}"
-                                  class="nav-link {{ Request::routeIs('rental-agreement.create') ? 'active' : '' }}">
-                                  <i class="far fa-dot-circle nav-icon"></i>
-                                  <p>Add New</p>
-                              </a>
-                          </li>
-                          <li class="nav-item">
-                              <a href="{{ route('rental-agreement.index') }}"
-                                  class="nav-link {{ Request::routeIs('rental-agreement.index') ? 'active' : '' }}">
-                                  <i class="far fa-dot-circle nav-icon"></i>
-                                  <p>All Rental Agreement</p>
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-                  {{-- Rental Agreement ends here --}}
+                    {{-- Rental Agreement ends here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('rental-agreement.index') || Request::routeIs('rental-agreement.create') ? 'menu-open active' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Rental Agreement
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('rental-agreement.create') }}"
+                                    class="nav-link {{ Request::routeIs('rental-agreement.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Add New</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('rental-agreement.index') }}"
+                                    class="nav-link {{ Request::routeIs('rental-agreement.index') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Rental Agreement</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- Rental Agreement ends here --}}
+
+                    {{-- Rental Agreement ends here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('bill-setup.index') || Request::routeIs('bill-setup.create') ? 'menu-open active' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Bill Setup
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('bill-setup.create') }}"
+                                    class="nav-link {{ Request::routeIs('bill-setup.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Generate Bill</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('bill-setup.index') }}"
+                                    class="nav-link {{ Request::routeIs('bill-setup.index') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Bills</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- Rental Agreement ends here --}}
 
                     {{-- User management start here --}}
                     {{-- <li

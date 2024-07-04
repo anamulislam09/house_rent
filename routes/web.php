@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BillSetupController;
 use App\Http\Controllers\BlanceController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\CategoryController;
@@ -113,8 +114,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/manage-flat', [FlatController::class, 'Index'])->name('flat.index');
     Route::get('/manage-flat/create', [FlatController::class, 'Create'])->name('flat.create');
     Route::post('/manage-flat/store', [FlatController::class, 'Store'])->name('flat.store');
-    Route::get('/manage-flat/single-create', [FlatController::class, 'SingleCreate'])->name('flat.singlecreate');
-    Route::post('/manage-flat/single-store', [FlatController::class, 'SingleStore'])->name('flat.singlestore');
+    Route::get('/manage-flat/edit/{id}', [FlatController::class, 'Edit']);
+    Route::post('/manage-flat/update', [FlatController::class, 'Update'])->name('flat.singlestore');
 
     // Tenant setup route 
     Route::get('/tenant', [TenantController::class, 'Index'])->name('tenant.index');
@@ -134,6 +135,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     // get data using ajax
     Route::post('/get-flat', [RentalAgreementController::class, 'getFlat']);
     Route::post('/get-flat-info', [RentalAgreementController::class, 'getFlatInfo']);
+
+    // Bill Setup route 
+    Route::get('/bill-setup', [BillSetupController::class, 'Index'])->name('bill-setup.index');
+    Route::get('/bill-setup/filter/{tenantId?}/{date?}', [BillSetupController::class, 'filterBills']); //bill setup filter using ajax 
+    Route::get('/bill-setup/create', [BillSetupController::class, 'Create'])->name('bill-setup.create');
+    Route::post('/bill-setup/store', [BillSetupController::class, 'Store'])->name('bill-setup.store');
+    // Route::get('/bill-setup/edit/{id}', [UserController::class, 'Edit']);
+    // Route::post('/bill-setup/update', [UserController::class, 'Update'])->name('users.update');
+    // Route::post('/bill-setup/delete', [UserController::class, 'Destroy'])->name('users.delete');
 
     // users route 
     Route::get('/users', [UserController::class, 'Index'])->name('users.index');

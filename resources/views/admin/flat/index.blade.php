@@ -59,8 +59,9 @@
                                             <th class="text-center">Flat Rent</th>
                                             <th class="text-center">Service Charge</th>
                                             <th class="text-center">Utility Bill</th>
-                                            {{-- <th class="text-center">Status</th> --}}
-                                            {{-- <th>Action</th> --}}
+                                            <th class="text-center">Status</th>
+                                            <th class="text-center">Booking Status</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
 
@@ -82,6 +83,24 @@
                                                 <td>{{ $item->flat_rent }}</td>
                                                 <td>{{ $item->service_charge }}</td>
                                                 <td>{{ $item->utility_bill }}</td>
+
+                                                <td>
+                                                    @if ($item->status == 1)
+                                                        <span class="badge badge-success">Active</span>
+                                                        @else
+                                                        <span class="badge badge-danger">Inactive</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->booking_status == 1)
+                                                        <span class="badge badge-success">Booked</span>
+                                                        @else
+                                                        <span class="badge badge-danger">Available</span>
+                                                    @endif
+                                                </td>
+                                                <td>    
+                                                    <a href="{{route('')}}" class="btn btn-primary btn-sm text"> <i class="fas fa-edit"></i> </a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

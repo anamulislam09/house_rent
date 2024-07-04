@@ -22,6 +22,8 @@ return new class extends Migration
             $table->double('service_charge', 20, 2)->default(0);
             $table->double('utility_bill', 20, 2)->default(0);
             $table->string('date')->nullable();
+            $table->tinyInteger('status')->default(1);
+            $table->string('booking_status')->default(0);
              $table->timestamps();
         });
     }

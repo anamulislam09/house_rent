@@ -6,6 +6,7 @@ use App\Models\AdvancedAmount;
 use App\Models\Building;
 use App\Models\Client;
 use App\Models\Flat;
+use App\Models\FlatLedger;
 use App\Models\RentalAgreement;
 use App\Models\RentalAgreementDetails;
 use App\Models\Tenant;
@@ -97,7 +98,22 @@ class RentalAgreementController extends Controller
             foreach ($flat_ids as $flat_id) {
                 RentalAgreementDetails::create([
                     'rental_agreement_id' => $rental_agreement_id,
+                    'tenant_id' => $tenant_id,
                     'flat_id' => $flat_id,
+                ]);
+            }
+            foreach ($flat_ids as $flat_id) {
+                $flat_info = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $flat_id)->first();
+                FlatLedger::create([
+                    'client_id' => Auth::guard('admin')->user()->id,
+                    'auth_id' => Auth::guard('admin')->user()->id,
+                    'agreement_id' => $rental_agreement_id,
+                    'tenant_id' => $tenant_id,
+                    'flat_id' => $flat_id,
+                    'rent' => $flat_info->flat_rent,
+                    'service_charge' => $flat_info->service_charge,
+                    'utility_bill' => $flat_info->utility_bill,
+                    'date' => date('m-Y'),
                 ]);
             }
 
@@ -117,23 +133,23 @@ class RentalAgreementController extends Controller
     }
 
 
-     // MOney Receipt
-     public function moneyReceipt($id)
-     {
-         $agreementInfo = RentalAgreement::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
-         $inv = AdvancedAmount::where('client_id', Auth::guard('admin')->user()->id)->where('agreement_id', $agreementInfo->id)->first();
-         $tenant = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $agreementInfo->tenant_id)->first();
-         $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
- 
-         $data = [
-             'agreementInfo' => $agreementInfo,
-             'inv' => $inv,
-             'tenant' => $tenant,
-             'client' => $client,
-         ];
-         $pdf = PDF::loadView('admin.voucher.money_receipt', $data);
-         return $pdf->stream('Money_Receipt.pdf');
-     }
+    // MOney Receipt
+    public function moneyReceipt($id)
+    {
+        $agreementInfo = RentalAgreement::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
+        $inv = AdvancedAmount::where('client_id', Auth::guard('admin')->user()->id)->where('agreement_id', $agreementInfo->id)->first();
+        $tenant = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $agreementInfo->tenant_id)->first();
+        $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
+
+        $data = [
+            'agreementInfo' => $agreementInfo,
+            'inv' => $inv,
+            'tenant' => $tenant,
+            'client' => $client,
+        ];
+        $pdf = PDF::loadView('admin.voucher.money_receipt', $data);
+        return $pdf->stream('Money_Receipt.pdf');
+    }
 
 
     public function edit($id)
