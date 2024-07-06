@@ -272,7 +272,7 @@
                     </li>
                     {{-- Rental Agreement ends here --}}
 
-                    {{-- Rental Agreement ends here --}}
+                    {{-- Bill Setup start here --}}
                     <li
                         class="nav-item {{ Request::routeIs('bill-setup.index') || Request::routeIs('bill-setup.create') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
@@ -299,7 +299,36 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- Rental Agreement ends here --}}
+                    {{-- Bill Setup ends here --}}
+
+                    {{-- Bill Setup start here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('collection.index') || Request::routeIs('collection.create') ? 'menu-open active' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Collections
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('collection.create') }}"
+                                    class="nav-link {{ Request::routeIs('collection.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>New Collection</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('collection.index') }}"
+                                    class="nav-link {{ Request::routeIs('collection.index') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Collection</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- Bill Setup ends here --}}
 
                     {{-- User management start here --}}
                     {{-- <li

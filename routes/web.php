@@ -5,6 +5,7 @@ use App\Http\Controllers\BillSetupController;
 use App\Http\Controllers\BlanceController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ExpDetailController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpSetupController;
@@ -115,7 +116,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/manage-flat/create', [FlatController::class, 'Create'])->name('flat.create');
     Route::post('/manage-flat/store', [FlatController::class, 'Store'])->name('flat.store');
     Route::get('/manage-flat/edit/{id}', [FlatController::class, 'Edit']);
-    Route::post('/manage-flat/update', [FlatController::class, 'Update'])->name('flat.singlestore');
+    Route::post('/manage-flat/update', [FlatController::class, 'Update'])->name('flat.update');
 
     // Tenant setup route 
     Route::get('/tenant', [TenantController::class, 'Index'])->name('tenant.index');
@@ -141,9 +142,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/bill-setup/filter/{tenantId?}/{date?}', [BillSetupController::class, 'filterBills']); //bill setup filter using ajax 
     Route::get('/bill-setup/create', [BillSetupController::class, 'Create'])->name('bill-setup.create');
     Route::post('/bill-setup/store', [BillSetupController::class, 'Store'])->name('bill-setup.store');
-    // Route::get('/bill-setup/edit/{id}', [UserController::class, 'Edit']);
-    // Route::post('/bill-setup/update', [UserController::class, 'Update'])->name('users.update');
-    // Route::post('/bill-setup/delete', [UserController::class, 'Destroy'])->name('users.delete');
+
+    // Collection Setup route 
+    Route::get('/collection', [CollectionController::class, 'Index'])->name('collection.index');
+    Route::get('/collection-all/filter/{tenantId?}/{date?}', [CollectionController::class, 'AllCollectionfilter']); //bill setup filter using ajax 
+    Route::get('/collection/create', [CollectionController::class, 'Create'])->name('collection.create');
+    Route::get('/collection/filter/{tenantId?}/{date?}', [CollectionController::class, 'Collectionfilter']); //bill setup filter using ajax 
+    Route::post('/collection/store', [CollectionController::class, 'Store'])->name('collection.store');
 
     // users route 
     Route::get('/users', [UserController::class, 'Index'])->name('users.index');

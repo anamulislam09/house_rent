@@ -87,41 +87,39 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <!-- /.card-header -->
-                            <div class="card-body">
+                            <div class="card-body" id="table">
+                                <form action="{{ route('collection.store') }}" method="post">
+                                    @csrf
                                 <div class="table-responsive">
                                     <table id="billsTable" class="table table-bordered table-striped mt-3">
                                         <thead>
                                             <tr>
                                                 <th> SL</th>
-                                                {{-- <th>Tenant Name</th> --}}
+                                                <th>Tenant Name</th>
                                                 <th>Flat Name</th>
-                                                {{-- <th>Building Name</th> --}}
+                                                <th>Building Name</th>
                                                 <th>Month</th>
                                                 <th class="text-right">Total Rent</th>
+                                                <th class="text-center">Collection</th>
                                             </tr>
-                                        </thead>
-                                        <tbody id="billsTable">
-                                            @foreach ($bills as $key => $item)
-                                                @php
-                                                    $flat = App\Models\Flat::where('client_id', $item->client_id)->where('id', $item->flat_id)->first();
-                                                    $tenant = App\Models\Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $item->tenant_id)->value('name');
-                                                    $building = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $flat->building_id)->value('name');
-                                                @endphp
-                                                <tr>
-                                                    <td class="text-center">{{ $key + 1 }}</td>
-                                                    {{-- <td>{{ $tenant }}</td> --}}
-                                                    <td>{{ $flat->flat_name }}</td>
-                                                    {{-- <td>{{ $building }}</td> --}}
-                                                    <td>{{ date('F', strtotime($item->bill_setup_date)) }}</td>
-                                                    <td class="text-right">{{ $item->total_rent }}</td>
-                                                </tr>
-                                            @endforeach
+                                        <tbody>
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="6"></td>
+                                                <td class="text-right">
+                                                    <input type="submit" value="Submit" class="btn btn-primary">
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                        
                                     </table>
                                 </div>
+                            </form>
                             </div>
-                            <!-- /.card-body -->
                         </div>
                     </div>
                 </div>
@@ -144,27 +142,47 @@
                 input.value = currentMonth;
             });
 
+            $('#table').hide(); //hide table
             $('#filterButton').on('click', function() {
                 const tenantId = $('#tenant').val();
                 const date = $('#date').val();
+                $('#table').show(); //show table
 
                 $.ajax({
-                    url: `/admin/bill-setup/filter/${tenantId}/${date}`,
+                    url: `/admin/collection/filter/${tenantId}/${date}`,
                     method: 'GET',
                     success: function(response) {
                         let tbody = '';
-                        response.forEach((item, index) => {
-                            const flat_name = item.flat_name;
-                            tbody += `
-                                <tr>
-                                    <td class="text-center">${index + 1}</td>
-                                    <td>${flat_name}</td>
-                                    <td>${new Date(item.bill_setup_date).toLocaleString('default', { month: 'long' })}</td>
-                                    <td class="text-right">${item.total_rent}</td>
-                                </tr>
-                            `;
+                        $('tbody').empty();
+                        // Populate table with new data
+                        response.forEach((bill, index) => {
+                            const billDate = new Date(bill.bill_setup_date);
+                            const options = {
+                                month: 'long'
+                            };
+                            const formattedDate = billDate.toLocaleDateString('en-US',
+                                options);
+                            $('tbody').append(`
+                            <tr>
+                                <input type="hidden" name="bill_id[]" value="${bill.id}">
+                                <input type="hidden" name="agreement_id[]" value="${bill.agreement_id}">
+                                <input type="hidden" name="tenant_id[]" value="${bill.tenant_id}">
+                                <input type="hidden" name="flat_id[]" value="${bill.flat_id}">
+                                <input type="hidden" name="flat_rent[]" value="${bill.flat_rent}">
+                                <input type="hidden" name="service_charge[]" value="${bill.service_charge}">
+                                <input type="hidden" name="utility_bill[]" value="${bill.utility_bill}">
+                                <input type="hidden" name="total_rent[]" value="${bill.total_rent}">
+                                <input type="hidden" name="bill_setup_date[]" value="${bill.bill_setup_date}">
+                            <td class="text-center">${index + 1}</td>
+                            <td>${bill.tenant_name}</td>
+                            <td>${bill.flat_name}</td>
+                            <td>${bill.building_name}</td>
+                            <td>${formattedDate}</td>
+                            <td class="text-right">${bill.total_rent}</td>
+                            <td class="text-right"></thead> <input type="text" class="form-control" name="total_collection[]" required></td>
+                        </tr>
+                    `);
                         });
-                        $('#billsTable tbody').html(tbody);
                     }
                 });
             });

@@ -52,6 +52,25 @@ class FlatController extends Controller
         }
     }
 
+    // create method start here 
+    public function Edit($id)
+    {
+        $flat = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
+        $building = Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $flat->building_id)->first();
+        return view('admin.flat.edit', compact('flat', 'building'));
+    }
+    // create method ends here 
+
+    // storer method start here 
+    public function Update(Request $request)
+    {
+        $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $request->id)->first();
+        $data['status'] = $request->status ? 1 : 0;
+        $data->save();
+
+        return redirect()->route('flat.index')->with('message', 'Flat creted successfully');
+    }
+
     // unique id serial function
     public function formatSrl($srl)
     {
@@ -70,52 +89,4 @@ class FlatController extends Controller
     }
 
     // store method ends here 
-
-    // flat single create start here
-    // public function SingleCreate()
-    // {
-    //     return view('admin.flat.single_create');
-    // }
-    // flat single create start here
-
-    // flat SingleStore start here
-    // public function SingleStore(Request $request)
-    // {
-    //     $unique_name = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('flat_name', $request->flat_name)->exists();
-    //     if ($unique_name) {
-    //         return redirect()->back()->with('message', 'Flat name already taken.');
-    //     } else {
-    //         $unique_id = Flat::where('client_id', Auth::guard('admin')->user()->id)->max('flat_id');
-    //         $flat = Flat::where('client_id', Auth::guard('admin')->user()->id)->first();
-
-    //         $zeroo = '0';
-    //         $data['flat_id'] = ($zeroo) . ++$unique_id;
-    //         $data['client_id'] = Auth::guard('admin')->user()->id;
-    //         $data['flat_name'] = $request->flat_name;
-    //         $data['floor_no'] = $request->floor_no;
-    //         $data['charge'] = "Service Charge";
-    //         $data['amount'] = $flat->amount;
-    //         $data['create_date'] = date('d');
-    //         $data['create_month'] = date('F');
-    //         $data['create_year'] = date('Y');
-
-    //         $flat = Flat::create($data);
-    //         if ($flat) {
-    //             $latest_flat = Flat::where('client_id', Auth::guard('admin')->user()->id)->latest()->first();
-    //             $user = User::insert([
-    //                 'user_id' => $latest_flat->client_id . $latest_flat->flat_id,
-    //                 'client_id' => $latest_flat->client_id,
-    //                 'flat_id' => $latest_flat->flat_id,
-    //                 'charge' => $latest_flat->charge,
-    //                 'amount' => $latest_flat->amount,
-    //             ]);
-    //             if ($user) {
-    //                 return redirect()->route('flat.index')->with('message', 'Flat creted successfully');
-    //             } else {
-    //                 return redirect()->back()->with('message', 'Something Went Wrong');
-    //             }
-    //         }
-    //     }
-    // }
-    // flat SingleStore ends here
 }

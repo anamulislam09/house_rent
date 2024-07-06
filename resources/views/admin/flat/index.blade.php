@@ -87,19 +87,24 @@
                                                 <td>
                                                     @if ($item->status == 1)
                                                         <span class="badge badge-success">Active</span>
-                                                        @else
+                                                    @else
                                                         <span class="badge badge-danger">Inactive</span>
                                                     @endif
                                                 </td>
                                                 <td>
                                                     @if ($item->booking_status == 1)
                                                         <span class="badge badge-success">Booked</span>
-                                                        @else
+                                                    @else
                                                         <span class="badge badge-danger">Available</span>
                                                     @endif
                                                 </td>
-                                                <td>    
-                                                    <a href="{{route('')}}" class="btn btn-primary btn-sm text"> <i class="fas fa-edit"></i> </a>
+                                                <td>
+                                                    {{-- <a href="" cclass="btn btn-sm btn-info edit"
+                                                    data-id="{{ $item->id }}" data-toggle="modal"
+                                                    data-target="#editAgreement"> <i class="fas fa-edit"></i> </a> --}}
+                                                    <a href="" class="btn btn-sm btn-info edit"
+                                                    data-id="{{ $item->id }}" data-toggle="modal"
+                                                    data-target="#editUser"><i class="fas fa-edit"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -112,4 +117,37 @@
             </div>
         </section>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="model-main">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Flat Edit Form</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div id="modal_body">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.js"></script>
+    <script>
+        $('body').on('click', '.edit', function() {
+            let user_id = $(this).data('id');
+            $.get("/admin/manage-flat/edit/" + user_id, function(data) {
+                $('#model-main').html(data);
+
+            })
+        })
+    </script>
 @endsection

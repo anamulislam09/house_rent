@@ -94,27 +94,43 @@
                                         <thead>
                                             <tr>
                                                 <th> SL</th>
-                                                {{-- <th>Tenant Name</th> --}}
+                                                <th>Tenant Name</th>
                                                 <th>Flat Name</th>
-                                                {{-- <th>Building Name</th> --}}
-                                                <th>Month</th>
+                                                <th>Building Name</th>
+                                                <th>Collection date</th>
                                                 <th class="text-right">Total Rent</th>
+                                                <th class="text-right">Total Collection</th>
+                                                <th class="text-right">Total Due</th>
                                             </tr>
                                         </thead>
                                         <tbody id="billsTable">
                                             @foreach ($bills as $key => $item)
                                                 @php
-                                                    $flat = App\Models\Flat::where('client_id', $item->client_id)->where('id', $item->flat_id)->first();
-                                                    $tenant = App\Models\Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $item->tenant_id)->value('name');
-                                                    $building = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $flat->building_id)->value('name');
+                                                    $flat = App\Models\Flat::where('client_id', $item->client_id)
+                                                        ->where('id', $item->flat_id)
+                                                        ->first();
+                                                    $tenant = App\Models\Tenant::where(
+                                                        'client_id',
+                                                        Auth::guard('admin')->user()->id,
+                                                    )
+                                                        ->where('id', $item->tenant_id)
+                                                        ->value('name');
+                                                    $building = App\Models\Building::where(
+                                                        'client_id',
+                                                        Auth::guard('admin')->user()->id,
+                                                    )
+                                                        ->where('id', $flat->building_id)
+                                                        ->value('name');
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">{{ $key + 1 }}</td>
-                                                    {{-- <td>{{ $tenant }}</td> --}}
+                                                    <td>{{ $tenant }}</td>
                                                     <td>{{ $flat->flat_name }}</td>
-                                                    {{-- <td>{{ $building }}</td> --}}
+                                                    <td>{{ $building }}</td>
                                                     <td>{{ date('F', strtotime($item->bill_setup_date)) }}</td>
                                                     <td class="text-right">{{ $item->total_rent }}</td>
+                                                    <td class="text-right">{{ $item->total_collection }}</td>
+                                                    <td class="text-right">{{ $item->total_due }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -153,18 +169,29 @@
                     method: 'GET',
                     success: function(response) {
                         let tbody = '';
-                        response.forEach((item, index) => {
-                            const flat_name = item.flat_name;
-                            tbody += `
-                                <tr>
-                                    <td class="text-center">${index + 1}</td>
-                                    <td>${flat_name}</td>
-                                    <td>${new Date(item.bill_setup_date).toLocaleString('default', { month: 'long' })}</td>
-                                    <td class="text-right">${item.total_rent}</td>
-                                </tr>
-                            `;
+                        $('tbody').empty();
+                        // Populate table with new data
+                        response.forEach((bill, index) => {
+                            const collectDate = new Date(bill.collection_date);
+                            const options = {
+                                month: 'long'
+                            };
+                            const formattedCollectDate = collectDate.toLocaleDateString(
+                                'en-US', options);
+
+                            $('tbody').append(`
+                            <tr>
+                            <td class="text-center">${index + 1}</td>
+                            <td>${bill.tenant_name}</td>
+                            <td>${bill.flat_name}</td>
+                            <td>${bill.building_name}</td>
+                            <td>${formattedCollectDate}</td>
+                            <td class="text-right">${bill.total_rent}</td>
+                            <td class="text-right">${bill.total_collection}</td>
+                            <td class="text-right">${bill.total_due}</td>
+                        </tr>
+                    `);
                         });
-                        $('#billsTable tbody').html(tbody);
                     }
                 });
             });

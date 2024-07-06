@@ -24,7 +24,7 @@ class RentalAgreementController extends Controller
 
     public function create()
     {
-        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status',1)->get();
         $buildings = Building::where('client_id', Auth::guard('admin')->user()->id)->get();
         return view('admin.rental_agreement.create', compact('tenants', 'buildings'));
     }
@@ -33,7 +33,7 @@ class RentalAgreementController extends Controller
     public function getFlat(Request $request)
     {
         $data['building'] = Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $request->building_id)->first();
-        $data['flat'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('building_id', $data['building']->id)->get();
+        $data['flat'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('building_id', $data['building']->id)->where('status',1)->where('booking_status',0)->get();
         return response()->json($data);
     }
 
@@ -102,6 +102,13 @@ class RentalAgreementController extends Controller
                     'flat_id' => $flat_id,
                 ]);
             }
+            // update flat booking status 
+            foreach ($flat_ids as $flat_id) {
+                $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $flat_id)->first();
+                $data['booking_status'] = 1;
+                $data->save();
+            }   
+            // Insert into FlatLedger for each flat
             foreach ($flat_ids as $flat_id) {
                 $flat_info = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $flat_id)->first();
                 FlatLedger::create([

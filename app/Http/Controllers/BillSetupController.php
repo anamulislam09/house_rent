@@ -33,7 +33,7 @@ class BillSetupController extends Controller
             $query->where('tenant_id', $tenantId);
         }
         if ($date) {
-            $query->where('date', 'like', $date . '%');
+            $query->where('bill_setup_date', 'like', $date . '%');
         }
         $bills = $query->get();
         // Append flat_name to each bill
@@ -74,16 +74,16 @@ class BillSetupController extends Controller
             return redirect()->back()->with('message', 'OPS! It is not possible to add data for a previous month. Please select the current month.');
         }
 
-        $isBillExists = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('date', $inputDate)->exists();
+        $isBillExists = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('bill_setup_date', $inputDate)->exists();
         if ($isBillExists) {
-            $bills = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('date', $inputDate)->get();
+            $bills = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('bill_setup_date', $inputDate)->get();
             return redirect()->back()->with('message', 'You have already generated the bill for this month!')->with('bills', $bills);
         }
 
         $flats = FlatLedger::where('client_id', $clientId)->where('tenant_id', $tenantId)->get();
         $agreement = RentalAgreement::where('client_id', $clientId)->where('tenant_id', $tenantId)->first();
         $previousMonthDate = Carbon::parse($currentDate)->subMonth()->format('Y-m');
-        $previousDues = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('date', $previousMonthDate)->get();
+        $previousDues = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('bill_setup_date', $previousMonthDate)->get();
 
         foreach ($flats as $i => $flat) {
             $totalDue = isset($previousDues[$i]) ? $previousDues[$i]->total_due : 0;
@@ -98,11 +98,12 @@ class BillSetupController extends Controller
                 'service_charge' => $flat->service_charge,
                 'utility_bill' => $flat->utility_bill,
                 'total_rent' => $flat->rent + $flat->service_charge + $flat->utility_bill + $totalDue,
-                'date' => $currentDate,
+                'total_due' => $flat->rent + $flat->service_charge + $flat->utility_bill + $totalDue,
+                'bill_setup_date' => $currentDate,
             ]);
         }
 
-        $bills = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('date', $inputDate)->get();
+        $bills = BillSetup::where('client_id', $clientId)->where('tenant_id', $tenantId)->where('bill_setup_date', $inputDate)->get();
         // dd($bills);
         return redirect()->back()->with('message', 'Bill generated successfully')->with('bills', $bills);
     }
