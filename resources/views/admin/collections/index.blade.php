@@ -56,7 +56,8 @@
                             <div class="card-header bg-primary">
                                 <div class="row ">
                                     <div class="col-lg-10 col-sm-12">
-                                        <h3 class="card-title text" style="width:100%; text-align:center">All Bill</h3>
+                                        <h3 class="card-title text" style="width:100%; text-align:center">All Collection
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
@@ -67,7 +68,7 @@
                                             <div class="form-group col-lg-3 col-md-4 col-sm-6 date">
                                                 <label for="">Tenant</label>
                                                 <select name="tenant_id" class="form-control text" id="tenant" required>
-                                                    <option value="" selected disabled>Select Tenant</option>
+                                                    <option value="0" selected disabled>Select Tenant</option>
                                                     @foreach ($tenants as $tenant)
                                                         <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
                                                     @endforeach
@@ -89,6 +90,10 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
+                                <a href="" class="btn btn-info btn-sm" id="generateBtn" target="_blank"
+                                    style="display: none;">Money
+                                    Receipt</a>
+
                                 <div class="table-responsive">
                                     <table id="billsTable" class="table table-bordered table-striped mt-3">
                                         <thead>
@@ -104,7 +109,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="billsTable">
-                                            @foreach ($bills as $key => $item)
+                                            @foreach ($collections as $key => $item)
                                                 @php
                                                     $flat = App\Models\Flat::where('client_id', $item->client_id)
                                                         ->where('id', $item->flat_id)
@@ -121,6 +126,7 @@
                                                     )
                                                         ->where('id', $flat->building_id)
                                                         ->value('name');
+
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">{{ $key + 1 }}</td>
@@ -134,6 +140,11 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
+                                        {{-- <tfoot>
+                                            <tr>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot> --}}
                                     </table>
                                 </div>
                             </div>
@@ -160,27 +171,31 @@
                 input.value = currentMonth;
             });
 
+            $('#generateBtn').hide();
             $('#filterButton').on('click', function() {
                 const tenantId = $('#tenant').val();
                 const date = $('#date').val();
 
                 $.ajax({
-                    url: `/admin/bill-setup/filter/${tenantId}/${date}`,
+                    url: `/admin/rent-collection-all/filter/${tenantId}/${date}`,
                     method: 'GET',
                     success: function(response) {
-                        let tbody = '';
                         $('tbody').empty();
-                        // Populate table with new data
-                        response.forEach((bill, index) => {
-                            const collectDate = new Date(bill.collection_date);
-                            const options = {
-                                month: 'long'
-                            };
-                            const formattedCollectDate = collectDate.toLocaleDateString(
-                                'en-US', options);
 
-                            $('tbody').append(`
-                            <tr>
+                        if (response.length > 0) {
+                            $('#generateBtn').show();
+                            // Populate table with new data
+                            response.forEach((bill, index) => {
+                                const collectDate = new Date(bill.collection_date);
+                                console.log(bill.collection_master_id);
+                                const options = {
+                                    month: 'long'
+                                };
+                                const formattedCollectDate = collectDate
+                                    .toLocaleDateString('en-US', options);
+
+                                $('tbody').append(`
+                        <tr>
                             <td class="text-center">${index + 1}</td>
                             <td>${bill.tenant_name}</td>
                             <td>${bill.flat_name}</td>
@@ -191,10 +206,25 @@
                             <td class="text-right">${bill.total_due}</td>
                         </tr>
                     `);
-                        });
-                    }
+                                // Update the href of the generate button with the collection_master_id
+                                $('#generateBtn').attr('href',
+                                    `/admin/collection/money-receipt/${bill.collection_master_id}`
+                                    );
+                            });
+                        } else {
+                            $('#generateBtn').hide();
+                            $('tbody').append(`
+                    <tr>
+                        <td colspan="8" class="text-center">No Collection Available of this Month</td>
+                    </tr>
+                `);
+                        }
+                    },
                 });
             });
+
+
+
         });
     </script>
 @endsection

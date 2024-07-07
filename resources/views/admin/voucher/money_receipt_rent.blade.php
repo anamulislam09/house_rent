@@ -30,7 +30,6 @@
             margin-bottom: -6Px;
         }
 
-
         .header-text p {
             margin: 0px 10px;
         }
@@ -99,7 +98,7 @@
         .middle-text p {
             width: 50%;
             text-align: center;
-            padding: 10px 5px;
+            padding: 5px 2px;
             background: #000;
             border-radius: 20px;
             font-weight: 800;
@@ -152,7 +151,7 @@
                 {{-- @isset($user->name) --}}
                 {{-- <p>name : {{ $user->name }}</p> --}}
                 {{-- @endisset
-               
+            
                 <p>name : ..........</p> --}}
                 {{-- <p>Flat_name : {{ $inv->flat_name }}</p> --}}
             </div>
@@ -161,7 +160,7 @@
             </div>
 
             <div class="right-text">
-                <p style="margin-top: 0px">{!! DNS1D::getBarcodeHTML("$inv->inv_id", 'C128', 1.5,25) !!}</p>
+                <p style="margin-top: 0px">{!! DNS1D::getBarcodeHTML("$inv->inv_id", 'C128', 1.5, 25) !!}</p>
                 <p>Date :{{ date('m/d/y') }}</p>
             </div>
         </div>
@@ -286,19 +285,27 @@
                 return '';
             }
 
-            $word = numberToWord($inv->deposit);
+            $word = numberToWord($inv->total_rent_collection);
         @endphp
 
         <div class="body">
-            <p>Advance received with thanks from Mr./Ms <strong><span style="border-bottom: 2px dotted #000; padding:0px 70px">
-                        @if (isset($tenant->name) && !empty($tenant->name))
-                            {{ $tenant->name }}
-                        @endif
+            <p>Received with thanks from Mr./Ms <strong><span style="border-bottom: 2px dotted #000; padding:0px 70px">
+                        @foreach ($tenants as $tenant)
+                            {{ $tenant }},
+                        @endforeach
                     </span></strong> The
                 sum of tk. (in words)
                 <strong><span
-                        style="border-bottom: 2px dotted #000; padding:0px 70px">{{ $word }}</span></strong>In Cash <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
-                        {{ $inv->deposit }}</span></strong>.
+                        style="border-bottom: 2px dotted #000; padding:0px 70px">{{ $word }}</span></strong>In
+                Cash <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
+                        {{ $inv->total_rent_collection }}</span></strong>For the month of </span></strong>
+                <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
+                        {{ date('F Y', strtotime($inv->collection_date)) }} </span></strong> for flat rent <strong><span
+                        style="border-bottom: 2px dotted #000; padding:0px 30px">
+                        @foreach ($collections as $collection)
+                            {{ $flats[$collection->id] }},
+                        @endforeach
+                    </span></strong>.
             </p>
 
         </div>

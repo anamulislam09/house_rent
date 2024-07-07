@@ -303,7 +303,7 @@
 
                     {{-- Bill Setup start here --}}
                     <li
-                        class="nav-item {{ Request::routeIs('collection.index') || Request::routeIs('collection.create') ? 'menu-open active' : '' }}">
+                        class="nav-item {{ Request::routeIs('rent-collection.index') || Request::routeIs('rent-collection.create') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
@@ -313,15 +313,15 @@
                         </a>
                         <ul class="nav nav-treeview ml-3">
                             <li class="nav-item">
-                                <a href="{{ route('collection.create') }}"
-                                    class="nav-link {{ Request::routeIs('collection.create') ? 'active' : '' }}">
+                                <a href="{{ route('rent-collection.create') }}"
+                                    class="nav-link {{ Request::routeIs('rent-collection.create') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>New Collection</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('collection.index') }}"
-                                    class="nav-link {{ Request::routeIs('collection.index') ? 'active' : '' }}">
+                                <a href="{{ route('rent-collection.index') }}"
+                                    class="nav-link {{ Request::routeIs('rent-collection.index') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>All Collection</p>
                                 </a>

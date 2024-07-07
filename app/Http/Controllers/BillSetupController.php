@@ -21,7 +21,7 @@ class BillSetupController extends Controller
     {
 
         $bills = BillSetup::where('client_id', Auth::guard('admin')->user()->id)->get();
-        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status',1)->get();
         return view('admin.bill_setup.index', compact('bills', 'tenants'));
     }
 
@@ -49,7 +49,7 @@ class BillSetupController extends Controller
      */
     public function Create()
     {
-        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status',1)->get();
         return view('admin.bill_setup.create', compact('tenants'));
     }
 
@@ -94,11 +94,11 @@ class BillSetupController extends Controller
                 'agreement_id' => $agreement->id,
                 'tenant_id' => $tenantId,
                 'flat_id' => $flat->flat_id,
-                'flat_rent' => $flat->rent,
-                'service_charge' => $flat->service_charge,
-                'utility_bill' => $flat->utility_bill,
-                'total_rent' => $flat->rent + $flat->service_charge + $flat->utility_bill + $totalDue,
-                'total_due' => $flat->rent + $flat->service_charge + $flat->utility_bill + $totalDue,
+                'flat_rent' => abs($flat->rent),
+                'service_charge' => abs($flat->service_charge),
+                'utility_bill' => abs($flat->utility_bill),
+                'total_rent' => abs($flat->rent), + abs($flat->service_charge) + abs($flat->utility_bill) + $totalDue,
+                'total_due' => abs($flat->rent), + abs($flat->service_charge) + abs($flat->utility_bill) + $totalDue,
                 'bill_setup_date' => $currentDate,
             ]);
         }

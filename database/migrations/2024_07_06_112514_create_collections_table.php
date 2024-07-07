@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('client_id');
             $table->integer('auth_id');
             $table->integer('agreement_id');
+            $table->integer('collection_master_id');
             $table->string('inv_id')->nullable();
             $table->integer('tenant_id');
             $table->integer('flat_id')->nullable();

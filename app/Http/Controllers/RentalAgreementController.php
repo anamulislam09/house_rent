@@ -49,7 +49,7 @@ class RentalAgreementController extends Controller
     {
         $tenant_id = $request->tenant_id;
         $building_id = $request->building_id;
-        $advanced = $request->advanced;
+        $advanced = abs($request->advanced);
         $from_date = $request->from_date;
         $to_date = $request->to_date;
         $duration = $request->duration;

@@ -104,9 +104,21 @@
                                         <tbody id="billsTable">
                                             @foreach ($bills as $key => $item)
                                                 @php
-                                                    $flat = App\Models\Flat::where('client_id', $item->client_id)->where('id', $item->flat_id)->first();
-                                                    $tenant = App\Models\Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $item->tenant_id)->value('name');
-                                                    $building = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $flat->building_id)->value('name');
+                                                    $flat = App\Models\Flat::where('client_id', $item->client_id)
+                                                        ->where('id', $item->flat_id)
+                                                        ->first();
+                                                    $tenant = App\Models\Tenant::where(
+                                                        'client_id',
+                                                        Auth::guard('admin')->user()->id,
+                                                    )
+                                                        ->where('id', $item->tenant_id)
+                                                        ->value('name');
+                                                    $building = App\Models\Building::where(
+                                                        'client_id',
+                                                        Auth::guard('admin')->user()->id,
+                                                    )
+                                                        ->where('id', $flat->building_id)
+                                                        ->value('name');
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">{{ $key + 1 }}</td>
@@ -146,16 +158,18 @@
 
             $('#filterButton').on('click', function() {
                 const tenantId = $('#tenant').val();
-                const date = $('#date').val();
+                const date = $('#date').val()
 
                 $.ajax({
                     url: `/admin/bill-setup/filter/${tenantId}/${date}`,
                     method: 'GET',
                     success: function(response) {
                         let tbody = '';
-                        response.forEach((item, index) => {
-                            const flat_name = item.flat_name;
-                            tbody += `
+                        $('tbody').empty();
+                        if (response.length > 0) {
+                            response.forEach((item, index) => {
+                                const flat_name = item.flat_name;
+                                tbody += `
                                 <tr>
                                     <td class="text-center">${index + 1}</td>
                                     <td>${flat_name}</td>
@@ -163,10 +177,20 @@
                                     <td class="text-right">${item.total_rent}</td>
                                 </tr>
                             `;
-                        });
-                        $('#billsTable tbody').html(tbody);
+                            });
+                            $('#billsTable tbody').html(tbody);
+
+                        } else {
+                            $('tbody').append(`
+                    <tr>
+                        <td colspan="8" class="text-center">No Data Found</td>
+                    </tr>
+                    `);
+                        }
                     }
                 });
+
+
             });
         });
     </script>

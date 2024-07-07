@@ -42,9 +42,9 @@ class FlatController extends Controller
             $data['building_id'] = $request->building_id;
             $data['flat_name'] = $request->flat_name;
             $data['flat_location'] = $request->flat_location;
-            $data['flat_rent'] = $request->flat_rent;
-            $data['service_charge'] = $request->service_charge;
-            $data['utility_bill'] = $request->utility_bill;
+            $data['flat_rent'] = abs($request->flat_rent);
+            $data['service_charge'] = abs($request->service_charge);
+            $data['utility_bill'] = abs($request->utility_bill);
             $data['date'] = date('d-m-Y');
             Flat::create($data);
 

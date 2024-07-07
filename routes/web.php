@@ -144,12 +144,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::post('/bill-setup/store', [BillSetupController::class, 'Store'])->name('bill-setup.store');
 
     // Collection Setup route 
-    Route::get('/collection', [CollectionController::class, 'Index'])->name('collection.index');
-    Route::get('/collection-all/filter/{tenantId?}/{date?}', [CollectionController::class, 'AllCollectionfilter']); //bill setup filter using ajax 
-    Route::get('/collection/create', [CollectionController::class, 'Create'])->name('collection.create');
-    Route::get('/collection/filter/{tenantId?}/{date?}', [CollectionController::class, 'Collectionfilter']); //bill setup filter using ajax 
-    Route::post('/collection/store', [CollectionController::class, 'Store'])->name('collection.store');
+    Route::get('/rent-collection', [CollectionController::class, 'Index'])->name('rent-collection.index');
+    Route::get('/rent-collection-all/filter/{tenantId?}/{date?}', [CollectionController::class, 'AllCollectionfilter']); //bill setup filter using ajax 
+    Route::get('/rent-collection/create', [CollectionController::class, 'Create'])->name('rent-collection.create');
+    Route::get('/rent-collection/filter/{tenantId?}/{date?}', [CollectionController::class, 'Collectionfilter']); //bill setup filter using ajax 
+    Route::post('/rent-collection/store', [CollectionController::class, 'Store'])->name('rent-collection.store');
 
+    Route::get('/collection/money-receipt/{id}', [CollectionController::class, 'MoneyReceipt'])->name('collection.money-receipt'); //many receipt for collection
+    
     // users route 
     Route::get('/users', [UserController::class, 'Index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'Create'])->name('users.create');
