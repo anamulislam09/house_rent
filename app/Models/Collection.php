@@ -19,10 +19,13 @@ class Collection extends Model
         'flat_rent',
         'service_charge',
         'utility_bill',
-        'total_rent',
+        'total_current_month_rent',
+        'previous_due',
+        'total_collection_amount',
         'total_collection',
-        'total_due',
+        'current_due',
         'bill_setup_date',
         'collection_date',
+        'created_date',
     ];
 }

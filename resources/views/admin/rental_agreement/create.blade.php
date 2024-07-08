@@ -149,7 +149,7 @@
                                         </div>
                                         <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                             <label class="text">Duration <span class="text-warning text" style="font-size: 12px">(month)</span></label>
-                                            <input type="text" class="form-control text" name="duration" id="" required>
+                                            <input type="text" class="form-control text" name="duration" id="duration" required>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -182,6 +182,48 @@
         </section>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    {{-- calculate from date and to date and set value duration monrth. --}}
+<script>
+    $(document).ready(function() {
+        // Function to calculate the number of months between two dates
+        function calculateMonthsBetween(fromDate, toDate) {
+            var start = new Date(fromDate);
+            var end = new Date(toDate);
+            var months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+            return months;
+        }
+
+        // Function to calculate the end date given a start date and a duration in months
+        function calculateEndDate(fromDate, duration) {
+            var start = new Date(fromDate);
+            var end = new Date(start.setMonth(start.getMonth() + parseInt(duration)));
+            return end.toISOString().substring(0, 7); // Format as YYYY-MM
+        }
+
+        // When from_date or to_date changes, calculate the duration
+        $('#from_date, #to_date').on('change', function() {
+            var fromDate = $('#from_date').val();
+            var toDate = $('#to_date').val();
+
+            if (fromDate && toDate) {
+                var duration = calculateMonthsBetween(fromDate, toDate);
+                $('#duration').val(duration);
+            }
+        });
+
+        // When duration changes, calculate the to_date
+        $('#duration').on('input', function() {
+            var fromDate = $('#from_date').val();
+            var duration = $('#duration').val();
+
+            if (fromDate && duration) {
+                var toDate = calculateEndDate(fromDate, duration);
+                $('#to_date').val(toDate);
+            }
+        });
+    });
+</script>
+
 
     <script>
         $(document).ready(function() {

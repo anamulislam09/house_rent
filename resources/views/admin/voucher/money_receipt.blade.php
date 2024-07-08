@@ -161,7 +161,7 @@
             </div>
 
             <div class="right-text">
-                <p style="margin-top: 0px">{!! DNS1D::getBarcodeHTML("$inv->inv_id", 'C128', 1.5,25) !!}</p>
+                <p style="margin-top: 0px">{!! DNS1D::getBarcodeHTML("$inv->inv_id", 'C128', 1.5, 25) !!}</p>
                 <p>Date :{{ date('m/d/y') }}</p>
             </div>
         </div>
@@ -286,20 +286,30 @@
                 return '';
             }
 
-            $word = numberToWord($inv->deposit);
+            $word = numberToWord($inv->total_rent_collection);
         @endphp
 
         <div class="body">
-            <p>Advance received with thanks from Mr./Ms <strong><span style="border-bottom: 2px dotted #000; padding:0px 70px">
+            <p>Advance received with thanks from Mr./Ms <strong><span
+                        style="border-bottom: 2px dotted #000; padding:0px 70px">
                         @if (isset($tenant) && !empty($tenant))
-                            {{ $tenant }}
+                            {{ $tenant->name }}
                         @endif
                     </span></strong> The
                 sum of tk. (in words)
                 <strong><span
-                        style="border-bottom: 2px dotted #000; padding:0px 70px">{{ $word }}</span></strong>In Cash <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
-                        {{ $inv->deposit }}</span></strong> for rent from Flat <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
-                            {{ $inv->deposit }}</span></strong>.
+                        style="border-bottom: 2px dotted #000; padding:0px 70px">{{ $word }}</span></strong>In
+                Cash <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
+                        {{ $inv->total_rent_collection }}</span></strong> for rent from Flat <strong><span
+                        style="border-bottom: 2px dotted #000; padding:0px 30px">
+                        @foreach ($agreementDetails as $agreement)
+                            @php
+                                $flat = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)
+                                    ->where('id', $agreement->flat_id)
+                                    ->value('flat_name');
+                            @endphp
+                            {{ $flat }},
+                        @endforeach.
             </p>
 
         </div>

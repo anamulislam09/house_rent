@@ -90,15 +90,17 @@
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="billsTable" class="table table-bordered table-striped mt-3">
+                                    <table id="example1" class="table table-bordered table-striped mt-3">
                                         <thead>
                                             <tr>
                                                 <th> SL</th>
-                                                {{-- <th>Tenant Name</th> --}}
+                                                <th>Tenant Name</th>
                                                 <th>Flat Name</th>
-                                                {{-- <th>Building Name</th> --}}
+                                                <th>Building Name</th>
                                                 <th>Month</th>
-                                                <th class="text-right">Total Rent</th>
+                                                <th class="text-right">Total Current Month Rent</th>
+                                                <th class="text-right">Previous Due</th>
+                                                <th class="text-right">Collection Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody id="billsTable">
@@ -122,11 +124,13 @@
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">{{ $key + 1 }}</td>
-                                                    {{-- <td>{{ $tenant }}</td> --}}
+                                                    <td>{{ $tenant }}</td>
                                                     <td>{{ $flat->flat_name }}</td>
-                                                    {{-- <td>{{ $building }}</td> --}}
+                                                    <td>{{ $building }}</td>
                                                     <td>{{ date('F', strtotime($item->bill_setup_date)) }}</td>
-                                                    <td class="text-right">{{ $item->total_rent }}</td>
+                                                    <td class="text-right">{{ $item->total_current_month_rent }}</td>
+                                                    <td class="text-right">{{ $item->previous_due }}</td>
+                                                    <td class="text-right">{{ $item->total_collection_amount }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -172,13 +176,17 @@
                                 tbody += `
                                 <tr>
                                     <td class="text-center">${index + 1}</td>
+                                    <td>${item.tenant_name}</td>
                                     <td>${flat_name}</td>
+                                    <td>${item.building_name}</td>
                                     <td>${new Date(item.bill_setup_date).toLocaleString('default', { month: 'long' })}</td>
-                                    <td class="text-right">${item.total_rent}</td>
+                                    <td class="text-right">${item.total_current_month_rent}</td>
+                                    <td class="text-right">${item.previous_due}</td>
+                                    <td class="text-right">${item.total_collection_amount}</td>
                                 </tr>
                             `;
                             });
-                            $('#billsTable tbody').html(tbody);
+                            $('#billsTable').html(tbody);
 
                         } else {
                             $('tbody').append(`

@@ -117,7 +117,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="col-lg-12 col-md-12 col-sm-12">
                                             <div class="table-responsive">
                                                 <table id="" class="table table-bordered table-striped mt-3">
                                                     <thead>
@@ -125,23 +125,33 @@
                                                             <th> SL</th>
                                                             <th>Month</th>
                                                             <th>Flat Name</th>
-                                                            <th class="text-right">Total Rent</th>
+                                                            <th class="text-right">Total Current Month Rent</th>
+                                                            <th class="text-right">Previous Due</th>
+                                                            <th class="text-right">Collection Amount</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($bills as $key => $item)
                                                             @php
                                                                 $flat_name = App\Models\Flat::where(
-                                                                    'client_id',
-                                                                    $item->client_id,
+                                                                    'client_id', Auth::guard('admin')->user()->id)->where('id',
+                                                                    $item->flat_id,
                                                                 )->value('flat_name');
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $key + 1 }}</td>
                                                                 <td>{{ $currentMonth }}</td>
                                                                 <td>{{ $flat_name }}</td>
-                                                                <td class="text-right">{{ $item->total_rent }}</td>
+                                                                <td class="text-right">{{ $item->total_current_month_rent }}</td>
+                                                                <td class="text-right">{{ $item->previous_due }}</td>
+                                                                <td class="text-right">{{ $item->total_collection_amount }}</td>
                                                             </tr>
+
+                                                            {{-- 'total_current_month_rent',
+        'previous_due',
+        'total_collection_amount',
+        'total_collection',
+        'current_due', --}}
                                                         @endforeach
                                                     </tbody>
                                                 </table>

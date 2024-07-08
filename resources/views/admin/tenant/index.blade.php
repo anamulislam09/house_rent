@@ -101,8 +101,6 @@
                                                 <td>{{ $item->email }}</td>
                                                 <td>{{ $item->address }}</td>
                                                 <td>{{ $item->Balance ? $item->Balance: 0 }}</td>
-                                                <td>{{ $created_by }}</td>
-                                                <td>{{ $item->created_date }}</td>
                                                 <td>
                                                     @if ($item->status == 0)
                                                         <span class="badge badge-danger">Deactive</span>
@@ -110,6 +108,8 @@
                                                         <span class="badge badge-primary">Active</span>
                                                     @endif
                                                 </td>
+                                                <td>{{ $item->created_date }}</td>
+                                                <td>{{ $created_by }}</td>
                                                 <td>
                                                     <a href="" class="btn btn-sm btn-info edit"
                                                         data-id="{{ $item->id }}" data-toggle="modal"

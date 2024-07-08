@@ -102,9 +102,12 @@
                                                 <th>Flat Name</th>
                                                 <th>Building Name</th>
                                                 <th>Collection date</th>
-                                                <th class="text-right">Total Rent</th>
+
+                                                <th class="text-right">Total Current Month Rent</th>
+                                                <th class="text-right">Previous Due</th>
+                                                <th class="text-right">Collection Amount</th>
                                                 <th class="text-right">Total Collection</th>
-                                                <th class="text-right">Total Due</th>
+                                                <th class="text-right">Current Due</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -127,10 +130,13 @@
                                                     <td>{{ $tenant }}</td>
                                                     <td>{{ $flat->flat_name }}</td>
                                                     <td>{{ $building }}</td>
-                                                    <td>{{ $Collection->collection_date }}</td>
-                                                    <td class="text-right">{{ $Collection->total_rent }}</td>
+                                                    <td>{{ date('F Y', strtotime($Collection->collection_date))}}</td>
+
+                                                    <td class="text-right">{{ $Collection->total_current_month_rent }}</td>
+                                                    <td class="text-right">{{ $Collection->previous_due }}</td>
+                                                    <td class="text-right">{{ $Collection->total_collection_amount }}</td>
                                                     <td class="text-right">{{ $Collection->total_collection }}</td>
-                                                    <td class="text-right">{{ $Collection->total_due }}</td>
+                                                    <td class="text-right">{{ $Collection->current_due }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -149,6 +155,8 @@
                                                 <th>Building Name</th>
                                                 <th>Month</th>
                                                 <th class="text-right">Total Rent</th>
+                                                <th class="text-right">Previous Due</th>
+                                                <th class="text-right">Total Due</th>
                                                 <th class="text-center">Collection</th>
                                             </tr>
                                         </thead>
@@ -156,7 +164,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr id="submitBtn">
-                                                <td colspan="6"></td>
+                                                <td colspan="8"></td>
                                                 <td class="text-right">
                                                     <input type="submit" value="Submit" class="btn btn-primary">
                                                 </td>
@@ -218,14 +226,18 @@
                                     <input type="hidden" name="flat_rent[]" value="${bill.flat_rent}">
                                     <input type="hidden" name="service_charge[]" value="${bill.service_charge}">
                                     <input type="hidden" name="utility_bill[]" value="${bill.utility_bill}">
-                                    <input type="hidden" name="total_rent[]" value="${bill.total_rent}">
+                                    <input type="hidden" name="total_current_month_rent[]" value="${bill.total_current_month_rent}">
+                                    <input type="hidden" name="total_collection_amount[]" value="${bill.total_collection_amount}">
                                     <input type="hidden" name="bill_setup_date[]" value="${bill.bill_setup_date}">
                                     <td class="text-center">${index + 1}</td>
                                     <td>${bill.tenant_name}</td>
                                     <td>${bill.flat_name}</td>
                                     <td>${bill.building_name}</td>
                                     <td>${formattedDate}</td>
-                                    <td class="text-right">${bill.total_rent}</td>
+                                    
+                                    <td class="text-right">${bill.total_current_month_rent}</td>
+                                    <td class="text-right">${bill.previous_due}</td>
+                                    <td class="text-right">${bill.total_collection_amount}</td>
                                     <td class="text-right"><input type="text" class="form-control" name="total_collection[]" required></td>
                                 </tr>
                             `);

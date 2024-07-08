@@ -95,7 +95,7 @@
                                     Receipt</a>
 
                                 <div class="table-responsive">
-                                    <table id="billsTable" class="table table-bordered table-striped mt-3">
+                                    <table id="example1" class="table table-bordered table-striped mt-3">
                                         <thead>
                                             <tr>
                                                 <th> SL</th>
@@ -103,9 +103,12 @@
                                                 <th>Flat Name</th>
                                                 <th>Building Name</th>
                                                 <th>Collection date</th>
-                                                <th class="text-right">Total Rent</th>
-                                                <th class="text-right">Total Collection</th>
-                                                <th class="text-right">Total Due</th>
+                                                <th>Collection month</th>
+                                                <th class="text-right">Current Month Rent</th>
+                                                <th class="text-right">Previous Due</th>
+                                                <th class="text-right">Collection Amount</th>
+                                                <th class="text-right">Collection</th>
+                                                <th class="text-right">Current Due</th>
                                             </tr>
                                         </thead>
                                         <tbody id="billsTable">
@@ -133,10 +136,14 @@
                                                     <td>{{ $tenant }}</td>
                                                     <td>{{ $flat->flat_name }}</td>
                                                     <td>{{ $building }}</td>
-                                                    <td>{{ date('F', strtotime($item->bill_setup_date)) }}</td>
-                                                    <td class="text-right">{{ $item->total_rent }}</td>
+                                                    <td class="text-right">{{ $item->collection_date }}</td>
+                                                    <td class="text-right">
+                                                        {{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
+                                                    <td class="text-right">{{ $item->total_current_month_rent }}</td>
+                                                    <td class="text-right">{{ $item->previous_due }}</td>
+                                                    <td class="text-right">{{ $item->total_collection_amount }}</td>
                                                     <td class="text-right">{{ $item->total_collection }}</td>
-                                                    <td class="text-right">{{ $item->total_due }}</td>
+                                                    <td class="text-right">{{ $item->current_due }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -187,10 +194,7 @@
                             // Populate table with new data
                             response.forEach((bill, index) => {
                                 const collectDate = new Date(bill.collection_date);
-                                console.log(bill.collection_master_id);
-                                const options = {
-                                    month: 'long'
-                                };
+                                const options = { month: 'long', year: 'numeric'};
                                 const formattedCollectDate = collectDate
                                     .toLocaleDateString('en-US', options);
 
@@ -200,16 +204,20 @@
                             <td>${bill.tenant_name}</td>
                             <td>${bill.flat_name}</td>
                             <td>${bill.building_name}</td>
+                            <td>${bill.collection_date}</td>
                             <td>${formattedCollectDate}</td>
-                            <td class="text-right">${bill.total_rent}</td>
+                            <td class="text-right">${bill.total_current_month_rent}</td>
+                            <td class="text-right">${bill.previous_due}</td>
+                            <td class="text-right">${bill.total_collection_amount}</td>
                             <td class="text-right">${bill.total_collection}</td>
-                            <td class="text-right">${bill.total_due}</td>
+                            <td class="text-right">${bill.current_due}</td>
                         </tr>
                     `);
+
                                 // Update the href of the generate button with the collection_master_id
                                 $('#generateBtn').attr('href',
                                     `/admin/collection/money-receipt/${bill.collection_master_id}`
-                                    );
+                                );
                             });
                         } else {
                             $('#generateBtn').hide();

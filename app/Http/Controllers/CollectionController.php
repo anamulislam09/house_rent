@@ -20,7 +20,7 @@ class CollectionController extends Controller
     public function Index()
     {
         $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status', 1)->get();
-        $collections = Collection::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $collections = Collection::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->get();
 
         return view('admin.collections.index', compact('tenants', 'collections'));
     }
@@ -81,9 +81,9 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
+
         $clientId = Auth::guard('admin')->user()->id;
         $currentDate = Carbon::now()->format('Y-m');
-
 
         // Get the latest invoice ID and increment it
         $isExist = CollectionMaster::where('client_id', $clientId)->exists();
@@ -100,7 +100,7 @@ class CollectionController extends Controller
         $data['agreement_id'] = $request->agreement_id[0];
         $data['bill_id'] = $request->bill_id[0];
         $data['tenant_id'] = $request->tenant_id[0];
-        $data['collection_date'] = $currentDate;
+        $data['collection_date'] = $request->bill_setup_date[0];
 
         $total_rent_collection = 0;
         foreach ($request->bill_id as $i => $bill_id) {
@@ -118,12 +118,12 @@ class CollectionController extends Controller
                 ->firstOrFail();
 
             $totalCollection = abs($request->total_collection[$i]);
-            $totalDue = abs($request->total_rent[$i]) - $totalCollection;
+            $totalDue = $request->total_collection_amount[$i] - $totalCollection;
 
             $bill_setup->update([
                 'total_collection' => $totalCollection,
-                'total_due' => $totalDue,
-                'collection_date' => $currentDate,
+                'current_due' => $totalDue,
+                'collection_date' => date('Y-m-d'),
             ]);
 
             // Create a new Collection entry
@@ -137,11 +137,13 @@ class CollectionController extends Controller
                 'flat_rent' => $bill_setup->flat_rent,
                 'service_charge' => $bill_setup->service_charge,
                 'utility_bill' => $bill_setup->utility_bill,
-                'total_rent' => $bill_setup->total_rent,
+                'total_current_month_rent' => $bill_setup->total_current_month_rent,
+                'previous_due' => $bill_setup->previous_due,
+                'total_collection_amount' => $bill_setup->total_collection_amount,
                 'total_collection' => $totalCollection,
-                'total_due' => $totalDue,
+                'current_due' => $totalDue,
                 'bill_setup_date' => $bill_setup->bill_setup_date,
-                'collection_date' => $currentDate,
+                'collection_date' => date('Y-m-d'),
             ]);
         }
 

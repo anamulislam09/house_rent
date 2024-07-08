@@ -22,11 +22,14 @@ return new class extends Migration
             $table->double('flat_rent',20, 2)->default(0); 
             $table->double('service_charge',20, 2)->default(0); 
             $table->double('utility_bill',20, 2)->default(0); 
-            $table->double('total_rent',20, 2)->default(0); 
+            $table->double('total_current_month_rent',20, 2)->default(0); 
+            $table->double('previous_due',20, 2)->default(0); 
+            $table->double('total_collection_amount',20, 2)->default(0); 
             $table->double('total_collection',20, 2)->default(0); 
-            $table->double('total_due',20, 2)->default(0); 
+            $table->double('current_due',20, 2)->default(0); 
             $table->string('bill_setup_date')->nullable();
             $table->string('collection_date')->nullable();
+            $table->string('created_date')->nullable();
             $table->timestamps();
         });
     }

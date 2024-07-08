@@ -144,16 +144,19 @@ class RentalAgreementController extends Controller
     public function moneyReceipt($id)
     {
         $agreementInfo = RentalAgreement::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
+        $agreementDetails = RentalAgreementDetails::where('rental_agreement_id', $agreementInfo->id)->get();
         $inv = AdvancedAmount::where('client_id', Auth::guard('admin')->user()->id)->where('agreement_id', $agreementInfo->id)->first();
         $tenant = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $agreementInfo->tenant_id)->first();
         $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
 
         $data = [
             'agreementInfo' => $agreementInfo,
+            'agreementDetails' => $agreementDetails,
             'inv' => $inv,
-            'tenant' => $tenant,
+            'tenant' => $tenant,    
             'client' => $client,
         ];
+        // dd($data);
         $pdf = PDF::loadView('admin.voucher.money_receipt', $data);
         return $pdf->stream('Money_Receipt.pdf');
     }
