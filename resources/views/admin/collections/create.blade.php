@@ -238,7 +238,7 @@
                                     <td class="text-right">${bill.total_current_month_rent}</td>
                                     <td class="text-right">${bill.previous_due}</td>
                                     <td class="text-right">${bill.total_collection_amount}</td>
-                                    <td class="text-right"><input type="text" class="form-control" name="total_collection[]" required></td>
+                                    <td class="text-right"><input type="number" class="form-control text-right" name="total_collection[]" placeholder="0.00" required></td>
                                 </tr>
                             `);
                         });

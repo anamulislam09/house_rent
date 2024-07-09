@@ -85,72 +85,74 @@ class CollectionController extends Controller
         $clientId = Auth::guard('admin')->user()->id;
         $currentDate = Carbon::now()->format('Y-m');
 
-        // Get the latest invoice ID and increment it
-        $isExist = CollectionMaster::where('client_id', $clientId)->exists();
-        $v_id = 1;
-        if ($isExist) {
-            $inv_id = CollectionMaster::where('client_id', $clientId)->max('inv_id');
-            $data['inv_id'] = $this->formatSrl(++$inv_id);
+        $collectionExist = Collection::where('client_id', $clientId)->where('tenant_id', $request->tenant_id)->where('bill_setup_date', $request->bill_setup_date)->exists();
+
+        if (!$collectionExist) {
+            // Get the latest invoice ID and increment it
+            $isExist = CollectionMaster::where('client_id', $clientId)->exists();
+            $v_id = 1;
+            if ($isExist) {
+                $inv_id = CollectionMaster::where('client_id', $clientId)->max('inv_id');
+                $data['inv_id'] = $this->formatSrl(++$inv_id);
+            } else {
+                $data['inv_id'] = $this->formatSrl($v_id);
+            }
+
+            $data['client_id'] = $clientId;
+            $data['auth_id'] = $clientId;
+            $data['agreement_id'] = $request->agreement_id[0];
+            $data['bill_id'] = $request->bill_id[0];
+            $data['tenant_id'] = $request->tenant_id[0];
+            $data['collection_date'] = $request->bill_setup_date[0];
+
+            $total_rent_collection = 0;
+            foreach ($request->bill_id as $i => $bill_id) {
+                $total_rent_collection += abs($request->total_collection[$i]);
+            }
+            $data['total_rent_collection'] = $total_rent_collection;
+
+            // Create a new CollectionMaster
+            $collectionMaster = CollectionMaster::create($data);
+
+            foreach ($request->bill_id as $i => $bill_id) {
+                $bill_setup = BillSetup::where('client_id', $clientId)
+                    ->where('id', $bill_id)
+                    ->where('bill_setup_date', $request->bill_setup_date)
+                    ->firstOrFail();
+
+                $totalCollection = abs($request->total_collection[$i]);
+                $totalDue = $request->total_collection_amount[$i] - $totalCollection;
+
+                $bill_setup->update([
+                    'total_collection' => $totalCollection,
+                    'current_due' => $totalDue,
+                    'collection_date' => date('Y-m-d'),
+                ]);
+
+                // Create a new Collection entry
+                Collection::create([
+                    'client_id' => $clientId,
+                    'auth_id' => $clientId,
+                    'agreement_id' => $bill_setup->agreement_id,
+                    'collection_master_id' => $collectionMaster->id,
+                    'tenant_id' => $bill_setup->tenant_id,
+                    'flat_id' => $bill_setup->flat_id,
+                    'flat_rent' => $bill_setup->flat_rent,
+                    'service_charge' => $bill_setup->service_charge,
+                    'utility_bill' => $bill_setup->utility_bill,
+                    'total_current_month_rent' => $bill_setup->total_current_month_rent,
+                    'previous_due' => $bill_setup->previous_due,
+                    'total_collection_amount' => $bill_setup->total_collection_amount,
+                    'total_collection' => $totalCollection,
+                    'current_due' => $totalDue,
+                    'bill_setup_date' => $bill_setup->bill_setup_date,
+                    'collection_date' => date('Y-m-d'),
+                ]);
+            }
+            return redirect()->back()->with('message', 'Rent collection successfully')->with('collectionsMaster', $collectionMaster);
         } else {
-            $data['inv_id'] = $this->formatSrl($v_id);
+            return redirect()->back()->with('message', 'You have already collected this month rent.');
         }
-
-        $data['client_id'] = $clientId;
-        $data['auth_id'] = $clientId;
-        $data['agreement_id'] = $request->agreement_id[0];
-        $data['bill_id'] = $request->bill_id[0];
-        $data['tenant_id'] = $request->tenant_id[0];
-        $data['collection_date'] = $request->bill_setup_date[0];
-
-        $total_rent_collection = 0;
-        foreach ($request->bill_id as $i => $bill_id) {
-            $total_rent_collection += abs($request->total_collection[$i]);
-        }
-        $data['total_rent_collection'] = $total_rent_collection;
-
-        // Create a new CollectionMaster
-        $collectionMaster = CollectionMaster::create($data);
-
-        foreach ($request->bill_id as $i => $bill_id) {
-            $bill_setup = BillSetup::where('client_id', $clientId)
-                ->where('id', $bill_id)
-                ->where('bill_setup_date', $request->bill_setup_date)
-                ->firstOrFail();
-
-            $totalCollection = abs($request->total_collection[$i]);
-            $totalDue = $request->total_collection_amount[$i] - $totalCollection;
-
-            $bill_setup->update([
-                'total_collection' => $totalCollection,
-                'current_due' => $totalDue,
-                'collection_date' => date('Y-m-d'),
-            ]);
-
-            // Create a new Collection entry
-            Collection::create([
-                'client_id' => $clientId,
-                'auth_id' => $clientId,
-                'agreement_id' => $bill_setup->agreement_id,
-                'collection_master_id' => $collectionMaster->id,
-                'tenant_id' => $bill_setup->tenant_id,
-                'flat_id' => $bill_setup->flat_id,
-                'flat_rent' => $bill_setup->flat_rent,
-                'service_charge' => $bill_setup->service_charge,
-                'utility_bill' => $bill_setup->utility_bill,
-                'total_current_month_rent' => $bill_setup->total_current_month_rent,
-                'previous_due' => $bill_setup->previous_due,
-                'total_collection_amount' => $bill_setup->total_collection_amount,
-                'total_collection' => $totalCollection,
-                'current_due' => $totalDue,
-                'bill_setup_date' => $bill_setup->bill_setup_date,
-                'collection_date' => date('Y-m-d'),
-            ]);
-        }
-
-        // Retrieve the latest CollectionMaster
-        // $collectionsMaster = CollectionMaster::where('client_id', $clientId)->latest()->first();
-
-        return redirect()->back()->with('message', 'Rent collection successfully')->with('collectionsMaster', $collectionMaster);
     }
 
     public function MoneyReceipt($id)
@@ -183,10 +185,6 @@ class CollectionController extends Controller
 
         return $pdf->stream('Money_Receipt_Rent.pdf');
     }
-
-
-
-
 
     // unique id serial function
     public function formatSrl($srl)

@@ -155,7 +155,7 @@
                                     <div class="row">
                                         <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                             <label class="text">Advanced Deposit</label>
-                                            <input type="text" class="form-control text" name="advanced" required>
+                                            <input type="text" class="form-control text-right text" name="advanced" placeholder="0.00" required>
                                         </div>
                                         <div class="form-group col-lg-3 col-md-3 col-sm-12 form-check" style="margin-top: 35px">
                                             <input type="checkbox" class="form-check-input text" id="deduct" name="deduct" value="something">

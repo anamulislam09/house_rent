@@ -291,7 +291,7 @@
         <div class="body">
             <p>Received with thanks from Mr./Ms <strong><span style="border-bottom: 2px dotted #000; padding:0px 70px">
                         @foreach ($tenants as $tenant)
-                            {{ $tenant }},
+                            {{ $tenant }}
                         @endforeach
                     </span></strong> The
                 sum of tk. (in words)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ForgotPasswordMail;
 use App\Models\Balance;
 use App\Models\Client;
+use App\Models\Collection;
 use App\Models\Exp_process;
 use App\Models\Expense;
 use App\Models\ExpenseVoucher;
@@ -17,10 +18,12 @@ use App\Models\OpeningBalance;
 use App\Models\OthersIncome;
 use App\Models\Package;
 use App\Models\SetupHistory;
+use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -445,8 +448,13 @@ class AdminController extends Controller
 
     public function GetTransaction($date)
     {
-
+        $data['total_collection_amount'] = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('bill_setup_date', $date)->sum('total_collection_amount');
+        $data['total_collection'] = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('bill_setup_date', $date)->sum('total_collection');
+        $data['current_due'] = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('bill_setup_date', $date)->sum('current_due');
         $data['flats'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
+        $data['flat_booked'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('booking_status', 0)->count();
+        $data['available_flat'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('booking_status', 1)->count();
+        $data['tenant'] = Tenant::where('client_id', Auth::guard('admin')->user()->id)->count();
         $data['expense'] = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
         $data['income'] = Income::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('paid');
         $manualOpeningBalance = DB::table('opening_balances')->where('client_id', Auth::guard('admin')->user()->id)->where('entry_datetime', $date)->first();
