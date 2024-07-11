@@ -69,22 +69,50 @@
                                     <tbody>
                                         @foreach ($data as $key => $item)
                                             @php
+                                            // dd($item);
+                                                // Fetch the building
                                                 $building = App\Models\Building::where(
                                                     'client_id',
                                                     Auth::guard('admin')->user()->id,
                                                 )
                                                     ->where('id', $item->building_id)
                                                     ->first();
+
+                                                if($item->booking_status){
+
+                                                        $agreementDetails = App\Models\RentalAgreementDetails::where(
+                                                            'flat_id',
+                                                            $item->id,
+                                                        )
+                                                            ->latest()
+                                                            ->first();
+
+                                                            $agreement = App\Models\RentalAgreement::where(
+                                                            'client_id',
+                                                            Auth::guard('admin')->user()->id,
+                                                        )
+                                                            ->where('id', $agreementDetails->rental_agreement_id)
+                                                            ->first();
+
+
+                                                            $currentDate = Carbon\Carbon::now();
+                                                            $toDate = Carbon\Carbon::createFromFormat('Y-m', $agreement->to_date);
+                                                            $monthsDifference = $currentDate->diffInMonths($toDate);
+
+                                                            if($monthsDifference<=2) $item->booking_status = 2;
+
+
+                                                    }
                                             @endphp
+
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
-                                                <td>{{ $building->name }}</td>
+                                                <td>{{ $building->name  }}</td>
                                                 <td>{{ $item->flat_name }}</td>
                                                 <td>Floor {{ $item->flat_location }}</td>
                                                 <td>{{ $item->flat_rent }}</td>
                                                 <td>{{ $item->service_charge }}</td>
                                                 <td>{{ $item->utility_bill }}</td>
-
                                                 <td>
                                                     @if ($item->status == 1)
                                                         <span class="badge badge-success">Active</span>
@@ -95,20 +123,23 @@
                                                 <td>
                                                     @if ($item->booking_status == 1)
                                                         <span class="badge badge-success">Booked</span>
+                                                    @elseif ($item->booking_status == 2)
+                                                        <span class="badge badge-info">Available Soon</span>
                                                     @else
                                                         <span class="badge badge-danger">Available</span>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    {{-- <a href="" cclass="btn btn-sm btn-info edit"
-                                                    data-id="{{ $item->id }}" data-toggle="modal"
-                                                    data-target="#editAgreement"> <i class="fas fa-edit"></i> </a> --}}
                                                     <a href="" class="btn btn-sm btn-info edit"
-                                                    data-id="{{ $item->id }}" data-toggle="modal"
-                                                    data-target="#editUser"><i class="fas fa-edit"></i></a>
+                                                        data-id="{{ $item->id }}" data-toggle="modal"
+                                                        data-target="#editUser">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
+                                            {{-- {{ dd('hello') }} --}}
                                         @endforeach
+
                                     </tbody>
                                 </table>
                             </div>

@@ -125,6 +125,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/tenant/edit/{id}', [TenantController::class, 'edit'])->name('tenant.edit');
     Route::post('/tenant/update', [TenantController::class, 'update'])->name('tenant.update');
 
+    // Tenant setup route 
+    Route::get('/tenant-document', [TenantController::class, 'AllDocuments'])->name('tenant-document.index');
+    Route::get('/tenant-document/create', [TenantController::class, 'CreateDocument'])->name('tenant-document.create');
+    Route::post('/tenant-document/store', [TenantController::class, 'StoreDocument'])->name('tenant-document.store');
+    Route::get('/tenant-document/edit/{id}', [TenantController::class, 'editDocument']);
+    Route::post('/tenant-document/update', [TenantController::class, 'updateDocument'])->name('tenant-document.update');
+
     // Rental Agreement route 
     Route::get('/rental-agreement', [RentalAgreementController::class, 'Index'])->name('rental-agreement.index');
     Route::get('/rental-agreement/create', [RentalAgreementController::class, 'Create'])->name('rental-agreement.create');

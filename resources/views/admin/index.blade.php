@@ -3,19 +3,19 @@
 
     <style>
         h3 {
-            font-size: 20px !important;
+            font-size: 22px !important;
         }
 
         p {
-            font-size: 14px !important
+            font-size: 16px !important
         }
 
         .text {
-            font-size: 14px !important
+            font-size: 16px !important
         }
 
         .link {
-            font-size: 12px !important;
+            font-size: 14px !important;
         }
 
         .ul-scrollable {
@@ -47,16 +47,27 @@
             $currentDate = Carbon\Carbon::now()->format('Y-m');
             $user = App\Models\User::where('client_id', Auth::guard('admin')->user()->id)->count();
             $flat = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
-            $flat_booked = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->where('booking_status', 0)->count();
-            $available_flat = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->where('booking_status', 1)->count();
+            $flat_booked = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)
+                ->where('booking_status', 1)
+                ->count();
+            $available_flat = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)
+                ->where('booking_status', 0)
+                ->count();
 
             $buildings = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->get();
+            $total_building = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->count();
             $total_exp = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
-            $total_collection_amount = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum('total_collection_amount');
+            $total_collection_amount = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum(
+                'total_collection_amount',
+            );
 
-            $total_collection = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum('total_collection');
+            $total_collection = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum(
+                'total_collection',
+            );
 
-            $current_due = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum('current_due');
+            $current_due = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum(
+                'current_due',
+            );
 
             $total_income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
             $manualOpeningBlance = DB::table('opening_balances')
@@ -353,7 +364,7 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                       
+
                         <!-- /.col -->
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
@@ -384,7 +395,7 @@
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="{{route('rent-collection.index')}}" class="small-box-footer link">More info <i
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -452,11 +463,45 @@
                                                 <ul class="mt-1 @if (count($flats) > 3) ul-scrollable @endif"
                                                     style="list-style-type: none; height: 95px;font-size: 14px;">
                                                     @foreach ($flats as $key => $item)
+                                                        {{-- @php
+                                                            if ($item->booking_status) {
+                                                                $agreementDetails = App\Models\RentalAgreementDetails::where(
+                                                                    'flat_id',
+                                                                    $item->id,
+                                                                )
+                                                                    ->latest()
+                                                                    ->first();
+
+                                                                $agreement = App\Models\RentalAgreement::where(
+                                                                    'client_id',
+                                                                    Auth::guard('admin')->user()->id,
+                                                                )
+                                                                    ->where(
+                                                                        'id',
+                                                                        $agreementDetails->rental_agreement_id,
+                                                                    )
+                                                                    ->first();
+
+                                                                $currentDate = Carbon\Carbon::now();
+                                                                $toDate = Carbon\Carbon::createFromFormat(
+                                                                    'Y-m',
+                                                                    $agreement->to_date,
+                                                                );
+                                                                $monthsDifference = $currentDate->diffInMonths($toDate);
+
+                                                                if ($monthsDifference <= 2) {
+                                                                    $item->booking_status = 2;
+                                                                }
+                                                            }
+                                                        @endphp --}}
+
                                                         <li class="mt-1 pb-1"
                                                             style="color: #222; border-bottom:1px solid #c5c3c3 !important">
                                                             {{ $item->flat_name }}
                                                             @if ($item->booking_status == 0)
-                                                                <span class="badge badge-info ml-5">Available</span>
+                                                                <span class="badge badge-success ml-5">Available</span>
+                                                            {{-- @elseif ($item->booking_status = 2)
+                                                                <span class="badge badge-info ml-5">Available Soon</span> --}}
                                                             @else
                                                                 <span class="badge badge-danger ml-5">Booked</span>
                                                             @endif
@@ -485,7 +530,7 @@
                             <div class="small-box " style="background: #d31bdd">
                                 <div class="inner">
                                     <p class="text-white">Total Building</p>
-                                    <h3 class="text-white">{{ $tenant }}</h3>
+                                    <h3 class="text-white">{{ $total_building }}</h3>
 
                                 </div>
                                 <div class="icon">
@@ -530,7 +575,7 @@
                             <div class="small-box" style="background: #73d8f1">
                                 <div class="inner text-white">
                                     <p>Available Flat</p>
-                                    <h3>{{ $available_flat}}</h3>
+                                    <h3>{{ $available_flat }}</h3>
 
                                 </div>
                                 <div class="icon">
@@ -556,55 +601,55 @@
                             </div>
                         </div>
 
-                         <!-- fix for small devices only -->
-                         <div class="clearfix hidden-md-up"></div>
-                         <div class="col-lg-4 col-6">
-                             <!-- small box -->
-                             <div class="small-box bg-secondary">
-                                 <div class="inner">
-                                     <p>Total Collection Amount</p>
-                                     <h3>{{ $total_collection_amount }}<sup style="font-size: 14px">TK</sup></h3>
- 
-                                 </div>
-                                 <div class="icon">
-                                     <i class="ion ion-stats-bars"></i>
-                                 </div>
-                                 <a href="{{route('rent-collection.index')}}" class="small-box-footer link">More info <i
-                                         class="fas fa-arrow-circle-right"></i></a>
-                             </div>
-                         </div>
-                         <div class="col-lg-4 col-6">
-                             <!-- small box -->
-                             <div class="small-box bg-primary">
-                                 <div class="inner">
-                                     <p>Total Collection</p>
-                                     <h3>{{ $total_collection }} <sup style="font-size: 14px">TK</sup></h3>
- 
-                                 </div>
-                                 <div class="icon">
-                                     <i class="ion ion-pie-graph"></i>
-                                 </div>
-                                 <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
-                                         class="fas fa-arrow-circle-right"></i></a>
-                             </div>
-                         </div>
- 
-                         <div class="col-lg-4 col-6">
-                             <!-- small box -->
-                             <div class="small-box bg-danger">
-                                 <div class="inner">
-                                     <p>Due</p>
-                                     <h3>{{ $current_due }} <sup style="font-size: 14px">TK</sup></h3>
- 
-                                 </div>
-                                 <div class="icon">
-                                     <i class="ion ion-pie-graph"></i>
-                                 </div>
-                                 <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
-                                         class="fas fa-arrow-circle-right"></i></a>
-                             </div>
-                         </div>
-                         <!-- /.col -->
+                        <!-- fix for small devices only -->
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-secondary">
+                                <div class="inner">
+                                    <p>Total Collection Amount</p>
+                                    <h3>{{ $total_collection_amount }}<sup style="font-size: 14px">TK</sup></h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <p>Total Collection</p>
+                                    <h3>{{ $total_collection }} <sup style="font-size: 14px">TK</sup></h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <p>Due</p>
+                                    <h3>{{ $current_due }} <sup style="font-size: 14px">TK</sup></h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- /.col -->
 
                         <!-- /.col -->
                         <div class="col-lg-4 col-6">

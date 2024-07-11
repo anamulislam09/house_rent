@@ -216,7 +216,7 @@
 
                     {{-- tenant Management ends here --}}
                     <li
-                        class="nav-item {{ Request::routeIs('tenant.index') || Request::routeIs('tenant.create') ? 'menu-open active' : '' }}">
+                        class="nav-item {{ Request::routeIs('tenant.index') || Request::routeIs('tenant.create') || Request::routeIs('tenant-document.index') || Request::routeIs('tenant-document.create') || Request::routeIs('tenant-document.edit') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
@@ -237,6 +237,13 @@
                                     class="nav-link {{ Request::routeIs('tenant.index') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>All Tenant</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('tenant-document.index') }}"
+                                    class="nav-link {{ Request::routeIs('tenant-document.index') || Request::routeIs('tenant-document.create') || Request::routeIs('tenant-document.edit') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Documents</p>
                                 </a>
                             </li>
                         </ul>
