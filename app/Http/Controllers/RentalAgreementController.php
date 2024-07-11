@@ -16,13 +16,13 @@ use PDF;
 
 class RentalAgreementController extends Controller
 {
-    public function index()
+    public function Index()
     {
         $data = RentalAgreement::where('client_id', Auth::guard('admin')->user()->id)->get();
         return view('admin.rental_agreement.index', compact('data'));
     }
 
-    public function create()
+    public function Create()
     {
         $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status',1)->get();
         $buildings = Building::where('client_id', Auth::guard('admin')->user()->id)->get();
@@ -30,7 +30,7 @@ class RentalAgreementController extends Controller
     }
 
     // get building and flat using jquery
-    public function getFlat(Request $request)
+    public function GetFlat(Request $request)
     {
         $data['building'] = Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $request->building_id)->first();
         $data['flat'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('building_id', $data['building']->id)->where('status',1)->where('booking_status',0)->get();
@@ -38,14 +38,14 @@ class RentalAgreementController extends Controller
     }
 
     // get and flat info using jquery
-    public function getFlatInfo(Request $request)
+    public function GetFlatInfo(Request $request)
     {
         $data['flat_info'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $request->flat_id)->first();
         return response()->json($data);
     }
 
     // store all data 
-    public function store(Request $request)
+    public function Store(Request $request)
     {
         $tenant_id = $request->tenant_id;
         $building_id = $request->building_id;
@@ -141,7 +141,7 @@ class RentalAgreementController extends Controller
 
 
     // MOney Receipt
-    public function moneyReceipt($id)
+    public function MoneyReceipt($id)
     {
         $agreementInfo = RentalAgreement::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
         $agreementDetails = RentalAgreementDetails::where('rental_agreement_id', $agreementInfo->id)->get();
@@ -162,7 +162,7 @@ class RentalAgreementController extends Controller
     }
 
 
-    public function edit($id)
+    public function Edit($id)
     {
         $data = RentalAgreement::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
         return view('admin.rental_agreement.edit', compact('data'));
@@ -171,7 +171,7 @@ class RentalAgreementController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function Update(Request $request)
     {
         $id = $request->id;
         $client_id = $request->client_id;

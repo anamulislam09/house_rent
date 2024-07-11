@@ -113,7 +113,7 @@
                                                         style="width: 50px" alt="Police Form Image"></td>
                                                 <td>
                                                     <a href="" class="btn btn-sm btn-info edit"
-                                                        data-id="{{ $item->tenant_id }}" data-toggle="modal"
+                                                        data-id="{{ $item->id }}" data-toggle="modal"
                                                         data-target="#editUser"><i class="fas fa-edit"></i></a>
                                                 </td>
                                             </tr>
@@ -154,9 +154,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.js"></script>
     <script>
         $('body').on('click', '.edit', function() {
-            let tenant_id = $(this).data('id');
-            $.get("/admin/tenant-document/edit/" + tenant_id, function(data) {
-                $('#model-main').html(data);
+            let id = $(this).data('id');
+            $.get("/admin/tenant-document/edit/" + id, function(data) {
+                $('#modal_body').html(data);
 
             })
         })

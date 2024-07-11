@@ -125,9 +125,10 @@
                                                             <th> SL</th>
                                                             <th>Month</th>
                                                             <th>Flat Name</th>
+                                                            <th>Tenant Name</th>
                                                             <th class="text-right">Total Current Month Rent</th>
                                                             <th class="text-right">Previous Due</th>
-                                                            <th class="text-right">Collection Amount</th>
+                                                            <th class="text-right">Bill Amount</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -137,21 +138,20 @@
                                                                     'client_id', Auth::guard('admin')->user()->id)->where('id',
                                                                     $item->flat_id,
                                                                 )->value('flat_name');
+                                                                $tenant_name = App\Models\Tenant::where(
+                                                                    'client_id', Auth::guard('admin')->user()->id)->where('id',
+                                                                    $item->tenant_id,
+                                                                )->value('name');
                                                             @endphp
                                                             <tr>
                                                                 <td class="text-center">{{ $key + 1 }}</td>
                                                                 <td>{{ $currentMonth }}</td>
                                                                 <td>{{ $flat_name }}</td>
+                                                                <td>{{ $tenant_name }}</td>
                                                                 <td class="text-right">{{ $item->total_current_month_rent }}</td>
                                                                 <td class="text-right">{{ $item->previous_due }}</td>
                                                                 <td class="text-right">{{ $item->total_collection_amount }}</td>
                                                             </tr>
-
-                                                            {{-- 'total_current_month_rent',
-        'previous_due',
-        'total_collection_amount',
-        'total_collection',
-        'current_due', --}}
                                                         @endforeach
                                                     </tbody>
                                                 </table>

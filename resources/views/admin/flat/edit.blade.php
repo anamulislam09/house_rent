@@ -17,17 +17,40 @@
         <input type="hidden" name="client_id" value="{{ $flat->client_id }}">
         <div class="modal-body">
             <div class="mb-3 mt-3">
-                <label for="tenant_name" class="form-label"> Flat Name</label>
-                <input type="text" class="form-control" value="{{ $flat->flat_name }}" name="" readonly>
+                <label for="tenant_name" class="form-label text"> Flat Name</label>
+                <input type="text" class="form-control text" value="{{ $flat->flat_name }}" name="" readonly>
             </div>
 
             <div class="mb-3 mt-3">
-                <label for="tenant_email" class="form-label"> Building</label>
-                <input type="text" class="form-control" value="{{ $building->name }}" name="" readonly>
+                <label for="tenant_email" class="form-label text"> Building</label>
+                <input type="text" class="form-control text" value="{{ $building->name }}" name="" readonly>
             </div>
-            <div class="mb-3 mt-3">
-                <label for="nid_no" class="form-label"> Flat Location</label>
-                <input type="text" class="form-control" value="{{ $flat->flat_location }}" name="" readonly>
+            <div class="row">
+                <div class="form-group col-lg-6">
+                    <label for="nid_no" class="form-label text"> Flat Location</label>
+                    <input type="text" class="form-control text" value="{{ $flat->flat_location }}" name=""
+                        readonly>
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="unit" class="label text">Amount of Flat Rent
+                    </label>
+                    <input type="text" class="form-control text" value="{{ $flat->flat_rent }}" name="flat_rent"
+                        placeholder="Enter Flat Rent" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-lg-6">
+                    <label for="unit" class="label text">Amount of Service Charge
+                    </label>
+                    <input type="text" class="form-control text" value="{{ $flat->service_charge }}"
+                        name="service_charge">
+                </div>
+                <div class="form-group col-lg-6">
+                    <label for="unit" class="label text">Amount of Utility Bill
+                    </label>
+                    <input type="text" class="form-control text" value="{{ $flat->utility_bill }}"
+                        name="utility_bill" placeholder="Enter Utility Bill" required>
+                </div>
             </div>
             <div class="mb-3 mt-3">
                 <h6> Status</h6>

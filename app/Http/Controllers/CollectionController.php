@@ -79,7 +79,7 @@ class CollectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function Store(Request $request)
     {
 
         $clientId = Auth::guard('admin')->user()->id;

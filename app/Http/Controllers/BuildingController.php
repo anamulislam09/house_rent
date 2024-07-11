@@ -47,6 +47,27 @@ class BuildingController extends Controller
         return redirect()->route('building.index')->with('message', 'Building creted successfully'); 
     }
 
+    // create method start here 
+    public function Edit($id)
+    {
+        $data = Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
+        return view('admin.building.edit', compact('data'));
+    }
+    // create method ends here 
+
+    // storer method start here 
+    public function Update(Request $request)
+    {
+        $data = Building::where('client_id', Auth::guard('admin')->user()->id)->where('id', $request->id)->first();
+        $data['name'] = $request->name;
+        $data['building_rent'] = $request->building_rent;
+        $data['service_charge'] = $request->service_charge;
+        $data['utility_bill'] = $request->utility_bill;
+        $data->save();
+
+        return redirect()->route('building.index')->with('message', 'Building updated successfully');
+    }
+
     // unique id serial function
     public function formatSrl($srl)
     {

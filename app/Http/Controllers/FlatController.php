@@ -65,10 +65,13 @@ class FlatController extends Controller
     public function Update(Request $request)
     {
         $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $request->id)->first();
+        $data['flat_rent'] = abs($request->flat_rent);
+        $data['service_charge'] = abs($request->service_charge);
+        $data['utility_bill'] = abs($request->utility_bill);
         $data['status'] = $request->status ? 1 : 0;
         $data->save();
 
-        return redirect()->route('flat.index')->with('message', 'Flat creted successfully');
+        return redirect()->route('flat.index')->with('message', 'Flat updated successfully');
     }
 
     // unique id serial function

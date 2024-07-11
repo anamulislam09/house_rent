@@ -22,7 +22,7 @@ class PaymentController extends Controller
     }
 
     // insert sub category category using ajax request
-    public function getPackage(Request $request)
+    public function GetPackage(Request $request)
     {
         $clientid = $request->post('client_id');
         $client = Client::where('id', $clientid)->first();

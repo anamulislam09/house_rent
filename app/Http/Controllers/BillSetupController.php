@@ -23,8 +23,11 @@ class BillSetupController extends Controller
     {
 
         $bills = BillSetup::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->get();
+        $total_current_month_rent = BillSetup::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->sum('total_current_month_rent');
+        $previous_due = BillSetup::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->sum('previous_due');
+        $total_collection_amount = BillSetup::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->sum('total_collection_amount');
         $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status', 1)->get();
-        return view('admin.bill_setup.index', compact('bills', 'tenants'));
+        return view('admin.bill_setup.index', compact('bills', 'tenants','total_current_month_rent', 'previous_due', 'total_collection_amount'));
     }
 
     // public function filterBills($tenantId = null, $date = null)
@@ -49,7 +52,7 @@ class BillSetupController extends Controller
     // }
 
 
-    public function filterBills($tenantId = null, $date = null)
+    public function FilterBills($tenantId = null, $date = null)
 {
     $clientId = Auth::guard('admin')->user()->id;
 

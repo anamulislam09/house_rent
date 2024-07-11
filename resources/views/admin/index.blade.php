@@ -273,8 +273,8 @@
                             <!-- small box -->
                             <div class="small-box bg-success">
                                 <div class="inner">
-                                    <p>Total Collection Amount</p>
-                                    <h3 id="total_collection_amount"><sup style="font-size: 14px">TK</sup></h3>
+                                    <p>Total Bill Amount</p>
+                                    <h3 id="total_collection_amount"> TK</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -306,7 +306,7 @@
                             <div class="small-box bg-primary">
                                 <div class="inner">
                                     <p>Total Collection</p>
-                                    <h3 id="total_collection"><sup style="font-size: 14px">TK</sup></h3>
+                                    <h3 id="total_collection"> TK</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -336,7 +336,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3 id="current_due"><sup style="font-size: 14px">TK</sup></h3>
+                                    <h3 id="current_due"> TK</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
@@ -371,7 +371,7 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total tenant</p>
-                                    <h3>{{ $tenant }}<sup style="font-size: 14px"></sup></h3>
+                                    <h3>{{ $tenant }}</h3>
 
                                 </div>
                                 <div class="icon">
@@ -388,8 +388,8 @@
                             <!-- small box -->
                             <div class="small-box bg-secondary">
                                 <div class="inner">
-                                    <p>Total Collection Amount</p>
-                                    <h3>{{ $monthly_collection_amount }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <p>Total Bill Amount</p>
+                                    <h3>{{ $monthly_collection_amount }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -404,7 +404,7 @@
                             <div class="small-box bg-primary">
                                 <div class="inner">
                                     <p>Total Collection</p>
-                                    <h3>{{ $monthly_collection }} <sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ $monthly_collection }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -420,7 +420,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $monthly_current_due }} <sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ $monthly_current_due }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -607,8 +607,8 @@
                             <!-- small box -->
                             <div class="small-box bg-secondary">
                                 <div class="inner">
-                                    <p>Total Collection Amount</p>
-                                    <h3>{{ $total_collection_amount }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <p>Total Bill Amount</p>
+                                    <h3>{{ $total_collection_amount }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -623,7 +623,7 @@
                             <div class="small-box bg-primary">
                                 <div class="inner">
                                     <p>Total Collection</p>
-                                    <h3>{{ $total_collection }} <sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ $total_collection }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -639,7 +639,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $current_due }} <sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ $current_due }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -657,7 +657,7 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
-                                    <h3>{{ $total_exp }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ $total_exp }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -674,7 +674,7 @@
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ $balance }} TK</h3>
 
                                 </div>
                                 <div class="icon">

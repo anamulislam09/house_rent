@@ -72,7 +72,7 @@ public function YearlyAllExpense(Request $request)
     return redirect()->route('expenses.year')->with(['yearly_expense' => $yearly_expense, 'years' => $year, 'currentYear' => $request->year]);
 }
 
-    public function showMonthlyIncome(Request $request)
+    public function ShowMonthlyIncome(Request $request)
     {
         $months = $request->input('month', Carbon::now()->month);
         $year = $request->input('year', Carbon::now()->year);
@@ -98,7 +98,7 @@ public function YearlyAllExpense(Request $request)
         return view('admin.report.monthly_incomes', compact('m_income', 'month', 'm_opening_balance', 'm_other_income', 'months', 'year'));
     }
 
-    public function handleMonthlyIncome(Request $request)
+    public function HandleMonthlyIncome(Request $request)
     {
         $months = $request->input('month');
         $year = $request->input('year');

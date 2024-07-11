@@ -52,7 +52,7 @@ Route::get('/admin/register-verified', [AdminController::class, 'Verified'])->na
 // Customer Forgate password route start here 
 Route::get('/admin/forgot-password', [AdminController::class, 'Forgot'])->name('admin.forgot-password');
 Route::post('/admin/forgot-password/create', [AdminController::class, 'ForgotPassword'])->name('admin.forgot-password.create');
-Route::get('/admin/reset/{token}', [AdminController::class, 'reset']);
+Route::get('/admin/reset/{token}', [AdminController::class, 'Reset']);
 Route::post('/admin/reset/{token}', [AdminController::class, 'PostReset']);
 // Customer Forgate password route ends here 
 
@@ -94,7 +94,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     // Payment route  
     Route::get('/client-collections', [PaymentController::class, 'Index'])->name('collections.all');
     Route::get('/collection/create', [PaymentController::class, 'Create'])->name('collection.create');
-    Route::post('/get-package', [PaymentController::class, 'getPackage']); // get subcategory using ajex 
+    Route::post('/get-package', [PaymentController::class, 'GetPackage']); // get subcategory using ajex 
     Route::post('/collection/store', [PaymentController::class, 'Store'])->name('collection.store');
     // Route::get('/collection/edit/{id}', [PaymentController::class, 'Edit'])->name('collection.edit');
     // Route::post('/collection/update', [PaymentController::class, 'Update'])->name('collection.update');
@@ -108,8 +108,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/building-manage', [BuildingController::class, 'Index'])->name('building.index');
     Route::get('/building-manage/create', [BuildingController::class, 'Create'])->name('building.create');
     Route::post('/building-manage/store', [BuildingController::class, 'Store'])->name('building.store');
-    // Route::get('/building-manage/single-create', [BuildingController::class, 'SingleCreate'])->name('building.singlecreate');
-    // Route::post('/building-manage/single-store', [BuildingController::class, 'SingleStore'])->name('building.singlestore');
+    Route::get('/building-manage/edit/{id}', [BuildingController::class, 'Edit']);
+    Route::post('/building-manage/update', [BuildingController::class, 'Update'])->name('building.update');
   
     // Flat setup route 
     Route::get('/manage-flat', [FlatController::class, 'Index'])->name('flat.index');
@@ -122,31 +122,31 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/tenant', [TenantController::class, 'Index'])->name('tenant.index');
     Route::get('/tenant/create', [TenantController::class, 'Create'])->name('tenant.create');
     Route::post('/tenant/store', [TenantController::class, 'Store'])->name('tenant.store');
-    Route::get('/tenant/edit/{id}', [TenantController::class, 'edit'])->name('tenant.edit');
-    Route::post('/tenant/update', [TenantController::class, 'update'])->name('tenant.update');
+    Route::get('/tenant/edit/{id}', [TenantController::class, 'Edit'])->name('tenant.edit');
+    Route::post('/tenant/update', [TenantController::class, 'Update'])->name('tenant.update');
 
     // Tenant setup route 
     Route::get('/tenant-document', [TenantController::class, 'AllDocuments'])->name('tenant-document.index');
     Route::get('/tenant-document/create', [TenantController::class, 'CreateDocument'])->name('tenant-document.create');
     Route::post('/tenant-document/store', [TenantController::class, 'StoreDocument'])->name('tenant-document.store');
-    Route::get('/tenant-document/edit/{id}', [TenantController::class, 'editDocument']);
-    Route::post('/tenant-document/update', [TenantController::class, 'updateDocument'])->name('tenant-document.update');
+    Route::get('/tenant-document/edit/{id}', [TenantController::class, 'EditDocument']);
+    Route::post('/tenant-document/update', [TenantController::class, 'UpdateDocument'])->name('tenant-document.update');
 
     // Rental Agreement route 
     Route::get('/rental-agreement', [RentalAgreementController::class, 'Index'])->name('rental-agreement.index');
     Route::get('/rental-agreement/create', [RentalAgreementController::class, 'Create'])->name('rental-agreement.create');
     Route::post('/rental-agreement/store', [RentalAgreementController::class, 'Store'])->name('rental-agreement.store');
-    Route::get('/rental-agreement/edit/{id}', [RentalAgreementController::class, 'edit'])->name('rental-agreement.edit');
-    Route::post('/rental-agreement/update', [RentalAgreementController::class, 'update'])->name('rental-agreement.update');
+    Route::get('/rental-agreement/edit/{id}', [RentalAgreementController::class, 'Edit'])->name('rental-agreement.edit');
+    Route::post('/rental-agreement/update', [RentalAgreementController::class, 'Update'])->name('rental-agreement.update');
     // money receipt route 
-    Route::get('/rental-agreement/money-receipt/{id}', [RentalAgreementController::class, 'moneyReceipt'])->name('rental-agreement.money-receipt');
+    Route::get('/rental-agreement/money-receipt/{id}', [RentalAgreementController::class, 'MoneyReceipt'])->name('rental-agreement.money-receipt');
     // get data using ajax
-    Route::post('/get-flat', [RentalAgreementController::class, 'getFlat']);
-    Route::post('/get-flat-info', [RentalAgreementController::class, 'getFlatInfo']);
+    Route::post('/get-flat', [RentalAgreementController::class, 'GetFlat']);
+    Route::post('/get-flat-info', [RentalAgreementController::class, 'GetFlatInfo']);
 
     // Bill Setup route 
     Route::get('/bill-setup', [BillSetupController::class, 'Index'])->name('bill-setup.index');
-    Route::get('/bill-setup/filter/{tenantId?}/{date?}', [BillSetupController::class, 'filterBills']); //bill setup filter using ajax 
+    Route::get('/bill-setup/filter/{tenantId?}/{date?}', [BillSetupController::class, 'FilterBills']); //bill setup filter using ajax 
     Route::get('/bill-setup/create', [BillSetupController::class, 'Create'])->name('bill-setup.create');
     Route::post('/bill-setup/store', [BillSetupController::class, 'Store'])->name('bill-setup.store');
 
@@ -246,8 +246,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::post('/account/expense-all', [VoucherController::class, 'ExpenseAll'])->name('account.expense.all');
 
     //Balance sheet
-    Route::get('/account/balance', [VoucherController::class, 'balanceSheetIndex'])->name('account.balancesheet');
-    Route::get('/account/balance-sheet/{year}/{month}', [VoucherController::class, 'balanceSheet'])->name('account.allbalancesheet');
+    Route::get('/account/balance', [VoucherController::class, 'BalanceSheetIndex'])->name('account.balancesheet');
+    Route::get('/account/balance-sheet/{year}/{month}', [VoucherController::class, 'BalanceSheet'])->name('account.allbalancesheet');
 
     Route::get('/income-statement', [VoucherController::class, 'Incomes'])->name('income.statement');
     /*--------------- Accounts voucher route ends here ------------------*/
@@ -262,8 +262,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     // Route::get('/incomes/month', [ReportController::class, 'MonthlyIncome'])->name('incomes.month');
     // Route::post('/monthly-income', 'ReportControllerMonthlyIncome')->name('incomesall.month');
 
-    Route::get('/monthly-income', [ReportController::class, 'showMonthlyIncome'])->name('incomes.month');
-    Route::post('/monthly-income', [ReportController::class, 'handleMonthlyIncome'])->name('handle.monthly.income');
+    Route::get('/monthly-income', [ReportController::class, 'ShowMonthlyIncome'])->name('incomes.month');
+    Route::post('/monthly-income', [ReportController::class, 'HandleMonthlyIncome'])->name('handle.monthly.income');
 
 
     // Route::post('/incomes-all/month', [ReportController::class, 'MonthlyAllIncome'])->name('incomesall.month');
@@ -366,8 +366,8 @@ Route::middleware('auth')->group(function () {
     // Route::get('/account/balance', [AccountController::class, 'BalanceSheet'])->name('manager.account.balancesheet');
     // Route::post('/account/balance-all', [AccountController::class, 'AllBalanceSheet'])->name('manager.account.allbalancesheet');
     //Balance sheet
-    Route::get('/account/balance', [AccountController::class, 'balanceSheetIndex'])->name('manager.account.balancesheet');
-    Route::get('/account/balance-sheet/{year}/{month}', [AccountController::class, 'balanceSheet'])->name('manager.account.allbalancesheet');
+    Route::get('/account/balance', [AccountController::class, 'BalanceSheetIndex'])->name('manager.account.balancesheet');
+    Route::get('/account/balance-sheet/{year}/{month}', [AccountController::class, 'BalanceSheet'])->name('manager.account.allbalancesheet');
 
 
     Route::get('/income-statement', [AccountController::class, 'Incomes'])->name('manager.income.statement');

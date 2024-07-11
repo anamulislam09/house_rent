@@ -33,6 +33,9 @@
             border-top: 1px solid #dee2e6;
             font-size: 14px;
         }
+        .text{
+            font-size: 14px;
+        }
     </style>
 
     <div class="content-wrapper">

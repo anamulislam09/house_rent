@@ -75,12 +75,12 @@ class VoucherController extends Controller
     }
 
     // BalanceSheet
-    public function balanceSheetIndex()
+    public function BalanceSheetIndex()
     {
         return view('admin.accounts.balance_sheet');
     }
 
-    public function balanceSheet($year, $month)
+    public function BalanceSheet($year, $month)
     {
         $month = $month;
         $year = $year;

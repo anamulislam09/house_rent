@@ -9,7 +9,6 @@
             font-size: 14PX
         }
 
-        /*======================    404 page    =======================*/
         .page_404 {
             padding: 40px 0;
             background: #fff;
@@ -182,129 +181,156 @@
         </section>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-    {{-- calculate from date and to date and set value duration monrth. --}}
-<script>
-    $(document).ready(function() {
-        // Function to calculate the number of months between two dates
-        function calculateMonthsBetween(fromDate, toDate) {
-            var start = new Date(fromDate);
-            var end = new Date(toDate);
-            var months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-            return months;
-        }
-
-        // Function to calculate the end date given a start date and a duration in months
-        function calculateEndDate(fromDate, duration) {
-            var start = new Date(fromDate);
-            var end = new Date(start.setMonth(start.getMonth() + parseInt(duration)));
-            return end.toISOString().substring(0, 7); // Format as YYYY-MM
-        }
-
-        // When from_date or to_date changes, calculate the duration
-        $('#from_date, #to_date').on('change', function() {
-            var fromDate = $('#from_date').val();
-            var toDate = $('#to_date').val();
-
-            if (fromDate && toDate) {
-                var duration = calculateMonthsBetween(fromDate, toDate);
-                $('#duration').val(duration);
+    <script>
+        $(document).ready(function() {
+            // Function to calculate the number of months between two dates
+            function calculateMonthsBetween(fromDate, toDate) {
+                var start = new Date(fromDate);
+                var end = new Date(toDate);
+                var months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+                return months;
             }
+    
+            // Function to calculate the end date given a start date and a duration in months
+            function calculateEndDate(fromDate, duration) {
+                var start = new Date(fromDate);
+                var end = new Date(start.setMonth(start.getMonth() + parseInt(duration)));
+                return end.toISOString().substring(0, 7); // Format as YYYY-MM
+            }
+    
+            // When from_date or to_date changes, calculate the duration
+            $('#from_date, #to_date').on('change', function() {
+                var fromDate = $('#from_date').val();
+                var toDate = $('#to_date').val();
+    
+                if (fromDate && toDate) {
+                    var duration = calculateMonthsBetween(fromDate, toDate);
+                    $('#duration').val(duration);
+                }
+            });
+    
+            // When duration changes, calculate the to_date
+            $('#duration').on('input', function() {
+                var fromDate = $('#from_date').val();
+                var duration = $('#duration').val();
+    
+                if (fromDate && duration) {
+                    var toDate = calculateEndDate(fromDate, duration);
+                    $('#to_date').val(toDate);
+                }
+            });
         });
+    </script>
+    
+    
+        <script>
+            $(document).ready(function() {
+                $("#deduct").click(function() {
+                    $("#deduct_amount").toggle();
+                });
+            });
+        </script>
+        {{-- show current month and date --}}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const dateInputs = document.querySelectorAll('input[type="month"]');
+                const today = new Date();
+                const month = today.getMonth() + 1; // January is 0!
+                const year = today.getFullYear();
+                const formattedMonth = month < 10 ? '0' + month : month;
+                const currentMonth = `${year}-${formattedMonth}`;
+    
+                dateInputs.forEach(input => {
+                    input.value = currentMonth;
+                });
+            });
+        </script>
+    
+    <script>
+    $(document).ready(function() {
+    $('#flat').hide();
+    $('#Addbtn').hide();
 
-        // When duration changes, calculate the to_date
-        $('#duration').on('input', function() {
-            var fromDate = $('#from_date').val();
-            var duration = $('#duration').val();
+    let selectedFlats = [];
 
-            if (fromDate && duration) {
-                var toDate = calculateEndDate(fromDate, duration);
-                $('#to_date').val(toDate);
+    // When building selection changes
+    $("#building_id").change(function() {
+        let building_id = $(this).val();
+        $('#flat').show();
+        $('#Addbtn').show();
+
+        $.ajax({
+            url: '/admin/get-flat',
+            type: 'post',
+            data: 'building_id=' + building_id + '&_token={{ csrf_token() }}',
+            success: function(result) {
+                $('.building').text(result.building.name);
+                // Append the default option
+                $('.flat').empty();
+                $('.flat').append('<option value="" selected disable>Select Flat</option>');
+                // Iterate over the flats and append options to the select
+                $.each(result.flat, function(index, flat) {
+                    let disabled = selectedFlats.includes(flat.id) ? 'disabled' : '';
+                    $('.flat').append('<option value="' + flat.id + '" ' + disabled + '>' + flat.flat_name + '</option>');
+                });
             }
         });
     });
-</script>
 
+    // When a flat selection changes
+    $(document).on('change', '.flat', function() {
+        let flat_id = $(this).val();
+        let row = $(this).closest('.rent-row');
 
-    <script>
-        $(document).ready(function() {
-            $("#deduct").click(function() {
-                $("#deduct_amount").toggle();
-            });
+        $.ajax({
+            url: '/admin/get-flat-info',
+            type: 'post',
+            data: 'flat_id=' + flat_id + '&_token={{ csrf_token() }}',
+            success: function(result) {
+                row.find('.rent').text(result.flat_info.flat_rent);
+                row.find('.service_charge').text(result.flat_info.service_charge);
+                row.find('.utility_bill').text(result.flat_info.utility_bill);
+            }
         });
-    </script>
-    {{-- show current month and date --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateInputs = document.querySelectorAll('input[type="month"]');
-            const today = new Date();
-            const month = today.getMonth() + 1; // January is 0!
-            const year = today.getFullYear();
-            const formattedMonth = month < 10 ? '0' + month : month;
-            const currentMonth = `${year}-${formattedMonth}`;
+    });
 
-            dateInputs.forEach(input => {
-                input.value = currentMonth;
-            });
+    // When adding a new row
+    $(document).on('click', '.btn-add', function() {
+        let newRow = $('.rent-row').first().clone();
+        newRow.find('select').val('');
+        newRow.find('.rent, .service_charge, .utility_bill').text(''); // Clear text values
+        newRow.find('td:last').html('<button type="button" class="btn btn-danger btn-remove text">Remove</button>');
+
+        // Store the selected flat
+        let selectedFlat = $('.rent-row').last().find('.flat').val();
+        if (selectedFlat) {
+            selectedFlats.push(selectedFlat);
+        }
+
+        // Disable previously selected flats in the new row
+        newRow.find('.flat option').each(function() {
+            if (selectedFlats.includes($(this).val())) {
+                $(this).attr('disabled', 'disabled');
+            }
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#flat').hide();
-            $('#Addbtn').hide();
 
-            // When building selection changes
-            $("#building_id").change(function() {
-                let building_id = $(this).val();
-                $('#flat').show();
-                $('#Addbtn').show();
+        $('#rent-table-body').append(newRow);
+    });
 
-                $.ajax({
-                    url: '/admin/get-flat',
-                    type: 'post',
-                    data: 'building_id=' + building_id + '&_token={{ csrf_token() }}',
-                    success: function(result) {
-                        $('.building').text(result.building.name);
-                        // Append the default option
-                        $('.flat').empty();
-                        $('.flat').append('<option value="" selected disable>Select Flat</option>');
-                        // Iterate over the flats and append options to the select
-                        $.each(result.flat, function(index, flat) {
-                            $('.flat').append('<option value="' + flat.id + '">' + flat.flat_name + '</option>');
-                        });
-                    }
-                });
-            });
+    // When removing a row
+    $(document).on('click', '.btn-remove', function() {
+        let row = $(this).closest('tr');
+        let removedFlat = row.find('.flat').val();
 
-            // When a flat selection changes
-            $(document).on('change', '.flat', function() {
-                let flat_id = $(this).val();
-                let row = $(this).closest('.rent-row');
+        // Remove the flat from the selected flats array
+        selectedFlats = selectedFlats.filter(flat => flat !== removedFlat);
 
-                $.ajax({
-                    url: '/admin/get-flat-info',
-                    type: 'post',
-                    data: 'flat_id=' + flat_id + '&_token={{ csrf_token() }}',
-                    success: function(result) {
-                        row.find('.rent').text(result.flat_info.flat_rent);
-                        row.find('.service_charge').text(result.flat_info.service_charge);
-                        row.find('.utility_bill').text(result.flat_info.utility_bill);
-                    }
-                });
-            });
+        // Enable the removed flat in all selects
+        $('.flat option[value="' + removedFlat + '"]').removeAttr('disabled');
 
-            // When adding a new row
-            $(document).on('click', '.btn-add', function() {
-                let newRow = $('.rent-row').first().clone();
-                newRow.find('select').val('');
-                newRow.find('.rent, .service_charge, .utility_bill').text(''); // Clear text values
-                newRow.find('td:last').html('<button type="button" class="btn btn-danger btn-remove text">Remove</button>');
-                $('#rent-table-body').append(newRow);
-            });
+        row.remove();
+    });
+});
 
-            // When removing a row
-            $(document).on('click', '.btn-remove', function() {
-                $(this).closest('tr').remove();
-            });
-        });
     </script>
 @endsection

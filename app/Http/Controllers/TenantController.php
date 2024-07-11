@@ -6,13 +6,14 @@ use App\Models\Document;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class TenantController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function Index()
     {
         $data = Tenant::where('client_id', Auth::guard('admin')->user()->id)->get();
         return view('admin.tenant.index', compact('data'));
@@ -21,7 +22,7 @@ class TenantController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function Create()
     {
         return view('admin.tenant.create');
     }
@@ -29,7 +30,7 @@ class TenantController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function Store(Request $request)
     {
         $name = $request->name;
         $phone = $request->phone;
@@ -61,7 +62,7 @@ class TenantController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function Edit($id)
     {
         $data = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
         return view('admin.tenant.edit', compact('data'));
@@ -70,7 +71,7 @@ class TenantController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function Update(Request $request)
     {
         $id = $request->id;
         $client_id = $request->client_id;
@@ -164,6 +165,79 @@ class TenantController extends Controller
 
         $tenantDocument->save();
 
-        return redirect()->back()->with('message', 'Documents uploaded successfully');
+        return redirect()->route('tenant-document.index')->with('message', 'Documents uploaded successfully');
     }
+
+    public function EditDocument($id)
+    {
+        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $data = Document::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
+        return view('admin.tenant.edit_document', compact('tenants', 'data'));
+    }
+
+    public function UpdateDocument(Request $request,)
+    {
+        $id = $request->id;
+        $request->validate([
+            'tenant_id' => 'required|exists:tenants,id',
+            'nid' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'tin' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'deed' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'police_form' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+        ]);
+
+        $document = Document::findOrFail($id);
+
+        if ($request->hasFile('nid')) {
+            // Delete the previous image
+            if ($document->nid) {
+                Storage::delete('public/' . $document->nid);
+            }
+            // Store the new image
+            $document->nid = $request->file('nid')->store('tenant_documents/nid', 'public');
+        }
+
+        if ($request->hasFile('tin')) {
+            // Delete the previous image
+            if ($document->tin) {
+                Storage::delete('public/' . $document->tin);
+            }
+            // Store the new image
+            $document->tin = $request->file('tin')->store('tenant_documents/tin', 'public');
+        }
+
+        if ($request->hasFile('photo')) {
+            // Delete the previous image
+            if ($document->photo) {
+                Storage::delete('public/' . $document->photo);
+            }
+            // Store the new image
+            $document->photo = $request->file('photo')->store('tenant_documents/photo', 'public');
+        }
+
+        if ($request->hasFile('deed')) {
+            // Delete the previous image
+            if ($document->deed) {
+                Storage::delete('public/' . $document->deed);
+            }
+            // Store the new image
+            $document->deed = $request->file('deed')->store('tenant_documents/deed', 'public');
+        }
+
+        if ($request->hasFile('police_form')) {
+            // Delete the previous image
+            if ($document->police_form) {
+                Storage::delete('public/' . $document->police_form);
+            }
+            // Store the new image
+            $document->police_form = $request->file('police_form')->store('tenant_documents/police_form', 'public');
+        }
+
+        $document->tenant_id = $request->tenant_id;
+        $document->save();
+
+        return redirect()->route('tenant-document.index')->with('success', 'Document updated successfully');
+    }
+
 }

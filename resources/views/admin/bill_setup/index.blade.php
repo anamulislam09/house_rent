@@ -100,7 +100,7 @@
                                                 <th>Month</th>
                                                 <th class="text-right">Total Current Month Rent</th>
                                                 <th class="text-right">Previous Due</th>
-                                                <th class="text-right">Collection Amount</th>
+                                                <th class="text-right">Bill Amount</th>
                                             </tr>
                                         </thead>
                                         <tbody id="billsTable">
@@ -134,6 +134,14 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
+                                       <tfoot>
+                                        <tr>
+                                            <td colspan="5">Total</td>
+                                            <td class="text-right">{{ $total_current_month_rent }}</td>
+                                            <td class="text-right">{{ $previous_due }}</td>
+                                            <td class="text-right">{{ $total_collection_amount }}</td>
+                                        </tr>
+                                       </tfoot>
                                     </table>
                                 </div>
                             </div>

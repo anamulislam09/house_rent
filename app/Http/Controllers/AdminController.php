@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
     // login method start here 
-    public function index()
+    public function Index()
     {
         return view('admin.pages.admin_login');
     } //end method
@@ -374,7 +374,7 @@ class AdminController extends Controller
         }
     }
 
-    public function reset($token)
+    public function Reset($token)
     {
         $client = Client::where('remember_token', '=', $token)->first();
         if (!empty($client)) {

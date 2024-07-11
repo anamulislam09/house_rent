@@ -105,7 +105,7 @@
 
                                                 <th class="text-right">Total Current Month Rent</th>
                                                 <th class="text-right">Previous Due</th>
-                                                <th class="text-right">Collection Amount</th>
+                                                <th class="text-right">Bill Amount</th>
                                                 <th class="text-right">Total Collection</th>
                                                 <th class="text-right">Current Due</th>
                                             </tr>
