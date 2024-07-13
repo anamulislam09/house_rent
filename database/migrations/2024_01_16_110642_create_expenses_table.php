@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
+            $table->integer('client_id');
             $table->integer('year')->nullable();
             $table->string('month')->nullable();
-            $table->integer('cat_id');
+            $table->string('exp_setup_id');
             $table->double('amount', 20, 2)->default(0);
-            $table->integer('client_id');
             $table->string('date');
             $table->string('auth_id');
             $table->timestamps();

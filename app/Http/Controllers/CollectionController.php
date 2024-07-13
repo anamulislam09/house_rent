@@ -160,6 +160,7 @@ class CollectionController extends Controller
         $clientId = Auth::guard('admin')->user()->id;
         $collection_master = CollectionMaster::where('client_id', $clientId)->where('id', $id)->firstOrFail();
         $collections = Collection::where('client_id', $clientId)->where('collection_master_id', $collection_master->id)->get();
+        $bill_amount = Collection::where('client_id', $clientId)->where('collection_master_id', $collection_master->id)->sum('total_collection_amount');
 
         // Get unique tenant IDs from collections
         $tenantIds = $collections->pluck('tenant_id')->unique();
@@ -177,14 +178,17 @@ class CollectionController extends Controller
         $pdf = PDF::loadView('admin.voucher.money_receipt_rent', [
             'client' => $client,
             'inv' => $collection_master,
+            'bill' => $bill_amount,
             'collections' => $collections,
             'tenants' => $tenants,
             'flats' => $flats,
         ]);
-
-
         return $pdf->stream('Money_Receipt_Rent.pdf');
     }
+
+
+
+
 
     // unique id serial function
     public function formatSrl($srl)

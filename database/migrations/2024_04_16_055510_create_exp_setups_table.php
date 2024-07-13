@@ -14,12 +14,10 @@ return new class extends Migration
         Schema::create('exp_setups', function (Blueprint $table) {
             $table->id();
             $table->integer('client_id');
-            $table->string('auth_id');
-            $table->integer('exp_id');
-            $table->tinyInteger('vendor_id');
-            $table->string('start_date');
-            $table->string('interval_days');
-            $table->string('end_date');
+            $table->integer('cat_id');
+            $table->string('created_by');
+            $table->string('exp_name');
+            $table->string('date');
             $table->string('status')->default(1);
             $table->timestamps();
         });

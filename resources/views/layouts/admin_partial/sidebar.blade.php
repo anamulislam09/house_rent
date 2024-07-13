@@ -308,7 +308,7 @@
                     </li>
                     {{-- Bill Setup ends here --}}
 
-                    {{-- Bill Setup start here --}}
+                    {{-- Collections start here --}}
                     <li
                         class="nav-item {{ Request::routeIs('rent-collection.index') || Request::routeIs('rent-collection.create') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
@@ -335,7 +335,42 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- Bill Setup ends here --}}
+                    {{-- Collections ends here --}}
+                    {{-- Report start here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('bills.report') || Request::routeIs('collection.report') || Request::routeIs('due.report') ? 'menu-open active' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Reports
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('bills.report') }}"
+                                    class="nav-link {{ Request::routeIs('bills.report') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Monthly Bill</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('collection.report') }}"
+                                    class="nav-link {{ Request::routeIs('collection.report') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Monthly Collection</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('due.report') }}"
+                                    class="nav-link {{ Request::routeIs('due.report') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Monthly Due</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- Report ends here --}}
 
                     {{-- User management start here --}}
                     {{-- <li
@@ -360,8 +395,8 @@
                     {{-- User management ends here --}}
 
                     {{-- Expense management ends here --}}
-                    {{-- <li
-                        class="nav-item {{ Request::routeIs('expense.create') || Request::routeIs('expense-summary.index') || Request::routeIs('expense.voucher.create') ? 'menu-open active' : '' }}">
+                    <li
+                        class="nav-item {{ Request::routeIs('expense.create') || Request::routeIs('expense-summary.index') || Request::routeIs('expense.voucher.create') || Request::routeIs('exp_setup.create') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
@@ -370,6 +405,13 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('exp_setup.create') }}"
+                                    class="nav-link {{ Request::routeIs('exp_setup.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Expense Setup</p>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a href="{{ route('expense.create') }}"
                                     class="nav-link {{ Request::routeIs('expense.create') ? 'active' : '' }}">
@@ -385,7 +427,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li> --}}
+                    </li>
                     {{-- Expenses Management start here --}}
 
                     {{-- Income Management start here --}}

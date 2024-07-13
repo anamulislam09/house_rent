@@ -109,9 +109,8 @@
                                                     <a href="" class="btn btn-sm btn-info edit"
                                                         data-id="{{ $item->id }}" data-toggle="modal"
                                                         data-target="#editAgreement"><i class="fas fa-edit"></i></a>
-                                                        <a href="{{ route('rental-agreement.money-receipt', $item->id) }}"
-                                                            target="_blank"><span
-                                                                class="badge badge-info">Voucher</span></a>
+                                                        <a class="btn btn-sm btn-success" href="{{ route('rental-agreement.money-receipt', $item->id) }}"
+                                                            target="_blank"><i class="fa fa-book"></i></a>
                                                     {{-- <a href="" class="btn btn-sm btn-success"
                                                         data-id="{{ $item->id }}" data-toggle="modal"
                                                         data-target="#"><i class="fas fa-eye"></i></a> --}}

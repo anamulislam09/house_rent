@@ -171,20 +171,28 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/user/create', [UserController::class, 'SingleCreate'])->name('user.create');
     Route::post('/user/store', [UserController::class, 'SingleStore'])->name('user.store');
 
-    // Expense-details route 
+    // Expense-setup route start here 
+    Route::get('/expense-setup/create', [ExpenseController::class, 'Exp_setup'])->name('exp_setup.create'); //create exp-setup
+    Route::post('/expense-setup/store', [ExpenseController::class, 'Exp_setupStore'])->name('exp_setup.store'); //store exp-setup
+    Route::get('/expense-setup/edit/{id}', [ExpenseController::class, 'Exp_setupEdit']);
+    Route::post('/expense-setup/update', [ExpenseController::class, 'Exp_setupUpdate'])->name('exp_setup.update');
+    // Expense-setup route ends here
+
+    // Expense route start here
     Route::get('/expense/create', [ExpenseController::class, 'Create'])->name('expense.create');
     Route::post('/expense/store', [ExpenseController::class, 'Store'])->name('expense.store');
     Route::get('/expense/edit/{id}', [ExpenseController::class, 'Edit']);
     Route::post('/expense/update', [ExpenseController::class, 'Update'])->name('expense.update');
     Route::get('/expense/delate/{id}', [ExpenseController::class, 'Delate'])->name('expense.delate');
+    // Expense route ends here
 
     Route::get('/expense-summary', [ExpenseController::class, 'Index'])->name('expense-summary.index');
 
-    // Expense setup route 
-    Route::get('/expense-setup', [ExpSetupController::class, 'ExpenseSetupIndex'])->name('expense.setup');
-    Route::post('/expense-setup/create', [ExpSetupController::class, 'ExpenseSetupCreate'])->name('expense.setup.create');
-    Route::get('/expense-setup/edit/{id}', [ExpSetupController::class, 'ExpenseSetupEdit'])->name('expense.setup.edit');
-    Route::post('/expense-setup/update', [ExpSetupController::class, 'ExpenseSetupUpdate'])->name('expense.setup.update');
+    // // Expense setup route 
+    // Route::get('/expense-setup', [ExpSetupController::class, 'ExpenseSetupIndex'])->name('expense.setup');
+    // Route::post('/expense-setup/create', [ExpSetupController::class, 'ExpenseSetupCreate'])->name('expense.setup.create');
+    // Route::get('/expense-setup/edit/{id}', [ExpSetupController::class, 'ExpenseSetupEdit'])->name('expense.setup.edit');
+    // Route::post('/expense-setup/update', [ExpSetupController::class, 'ExpenseSetupUpdate'])->name('expense.setup.update');
 
     // setup history route 
     Route::get('/expense-setup/history', [ExpSetupController::class, 'ExpenseSetupHistory'])->name('expense.setup.history');
@@ -253,6 +261,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     /*--------------- Accounts voucher route ends here ------------------*/
 
     /*--------------- Report route start here ------------------*/
+    Route::get('/bills/report', [ReportController::class, 'BillReport'])->name('bills.report');
+    Route::post('/collection/report', [ReportController::class, 'CollectionReport'])->name('collection.report');
+    Route::post('/due/report', [ReportController::class, 'DueReport'])->name('due.report');
+
     Route::get('/expenses/month', [ReportController::class, 'MonthlyExpense'])->name('expenses.month');
     Route::post('/expenses-all/month', [ReportController::class, 'MonthlyAllExpense'])->name('expensesall.month');
 

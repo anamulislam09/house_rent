@@ -48,7 +48,7 @@
                         <div class="card-header bg-primary">
                             <div class="row ">
                                 <div class="col-lg-10 col-sm-12">
-                                    <h3 class="card-title text" style="width:100%; text-align:center">All Bill</h3>
+                                    <h3 class="card-title text" style="width:100%; text-align:center">New Collection</h3>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +246,7 @@
                         $('#submitBtn').hide(); //hide submit button
                         $('#tbody').append(`
                             <tr>
-                                <td colspan="8" class="text-center">No Data Found</td>
+                                <td colspan="9" class="text-center">No Data Found</td>
                             </tr>
                         `);
                     }

@@ -11,12 +11,10 @@ class ExpSetup extends Model
 
     protected $fillable = [
         'client_id',
-        'auth_id',
-        'exp_id',
-        'vendor_id',
-        'start_date',
-        'interval_days',
-        'end_date',
+        'cat_id',
+        'exp_name',
+        'date',
+        'created_by',
         'status',
     ];
 }

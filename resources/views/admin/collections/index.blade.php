@@ -223,7 +223,7 @@
                             $('#generateBtn').hide();
                             $('tbody').append(`
                     <tr>
-                        <td colspan="8" class="text-center">No Collection Available of this Month</td>
+                        <td colspan="10" class="text-center">No Collection Available of this Month</td>
                     </tr>
                 `);
                         }

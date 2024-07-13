@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
+    // BIlls report function start here 
+    public function BillReport(){
+
+    }
+
+
     // Display the form and current month data
     public function MonthlyExpense(Request $request)
     {

@@ -9,11 +9,11 @@ class Expense extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'cat_id',
+        'client_id',
         'year',
         'month',
+        'exp_setup_id',
         'amount',
-        'client_id',
         'date',
         'auth_id'
     ];
