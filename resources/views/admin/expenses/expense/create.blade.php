@@ -172,11 +172,9 @@
                                                         data-target="#editexp"><i class="fas fa-edit"></i></a>
                                                     <a href="{{ route('expense.delate', $item->id) }}"
                                                         class="text-danger"><i class="fas fa-trash"></i></a>
-                                                    <a href="{{ route('expense.voucher.create', $item->id) }}"
+                                                    <a href="{{ route('expense.voucher.create', $item->id) }}" target="_blank"
                                                         class="text-info">
                                                         <i class="fa fa-book"></i>
-                                                        {{-- <span
-                                                                class="badge badge-primary">Voucher</span> --}}
                                                     </a>
                                                 </td>
 

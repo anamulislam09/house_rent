@@ -52,14 +52,6 @@ class TenantController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Tenant $tenant)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function Edit($id)
@@ -238,6 +230,16 @@ class TenantController extends Controller
         $document->save();
 
         return redirect()->route('tenant-document.index')->with('success', 'Document updated successfully');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function ShowDocument($id)
+    {
+        $tenant_document = Document::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
+        $tenant = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('id', $tenant_document->tenant_id)->first();
+        return view('admin.tenant.show_document', compact('tenant_document', 'tenant'));
     }
 
 }

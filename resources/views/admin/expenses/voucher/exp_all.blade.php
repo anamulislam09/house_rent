@@ -72,7 +72,7 @@
         .Prepared {
             width: 33.33%;
             float: left;
-            font-size:14px;
+            font-size: 14px;
         }
 
         .Prepared h4 {
@@ -85,7 +85,7 @@
             width: 33.33%;
             float: left;
             text-align: -webkit-center;
-            font-size:14px;
+            font-size: 14px;
         }
 
         .Approved h4 {
@@ -98,7 +98,7 @@
             width: 33.33%;
             float: left;
             text-align: -webkit-right;
-            font-size:14px;
+            font-size: 14px;
         }
 
         .Recipient h4 {
@@ -132,18 +132,20 @@
             margin-top: 4px;
         }
 
-        .dateTime{
-          margin-bottom: -10px;
+        .dateTime {
+            margin-bottom: -10px;
         }
-        .month{
-          width: 50%;
-          float: left;
+
+        .month {
+            width: 50%;
+            float: left;
         }
-      
-        .date p{
-         text-align: center;
-         font-size:14px;
+
+        .date p {
+            text-align: center;
+            font-size: 14px;
         }
+
         /* body text ends here  */
     </style>
 </head>
@@ -181,42 +183,42 @@
     </div> --}}
         <div class="body">
 
-           <div class="dateTime">
-            <div class="month">
-              <p style="font-size: 14px;">Total Expense for the Month of<strong><span>
-                          @if ('1' == date('m'))
-                              January
-                          @elseif ('2' == date('m'))
-                              February
-                          @elseif ('3' == date('m'))
-                              March
-                          @elseif ('4' == date('m'))
-                              April
-                          @elseif ('5' == date('m'))
-                              May
-                          @elseif ('6' == date('m'))
-                              June
-                          @elseif ('7' == date('m'))
-                              July
-                          @elseif ('8' == date('m'))
-                              August
-                          @elseif ('9' == date('m'))
-                              September
-                          @elseif ('10' == date('m'))
-                              October
-                          @elseif ('11' == date('m'))
-                              November
-                          @elseif ('12' == date('m'))
-                              December
-                          @endif -{{date('Y')}}
-                      </span> <strong>
-              </p>
-          </div>
-          <div class="date">
-              <p>Date: {{date("Y/m/d")}}</p>
-          </div>
+            <div class="dateTime">
+                <div class="month">
+                    <p style="font-size: 14px;">Total Expense for the Month of<strong><span>
+                                @if ('1' == date('m'))
+                                    January
+                                @elseif ('2' == date('m'))
+                                    February
+                                @elseif ('3' == date('m'))
+                                    March
+                                @elseif ('4' == date('m'))
+                                    April
+                                @elseif ('5' == date('m'))
+                                    May
+                                @elseif ('6' == date('m'))
+                                    June
+                                @elseif ('7' == date('m'))
+                                    July
+                                @elseif ('8' == date('m'))
+                                    August
+                                @elseif ('9' == date('m'))
+                                    September
+                                @elseif ('10' == date('m'))
+                                    October
+                                @elseif ('11' == date('m'))
+                                    November
+                                @elseif ('12' == date('m'))
+                                    December
+                                @endif -{{ date('Y') }}
+                            </span> <strong>
+                    </p>
+                </div>
+                <div class="date">
+                    <p>Date: {{ date('Y/m/d') }}</p>
+                </div>
 
-           </div>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -228,17 +230,19 @@
                 <tbody>
                     @foreach ($inv as $key => $item)
                         @php
-                            $exp_name = App\Models\Category::where('id', $item->cat_id)->first();
+                            $exp_name = App\Models\ExpSetup::where('client_id', Auth::guard('admin')->user()->id)
+                                ->where('id', $item->exp_setup_id)
+                                ->value('exp_name');
                             // $user = App\Models\User::where('user_id', Auth::guard('admin')->user()->user_id)->first();
                             $amount = App\Models\expense::where('client_id', Auth::guard('admin')->user()->id)
                                 ->where('month', $item->month)
                                 ->where('year', $item->year)
-                                ->where('cat_id', $item->cat_id)
+                                ->where('exp_setup_id', $item->exp_setup_id)
                                 ->sum('amount');
                         @endphp
                         <tr>
                             <td style="text-align: center">{{ $key + 1 }}</td>
-                            <td colspan="2">{{ $exp_name->name }}</td>
+                            <td colspan="2">{{ $exp_name }}</td>
                             <td style="text-align: center">{{ $amount }}</td>
                         </tr>
                     @endforeach

@@ -59,34 +59,6 @@
 
                         </ul>
                     </li>
-                    <li
-                        class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">
-                        <a href="#"
-                            class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-circle"></i>
-                            <p>
-                                Expense Category
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview ml-3">
-                            <li class="nav-item">
-                                <a href="{{ route('category.index') }}"
-                                    class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.edit') ? 'active' : '' }}">
-                                    <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>All Categories</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('category.create') }}"
-                                    class="nav-link {{ Request::routeIs('category.create') ? 'active' : '' }}">
-                                    <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>Add New</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
                     <li class="nav-item">
                         <a href="{{ route('client.index') }}"
                             class="nav-link {{ Request::routeIs('client.index') ? 'active' : '' }}">
@@ -216,7 +188,7 @@
 
                     {{-- tenant Management ends here --}}
                     <li
-                        class="nav-item {{ Request::routeIs('tenant.index') || Request::routeIs('tenant.create') || Request::routeIs('tenant-document.index') || Request::routeIs('tenant-document.create') || Request::routeIs('tenant-document.edit') ? 'menu-open active' : '' }}">
+                        class="nav-item {{ Request::routeIs('tenant.index') || Request::routeIs('tenant.create') || Request::routeIs('tenant-document.index') || Request::routeIs('tenant-document.create') || Request::routeIs('tenant-document.edit') || Request::routeIs('tenant-document.show') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
@@ -241,7 +213,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('tenant-document.index') }}"
-                                    class="nav-link {{ Request::routeIs('tenant-document.index') || Request::routeIs('tenant-document.create') || Request::routeIs('tenant-document.edit') ? 'active' : '' }}">
+                                    class="nav-link {{ Request::routeIs('tenant-document.index') || Request::routeIs('tenant-document.create') || Request::routeIs('tenant-document.edit') || Request::routeIs('tenant-document.show') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>All Documents</p>
                                 </a>
@@ -396,7 +368,7 @@
 
                     {{-- Expense management ends here --}}
                     <li
-                        class="nav-item {{ Request::routeIs('expense.create') || Request::routeIs('expense-summary.index') || Request::routeIs('expense.voucher.create') || Request::routeIs('exp_setup.create') ? 'menu-open active' : '' }}">
+                        class="nav-item {{ Request::routeIs('expense.create') || Request::routeIs('expense-summary.index') || Request::routeIs('expense.voucher.create') || Request::routeIs('exp_setup.create') || Request::routeIs('category.index') || Request::routeIs('category.create')? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
@@ -405,6 +377,14 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('category.index') }}"
+                                    class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Expense Categories</p>
+                                </a>
+                            </li>
+
                             <li class="nav-item">
                                 <a href="{{ route('exp_setup.create') }}"
                                     class="nav-link {{ Request::routeIs('exp_setup.create') ? 'active' : '' }}">
@@ -428,6 +408,34 @@
                             </li>
                         </ul>
                     </li>
+
+                    {{-- <li
+                        class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Expense Category
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('category.index') }}"
+                                    class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.edit') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Categories</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('category.create') }}"
+                                    class="nav-link {{ Request::routeIs('category.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Add New</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li> --}}
                     {{-- Expenses Management start here --}}
 
                     {{-- Income Management start here --}}

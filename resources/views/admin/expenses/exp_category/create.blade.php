@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 
 @section('admin_content')
+<style>
+    .text{
+        font-size: 14px;
+    }
+</style>
     <div class="content-wrapper">
             <div class="container-fluid">
               <div class="row">
@@ -9,8 +14,8 @@
                   </div>
                   <div class="col-sm-6">
                       <ol class="breadcrumb float-sm-right">
-                          <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
-                          <li class="breadcrumb-item active">Expense Category</li>
+                          <li class="breadcrumb-item"><a class="text" href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                          <li class="breadcrumb-item active text">Expense Category</li>
                       </ol>
                   </div>
               </div>
@@ -23,7 +28,7 @@
                         <div class="card">
                             <div class="card-header bg-primary p-1">
                                 <h3 class="card-title">
-                                    <a href="{{ route('category.index') }}"class="btn btn-light shadow rounded m-0"><span>See All</span></a>
+                                    <a href="{{ route('category.index') }}"class="btn btn-light shadow rounded m-0 text"><span>See All</span></a>
                                 </h3>
                             </div>
                             <!-- /.card-header -->
@@ -31,14 +36,14 @@
                                 <form action="{{ route('category.store') }}" method="POST">
                                     @csrf
                                     <div class="mb-3 mt-3">
-                                        <label for="name" class="form-label">Expense Category:</label>
-                                        <input type="text" class="form-control" value="{{ old('name') }}"
+                                        <label for="name" class="form-label text">Expense Category:</label>
+                                        <input type="text" class="form-control text" value="{{ old('name') }}"
                                             name="name" id="name" placeholder="Enter Expense Category">
                                     </div>
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer clearfix">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary text">Submit</button>
                             </div>
                             </form>
                         </div>

@@ -1,6 +1,15 @@
 @extends('layouts.admin')
 
 @section('admin_content')
+<style>
+    .text{
+        font-size: 14px;
+    }
+    tr, td{
+        font-size: 14px;
+        padding: 5px !important;
+    }
+</style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
         <div class="container-fluid">
@@ -10,8 +19,8 @@
                 </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Expense Category</li>
+                        <li class="breadcrumb-item"><a class="text" href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active text">Expense Category</li>
                     </ol>
                 </div>
             </div>
@@ -25,7 +34,7 @@
                             <div class="card-header bg-primary p-1">
                                 <h3 class="card-title">
                                     <a href="{{ route('category.create') }}"class="btn btn-light shadow rounded m-0"><i
-                                            class="fas fa-plus"></i><span>Add New</span></a>
+                                            class="fas fa-plus text"></i><span>Add New</span></a>
                                 </h3>
                             </div>
                             <!-- /.card-header -->

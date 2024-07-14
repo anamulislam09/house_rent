@@ -24,13 +24,9 @@ class CategoryController extends Controller
      */
     public function Index()
     {
-        if (Auth::guard('admin')->user()->role == 0) {
+
             $data = Category::all();
-            return view('superadmin.exp_category.index', compact('data'));
-        } else {
-            $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
-            return redirect()->back()->with($notification);
-        }
+            return view('admin.expenses.exp_category.index', compact('data'));
     }
 
     /**
@@ -38,12 +34,8 @@ class CategoryController extends Controller
      */
     public function Create()
     {
-        if (Auth::guard('admin')->user()->role == 0) {
-            return view('superadmin.exp_category.create');
-        } else {
-            $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
-            return redirect()->back()->with($notification);
-        }
+            return view('admin.expenses.exp_category.create');
+
     }
 
     /**

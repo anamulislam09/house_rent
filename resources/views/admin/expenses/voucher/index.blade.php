@@ -152,11 +152,11 @@
         </div>
 
         <div class="bodyInfo">
-            <div class="left-text">
+            {{-- <div class="left-text">
                 <p>Name : {{ $vendor->name }}</p>
                 <p>Phone : {{ $vendor->phone }}</p>
                 <p>Address : {{ $vendor->address }}</p>
-            </div>
+            </div> --}}
             <div class="right-text">
                 <p>Voucher No : {{ $inv->voucher_id }}</p>
                 <p>Date :{{ $inv->date }}</p>

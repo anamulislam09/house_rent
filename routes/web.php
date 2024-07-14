@@ -131,6 +131,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::post('/tenant-document/store', [TenantController::class, 'StoreDocument'])->name('tenant-document.store');
     Route::get('/tenant-document/edit/{id}', [TenantController::class, 'EditDocument']);
     Route::post('/tenant-document/update', [TenantController::class, 'UpdateDocument'])->name('tenant-document.update');
+    // Document view route start here
+    Route::get('/tenant-document/show/{id}', [TenantController::class, 'ShowDocument'])->name('tenant-document.show');
 
     // Rental Agreement route 
     Route::get('/rental-agreement', [RentalAgreementController::class, 'Index'])->name('rental-agreement.index');
@@ -230,13 +232,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
 
     /*------------------------- Expense voucher route srtart here-------------------------*/
-    // Expense Management 
-    Route::get('/expense/create-voucher/{id}', [PdfGeneratorController::class, 'CreateVoucher'])->name('expense.voucher.create');
-    Route::post('/expense/create-voucher/store', [PdfGeneratorController::class, 'CreateVoucherStore'])->name('expense.voucher.store');
-    Route::post('/expense/generate-voucher', [PdfGeneratorController::class, 'GenerateVoucher'])->name('expense.voucher.generate');
-    Route::get('/expense/generate-voucher-all', [PdfGeneratorController::class, 'GenerateVoucherAll'])->name('expense.voucher.generateall');
+    // // Expense Management 
+    // Route::get('/expense/create-voucher/{id}', [PdfGeneratorController::class, 'CreateVoucher'])->name('expense.voucher.create');
+    // Route::post('/expense/create-voucher/store', [PdfGeneratorController::class, 'CreateVoucherStore'])->name('expense.voucher.store');
+    Route::get('/account/voucher/{id}', [PdfGeneratorController::class, 'GenerateVoucher'])->name('expense.voucher.create');  //create single expense voucher
+    // Route::post('/expense/generate-voucher', [PdfGeneratorController::class, 'GenerateVoucher'])->name('expense.voucher.generate');
+    Route::post('/expense/generate-voucher-all', [PdfGeneratorController::class, 'GenerateVoucherAll'])->name('expense.voucher.generateall');
     // Expense Accounts 
-    Route::post('/account/expense-voucher-all', [PdfGeneratorController::class, 'GenerateExpenseVoucherAll'])->name('account.expense.voucher.generateall');
+    
     /*------------------------- expense voucher route srtart here-------------------------*/
 
     /*------------------------- income voucher route start here-------------------------*/

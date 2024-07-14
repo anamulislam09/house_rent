@@ -127,8 +127,8 @@
                                                 <th class="text-center">Year</th>
                                                 <th class="text-center">Month</th>
                                                 <th class="text-center">Expense Name</th>
-                                            <th class="text-center">Category</th>
-                                            <th class="text-center">Amount</th>
+                                                <th class="text-center">Category</th>
+                                                <th class="text-center">Amount</th>
                                         </thead>
                                         @if (count($expSummary) < 1)
                                             <tbody>
@@ -140,7 +140,6 @@
                                             <tbody>
                                                 @foreach ($expSummary as $key => $item)
                                                     @php
-                                                       
                                                         $amount = App\Models\Expense::where(
                                                             'client_id',
                                                             Auth::guard('admin')->user()->id,
@@ -149,7 +148,6 @@
                                                             ->where('year', $item->year)
                                                             ->where('exp_setup_id', $item->exp_setup_id)
                                                             ->sum('amount');
-                                                        // dd($amount);
                                                         $total = App\Models\Expense::where(
                                                             'client_id',
                                                             Auth::guard('admin')->user()->id,
@@ -157,7 +155,6 @@
                                                             ->where('month', $item->month)
                                                             ->where('year', $item->year)
                                                             ->sum('amount');
-
                                                         $exp_setup = DB::table('exp_setups')
                                                             ->where('id', $item->exp_setup_id)
                                                             ->first();

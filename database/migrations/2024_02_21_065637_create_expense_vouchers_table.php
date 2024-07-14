@@ -19,9 +19,8 @@ return new class extends Migration
             $table->string('date');
             $table->integer('client_id');
             $table->string('auth_id');
-            $table->integer('cat_id')->nullable();
+            $table->integer('exp_setup_id')->nullable();
             $table->double('amount', 20, 2)->default(0);
-            $table->integer('vendor_id')->nullable();
             $table->timestamps();
         });
     }

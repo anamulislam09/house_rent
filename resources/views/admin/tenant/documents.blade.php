@@ -115,6 +115,7 @@
                                                     <a href="" class="btn btn-sm btn-info edit"
                                                         data-id="{{ $item->id }}" data-toggle="modal"
                                                         data-target="#editUser"><i class="fas fa-edit"></i></a>
+                                                    <a href="{{route('tenant-document.show', $item->id)}}" class="btn btn-sm btn-success"><i class="fas fa-eye"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
