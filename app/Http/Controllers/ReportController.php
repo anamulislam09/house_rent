@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BillSetup;
 use App\Models\Expense;
 use App\Models\Income;
 use App\Models\MonthlyBlance;
@@ -15,7 +16,8 @@ class ReportController extends Controller
 {
     // BIlls report function start here 
     public function BillReport(){
-
+        $bills = BillSetup::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->get();
+        return view('admin.report.monthly_expenses', compact('monthly_exp', 'month', 'months', 'year'));
     }
 
 

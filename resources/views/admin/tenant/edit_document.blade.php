@@ -23,7 +23,7 @@
                         <input type="file" name="nid" class="form-control dropify" data-height="100">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <img src="{{ asset('storage/' . $data->nid) }}" style="width: 50px" alt="nid Image">
+                        <img src="{{ asset($data->nid) }}" style="width: 50px" alt="nid Image">
                     </div>
                 </div>
                 @error('nid')
@@ -37,7 +37,7 @@
                         <input type="file" name="tin" class="form-control dropify" data-height="100">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <img src="{{ asset('storage/' . $data->tin) }}" style="width: 50px" alt="tin Image">
+                        <img src="{{ asset($data->tin) }}" style="width: 50px" alt="tin Image">
                     </div>
                 </div>
 
@@ -52,7 +52,7 @@
                         <input type="file" name="photo" class="form-control dropify" data-height="100">
                     </div>
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <img src="{{ asset('storage/' . $data->photo) }}" style="width: 50px" alt="photo Image">
+                        <img src="{{ asset($data->photo) }}" style="width: 50px" alt="photo Image">
                     </div>
                     @error('photo')
                         <span class="text-danger">{{ $message }}</span>
@@ -65,7 +65,7 @@
                             <input type="file" name="deed" class="form-control dropify">
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12">
-                            <img src="{{ asset('storage/' . $data->deed) }}" style="width: 50px" alt="deed Image">
+                            <img src="{{ asset($data->deed) }}" style="width: 50px" alt="deed Image">
                         </div>
                     </div>
                     @error('deed')
@@ -79,7 +79,7 @@
                             <input type="file" name="police_form" class="form-control dropify" data-height="100">
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-12 " style="border:1px solid #f2f0f0">
-                            <img src="{{ asset('storage/' . $data->police_form) }}" style="width: 60px"
+                            <img src="{{ asset($data->police_form) }}" style="width: 60px"
                                 alt="police_form Image">
                         </div>
                     </div>

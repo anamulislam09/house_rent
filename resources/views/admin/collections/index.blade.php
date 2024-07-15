@@ -100,15 +100,16 @@
                                             <tr>
                                                 <th> SL</th>
                                                 <th>Tenant Name</th>
-                                                <th>Flat Name</th>
-                                                <th>Building Name</th>
+                                                {{-- <th>Flat Name</th>
+                                                <th>Building Name</th> --}}
                                                 <th>Collection date</th>
                                                 <th>Collection month</th>
-                                                <th class="text-right">Current Month Rent</th>
-                                                <th class="text-right">Previous Due</th>
+                                                {{-- <th class="text-right">Current Month Rent</th> --}}
+                                                {{-- <th class="text-right">Previous Due</th> --}}
                                                 <th class="text-right">Bill Amount</th>
                                                 <th class="text-right">Collection</th>
                                                 <th class="text-right">Current Due</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="billsTable">
@@ -129,29 +130,43 @@
                                                     )
                                                         ->where('id', $flat->building_id)
                                                         ->value('name');
-
+                                                    $total_collection_amount = App\Models\Collection::where(
+                                                        'client_id',
+                                                        Auth::guard('admin')->user()->id,
+                                                    )
+                                                        ->where('tenant_id', $item->tenant_id)
+                                                        ->sum('total_collection_amount');
+                                                    $collections = App\Models\Collection::where(
+                                                        'client_id',
+                                                        Auth::guard('admin')->user()->id,
+                                                    )
+                                                        ->where('tenant_id', $item->tenant_id)
+                                                        ->sum('total_collection');
+                                                    $current_due = App\Models\Collection::where(
+                                                        'client_id',
+                                                        Auth::guard('admin')->user()->id,
+                                                    )
+                                                        ->where('tenant_id', $item->tenant_id)
+                                                        ->sum('current_due');
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">{{ $key + 1 }}</td>
                                                     <td>{{ $tenant }}</td>
-                                                    <td>{{ $flat->flat_name }}</td>
-                                                    <td>{{ $building }}</td>
+                                                    {{-- <td>{{ $flat->flat_name }}</td>
+                                                    <td>{{ $building }}</td> --}}
                                                     <td class="text-right">{{ $item->collection_date }}</td>
                                                     <td class="text-right">
                                                         {{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
-                                                    <td class="text-right">{{ $item->total_current_month_rent }}</td>
-                                                    <td class="text-right">{{ $item->previous_due }}</td>
-                                                    <td class="text-right">{{ $item->total_collection_amount }}</td>
-                                                    <td class="text-right">{{ $item->total_collection }}</td>
-                                                    <td class="text-right">{{ $item->current_due }}</td>
+
+                                                    <td class="text-right">{{ $total_collection_amount }}</td>
+                                                    <td class="text-right">{{ $collections }}</td>
+                                                    <td class="text-right">{{ $current_due }}</td>
+                                                    <td class="text-center">
+                                                        <a href="" class="btn btn-sm btn-info edit" data-tenant_id="{{ $item->tenant_id }}" data-bill_setup_date="{{ $item->bill_setup_date }}" data-toggle="modal" data-target="#editUser"><i class="fa fa-eye"></i></a>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
-                                        {{-- <tfoot>
-                                            <tr>
-                                                <td></td>
-                                            </tr>
-                                        </tfoot> --}}
                                     </table>
                                 </div>
                             </div>
@@ -163,8 +178,38 @@
         </section>
     </div>
 
-    <script src="{{ asset('backend/plugins/jquery/jquery.min.js') }}"></script>
+    {{-- Edit Modal --}}
+    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="model-main">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Collection Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="modal_body"></div>
+            </div>
+        </div>
+    </div>
 
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.js"></script>
+    <script>
+        $('body').on('click', '.edit', function() {
+            let tenant_id = $(this).data('tenant_id');
+            let bill_setup_date = $(this).data('bill_setup_date');
+            
+            $.get("/admin/rent-collection-details/" + tenant_id + "/" + bill_setup_date, function(data) {
+                $('#modal_body').html(data);
+            });
+        });
+    </script>
+    
+
+    <script src="{{ asset('backend/plugins/jquery/jquery.min.js') }}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const dateInputs = document.querySelectorAll('input[type="month"]');
@@ -194,16 +239,16 @@
                             // Populate table with new data
                             response.forEach((bill, index) => {
                                 const collectDate = new Date(bill.collection_date);
-                                const options = { month: 'long', year: 'numeric'};
+                                const options = {
+                                    month: 'long',
+                                    year: 'numeric'
+                                };
                                 const formattedCollectDate = collectDate
                                     .toLocaleDateString('en-US', options);
-
                                 $('tbody').append(`
                         <tr>
                             <td class="text-center">${index + 1}</td>
                             <td>${bill.tenant_name}</td>
-                            <td>${bill.flat_name}</td>
-                            <td>${bill.building_name}</td>
                             <td>${bill.collection_date}</td>
                             <td>${formattedCollectDate}</td>
                             <td class="text-right">${bill.total_current_month_rent}</td>
@@ -213,7 +258,6 @@
                             <td class="text-right">${bill.current_due}</td>
                         </tr>
                     `);
-
                                 // Update the href of the generate button with the collection_master_id
                                 $('#generateBtn').attr('href',
                                     `/admin/collection/money-receipt/${bill.collection_master_id}`
@@ -230,9 +274,6 @@
                     },
                 });
             });
-
-
-
         });
     </script>
 @endsection

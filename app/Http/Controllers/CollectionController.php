@@ -19,10 +19,18 @@ class CollectionController extends Controller
     // get all collection 
     public function Index()
     {
+        $currentDate = Carbon::now()->format('Y-m');
         $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status', 1)->get();
-        $collections = Collection::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->get();
+        $collections = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('bill_setup_date', $currentDate)->groupBy('tenant_id')->orderBy('id', 'DESC')->get();
 
         return view('admin.collections.index', compact('tenants', 'collections'));
+    }
+
+    public function CollectionDetails($tenant_id, $bill_setup_date)   // show collection details
+    {
+        $currentDate = Carbon::now()->format('Y-m');
+        $collections_details = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('tenant_id', $tenant_id)->where('bill_setup_date', $bill_setup_date)->groupBy('tenant_id')->orderBy('id', 'DESC')->get();
+        return view('admin.collections.collection_details', compact('collections_details'));
     }
 
     public function AllCollectionfilter($tenantId = null, $date = null)   // get all collection  by filter

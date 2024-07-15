@@ -117,7 +117,7 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            <div class="form-group text">
+                                            <div class="form-group text">   
                                                 <label for="tin" class="text">TIN</label>
                                                 <input type="file" name="tin" class="form-control dropify"
                                                     data-height="100">

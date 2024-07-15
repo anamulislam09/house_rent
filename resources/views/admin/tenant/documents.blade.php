@@ -3,7 +3,6 @@
 @section('admin_content')
     <style>
         @media screen and (max-width: 767px) {
-
             div.dataTables_wrapper div.dataTables_length,
             div.dataTables_wrapper div.dataTables_filter,
             div.dataTables_wrapper div.dataTables_info,
@@ -28,11 +27,6 @@
                 font-size: 13px !important;
                 padding: 10px !important;
             }
-
-            /* .card-header {
-                    padding: .25rem 1.25rem;
-                } */
-
         }
 
         a.disabled {
@@ -66,13 +60,11 @@
                         <div class="card">
                             <div class="card-header bg-primary text">
                                 <h3 class="card-title">
-                                    <a href="{{ route('tenant-document.create') }}"class="btn btn-light shadow rounded"><i
-                                            class="fas fa-plus"></i>
-                                        <span>Add New</span></a>
+                                    <a href="{{ route('tenant-document.create') }}" class="btn btn-light shadow rounded">
+                                        <i class="fas fa-plus"></i> <span>Add New</span>
+                                    </a>
                                 </h3>
                             </div>
-                            {{-- </div> --}}
-                            <!-- /.card-header -->
                             <div class="card-body">
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
@@ -85,37 +77,49 @@
                                             <th>Deed</th>
                                             <th>Police Form</th>
                                             <th>Action</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $key => $item)
                                             @php
-                                                $created_by = App\Models\Client::where('id', $item->auth_id)->value(
-                                                    'name',
-                                                );
-                                                $tenant = App\Models\Tenant::where('id', $item->tenant_id)->value(
-                                                    'name',
-                                                );
+                                                $created_by = App\Models\Client::where('id', $item->auth_id)->value('name');
+                                                $tenant = App\Models\Tenant::where('id', $item->tenant_id)->value('name');
                                             @endphp
                                             <tr>
                                                 <td>{{ $key + 1 }}</td>
                                                 <td>{{ $tenant }}</td>
-                                                <td><img src="{{ asset('storage/' . $item->nid) }}" style="width: 50px"
-                                                        alt="NID Image"></td>
-                                                <td><img src="{{ asset('storage/' . $item->tin) }}" style="width: 50px"
-                                                        alt="TIN Image"></td>
-                                                <td><img src="{{ asset('storage/' . $item->photo) }}" style="width: 50px"
-                                                        alt="Photo Image"></td>
-                                                <td><img src="{{ asset('storage/' . $item->deed) }}" style="width: 50px"
-                                                        alt="Deed Image"></td>
-                                                <td><img src="{{ asset('storage/' . $item->police_form) }}"
-                                                        style="width: 50px" alt="Police Form Image"></td>
                                                 <td>
-                                                    <a href="" class="btn btn-sm btn-info edit"
-                                                        data-id="{{ $item->id }}" data-toggle="modal"
-                                                        data-target="#editUser"><i class="fas fa-edit"></i></a>
-                                                    <a href="{{route('tenant-document.show', $item->id)}}" class="btn btn-sm btn-success"><i class="fas fa-eye"></i></a>
+                                                    @if ($item->nid)
+                                                        <img src="{{ asset($item->nid) }}" style="width: 50px" alt="NID Image">
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->tin)
+                                                        <img src="{{ asset($item->tin) }}" style="width: 50px" alt="TIN Image">
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->photo)
+                                                        <img src="{{ asset($item->photo) }}" style="width: 50px" alt="Photo Image">
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->deed)
+                                                        <img src="{{ asset($item->deed) }}" style="width: 50px" alt="Deed Image">
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($item->police_form)
+                                                        <img src="{{ asset($item->police_form) }}" style="width: 50px" alt="Police Form Image">
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="" class="btn btn-sm btn-info edit" data-id="{{ $item->id }}" data-toggle="modal" data-target="#editUser">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="{{ route('tenant-document.show', $item->id) }}" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -129,10 +133,8 @@
         </section>
     </div>
 
-    {{-- category edit model --}}
-    <!-- Modal -->
-    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    {{-- Edit Modal --}}
+    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content" id="model-main">
                 <div class="modal-header">
@@ -141,11 +143,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
-                <div id="modal_body">
-
-                </div>
-
+                <div id="modal_body"></div>
             </div>
         </div>
     </div>
@@ -158,7 +156,6 @@
             let id = $(this).data('id');
             $.get("/admin/tenant-document/edit/" + id, function(data) {
                 $('#modal_body').html(data);
-
             })
         })
     </script>

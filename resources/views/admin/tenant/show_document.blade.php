@@ -13,14 +13,14 @@
         }
 
         .document-img:hover {
-            scale: 1.1;
+            transform: scale(1.1);
         }
 
         .modal-body {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%
+            width: 100%;
         }
 
         h5.card-title {
@@ -40,7 +40,7 @@
             <div class="container-fluid">
                 <div class="card">
                     <div class="card-header bg-primary text">
-                        <h3 class="card-title">Tenant Document Details </h3>
+                        <h3 class="card-title">Tenant Document Details</h3>
                     </div>
                 </div>
                 <div class="row">
@@ -62,7 +62,7 @@
                         <div class="card mt-3">
                             <div class="card-body">
                                 <h5 class="card-title">National ID (NID)</h5>
-                                <img src="{{ asset('storage/' . $tenant_document->nid) }}" class="document-img" alt="NID Document" data-toggle="modal" data-target="#imageModal" data-image="{{ asset('storage/' . $tenant_document->nid) }}" data-name="National ID (NID)">
+                                <img src="{{ asset($tenant_document->nid) }}" class="document-img" alt="NID Document" data-toggle="modal" data-target="#imageModal" data-image="{{ asset($tenant_document->nid) }}" data-name="National ID (NID)">
                             </div>
                         </div>
                     </div>
@@ -70,9 +70,7 @@
                         <div class="card mt-3">
                             <div class="card-body">
                                 <h5 class="card-title">TIN Number</h5>
-                                <img src="{{ asset('storage/' . $tenant_document->tin) }}" class="document-img"
-                                    alt="TIN Document" data-toggle="modal" data-target="#imageModal"
-                                    data-image="{{ asset('storage/' . $tenant_document->tin) }}" data-name="TIN Number">
+                                <img src="{{ asset($tenant_document->tin) }}" class="document-img" alt="TIN Document" data-toggle="modal" data-target="#imageModal" data-image="{{ asset($tenant_document->tin) }}" data-name="TIN Number">
                             </div>
                         </div>
                     </div>
@@ -82,9 +80,7 @@
                         <div class="card mt-3">
                             <div class="card-body">
                                 <h5 class="card-title">Tenant Photo</h5>
-                                <img src="{{ asset('storage/' . $tenant_document->photo) }}" class="document-img"
-                                    alt="Tenant Photo" data-toggle="modal" data-target="#imageModal"
-                                    data-image="{{ asset('storage/' . $tenant_document->photo) }}" data-name="Tenant Photo">
+                                <img src="{{ asset($tenant_document->photo) }}" class="document-img" alt="Tenant Photo" data-toggle="modal" data-target="#imageModal" data-image="{{ asset($tenant_document->photo) }}" data-name="Tenant Photo">
                             </div>
                         </div>
                     </div>
@@ -92,9 +88,7 @@
                         <div class="card mt-3">
                             <div class="card-body">
                                 <h5 class="card-title">Deed</h5>
-                                <img src="{{ asset('storage/' . $tenant_document->deed) }}" class="document-img"
-                                    alt="Deed Document" data-toggle="modal" data-target="#imageModal"
-                                    data-image="{{ asset('storage/' . $tenant_document->deed) }}" data-name="Deed">
+                                <img src="{{ asset($tenant_document->deed) }}" class="document-img" alt="Deed Document" data-toggle="modal" data-target="#imageModal" data-image="{{ asset($tenant_document->deed) }}" data-name="Deed">
                             </div>
                         </div>
                     </div>
@@ -104,22 +98,17 @@
                         <div class="card mt-3">
                             <div class="card-body">
                                 <h5 class="card-title">Police Form</h5>
-                                <img src="{{ asset('storage/' . $tenant_document->police_form) }}" class="document-img"
-                                    alt="Police Form" data-toggle="modal" data-target="#imageModal"
-                                    data-image="{{ asset('storage/' . $tenant_document->police_form) }}"
-                                    data-name="Police Form">
+                                <img src="{{ asset($tenant_document->police_form) }}" class="document-img" alt="Police Form" data-toggle="modal" data-target="#imageModal" data-image="{{ asset($tenant_document->police_form) }}" data-name="Police Form">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-    </div>
-    </section>
+        </section>
     </div>
 
     <!-- Modal for displaying full image -->
-    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">

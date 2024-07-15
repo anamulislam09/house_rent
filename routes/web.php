@@ -154,10 +154,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     // Collection Setup route 
     Route::get('/rent-collection', [CollectionController::class, 'Index'])->name('rent-collection.index');
+    Route::get('/rent-collection-details/{tenant_id}/{bill_setup_date}', [CollectionController::class, 'CollectionDetails']); //show all collection
     Route::get('/rent-collection-all/filter/{tenantId?}/{date?}', [CollectionController::class, 'AllCollectionfilter']); //bill setup filter using ajax 
     Route::get('/rent-collection/create', [CollectionController::class, 'Create'])->name('rent-collection.create');
     Route::get('/rent-collection/filter/{tenantId?}/{date?}', [CollectionController::class, 'Collectionfilter']); //bill setup filter using ajax 
     Route::post('/rent-collection/store', [CollectionController::class, 'Store'])->name('rent-collection.store');
+    
 
     Route::get('/collection/money-receipt/{id}', [CollectionController::class, 'MoneyReceipt'])->name('collection.money-receipt'); //many receipt for collection
     
@@ -207,7 +209,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/vendor/edit/{id}', [VendoreController::class, 'VendorEdit'])->name('vendor.edit');
     Route::post('/vendor/update', [VendoreController::class, 'VendorUpdate'])->name('vendor.update');
 
-
     // report route start here 
     // Route::get('/expenses/all', [ExpProcessController::class, 'Index'])->name('expenses.process');
     Route::get('/expenses/month', [ExpDetailController::class, 'MonthlyExpense'])->name('expenses.month');
@@ -231,7 +232,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::post('/income/collection/store/', [IncomeController::class, 'StoreCollection'])->name('income.collection.store');
 
 
-    /*------------------------- Expense voucher route srtart here-------------------------*/
+    /*------------------------- Expense voucher route start here-------------------------*/
     // // Expense Management 
     // Route::get('/expense/create-voucher/{id}', [PdfGeneratorController::class, 'CreateVoucher'])->name('expense.voucher.create');
     // Route::post('/expense/create-voucher/store', [PdfGeneratorController::class, 'CreateVoucherStore'])->name('expense.voucher.store');

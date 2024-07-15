@@ -57,7 +57,7 @@
             $buildings = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->get();
             $total_building = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->count();
             $total_exp = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
-            $total_collection_amount = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum(
+            $total_collection_amount = App\Models\BillSetup::where('client_id', Auth::guard('admin')->user()->id)->sum(
                 'total_collection_amount',
             );
 
@@ -84,7 +84,7 @@
             $superAdmin = Auth::guard('admin')->user()->id;
 
             // this month transactions
-            $monthly_collection_amount = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)
+            $monthly_collection_amount = App\Models\BillSetup::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('bill_setup_date', $currentDate)
                 ->sum('total_collection_amount');
 
@@ -420,7 +420,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $monthly_current_due }} TK</h3>
+                                    <h3>{{ $monthly_collection_amount - $monthly_collection }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -639,7 +639,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $current_due }} TK</h3>
+                                    <h3>{{ $total_collection_amount - $total_collection }} TK</h3>
 
                                 </div>
                                 <div class="icon">

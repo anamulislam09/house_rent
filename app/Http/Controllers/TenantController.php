@@ -123,42 +123,53 @@ class TenantController extends Controller
             'police_form.mimes' => 'The police form must be a file of type: jpeg, png, jpg, pdf.',
             'police_form.max' => 'The police form must not exceed 1 MB.',
         ]);
-
+    
         $tenantDocument = new Document();
-
+    
         $tenantDocument->tenant_id = $request->tenant_id;
         $tenantDocument->client_id = Auth::guard('admin')->user()->id;
         $tenantDocument->auth_id = Auth::guard('admin')->user()->id;
-
+    
         if ($request->hasFile('nid')) {
-            $nidPath = $request->file('nid')->store('tenant_documents/nid', 'public');
-            $tenantDocument->nid = $nidPath;
+            $nidFile = $request->file('nid');
+            $nidFileName = time() . '_nid.' . $nidFile->getClientOriginalExtension();
+            $nidFile->move(public_path('tenant_documents/nid'), $nidFileName);
+            $tenantDocument->nid = 'tenant_documents/nid/' . $nidFileName;
         }
-
+    
         if ($request->hasFile('tin')) {
-            $tinPath = $request->file('tin')->store('tenant_documents/tin', 'public');
-            $tenantDocument->tin = $tinPath;
+            $tinFile = $request->file('tin');
+            $tinFileName = time() . '_tin.' . $tinFile->getClientOriginalExtension();
+            $tinFile->move(public_path('tenant_documents/tin'), $tinFileName);
+            $tenantDocument->tin = 'tenant_documents/tin/' . $tinFileName;
         }
-
+    
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('tenant_documents/photo', 'public');
-            $tenantDocument->photo = $photoPath;
+            $photoFile = $request->file('photo');
+            $photoFileName = time() . '_photo.' . $photoFile->getClientOriginalExtension();
+            $photoFile->move(public_path('tenant_documents/photo'), $photoFileName);
+            $tenantDocument->photo = 'tenant_documents/photo/' . $photoFileName;
         }
-
+    
         if ($request->hasFile('deed')) {
-            $deedPath = $request->file('deed')->store('tenant_documents/deed', 'public');
-            $tenantDocument->deed = $deedPath;
+            $deedFile = $request->file('deed');
+            $deedFileName = time() . '_deed.' . $deedFile->getClientOriginalExtension();
+            $deedFile->move(public_path('tenant_documents/deed'), $deedFileName);
+            $tenantDocument->deed = 'tenant_documents/deed/' . $deedFileName;
         }
-
+    
         if ($request->hasFile('police_form')) {
-            $policeFormPath = $request->file('police_form')->store('tenant_documents/police_form', 'public');
-            $tenantDocument->police_form = $policeFormPath;
+            $policeFormFile = $request->file('police_form');
+            $policeFormFileName = time() . '_police_form.' . $policeFormFile->getClientOriginalExtension();
+            $policeFormFile->move(public_path('tenant_documents/police_form'), $policeFormFileName);
+            $tenantDocument->police_form = 'tenant_documents/police_form/' . $policeFormFileName;
         }
-
+    
         $tenantDocument->save();
-
+    
         return redirect()->route('tenant-document.index')->with('message', 'Documents uploaded successfully');
     }
+    
 
     public function EditDocument($id)
     {
@@ -167,70 +178,80 @@ class TenantController extends Controller
         return view('admin.tenant.edit_document', compact('tenants', 'data'));
     }
 
-    public function UpdateDocument(Request $request,)
+    public function UpdateDocument(Request $request)
     {
         $id = $request->id;
         $request->validate([
             'tenant_id' => 'required|exists:tenants,id',
-            'nid' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-            'tin' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-            'deed' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
-            'police_form' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:1024',
+            'nid' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:1024',
+            'tin' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:1024',
+            'photo' => 'nullable|file|mimes:jpeg,png,jpg|max:1024',
+            'deed' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:1024',
+            'police_form' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:1024',
         ]);
-
+    
         $document = Document::findOrFail($id);
-
-        if ($request->hasFile('nid')) {
-            // Delete the previous image
-            if ($document->nid) {
-                Storage::delete('public/' . $document->nid);
-            }
-            // Store the new image
-            $document->nid = $request->file('nid')->store('tenant_documents/nid', 'public');
-        }
-
-        if ($request->hasFile('tin')) {
-            // Delete the previous image
-            if ($document->tin) {
-                Storage::delete('public/' . $document->tin);
-            }
-            // Store the new image
-            $document->tin = $request->file('tin')->store('tenant_documents/tin', 'public');
-        }
-
-        if ($request->hasFile('photo')) {
-            // Delete the previous image
-            if ($document->photo) {
-                Storage::delete('public/' . $document->photo);
-            }
-            // Store the new image
-            $document->photo = $request->file('photo')->store('tenant_documents/photo', 'public');
-        }
-
-        if ($request->hasFile('deed')) {
-            // Delete the previous image
-            if ($document->deed) {
-                Storage::delete('public/' . $document->deed);
-            }
-            // Store the new image
-            $document->deed = $request->file('deed')->store('tenant_documents/deed', 'public');
-        }
-
-        if ($request->hasFile('police_form')) {
-            // Delete the previous image
-            if ($document->police_form) {
-                Storage::delete('public/' . $document->police_form);
-            }
-            // Store the new image
-            $document->police_form = $request->file('police_form')->store('tenant_documents/police_form', 'public');
-        }
-
+    
         $document->tenant_id = $request->tenant_id;
+        $document->client_id = Auth::guard('admin')->user()->id;
+        $document->auth_id = Auth::guard('admin')->user()->id;
+    
+        if ($request->hasFile('nid')) {
+            if ($document->nid && file_exists(public_path($document->nid))) {
+                unlink(public_path($document->nid));
+            }
+            $nidFile = $request->file('nid');
+            $nidFileName = time() . '_nid.' . $nidFile->getClientOriginalExtension();
+            $nidFile->move(public_path('tenant_documents/nid'), $nidFileName);
+            $document->nid = 'tenant_documents/nid/' . $nidFileName;
+        }
+    
+        if ($request->hasFile('tin')) {
+            if ($document->tin && file_exists(public_path($document->tin))) {
+                unlink(public_path($document->tin));
+            }
+            $tinFile = $request->file('tin');
+            $tinFileName = time() . '_tin.' . $tinFile->getClientOriginalExtension();
+            $tinFile->move(public_path('tenant_documents/tin'), $tinFileName);
+            $document->tin = 'tenant_documents/tin/' . $tinFileName;
+        }
+    
+        if ($request->hasFile('photo')) {
+            if ($document->photo && file_exists(public_path($document->photo))) {
+                unlink(public_path($document->photo));
+            }
+            $photoFile = $request->file('photo');
+            $photoFileName = time() . '_photo.' . $photoFile->getClientOriginalExtension();
+            $photoFile->move(public_path('tenant_documents/photo'), $photoFileName);
+            $document->photo = 'tenant_documents/photo/' . $photoFileName;
+        }
+    
+        if ($request->hasFile('deed')) {
+            if ($document->deed && file_exists(public_path($document->deed))) {
+                unlink(public_path($document->deed));
+            }
+            $deedFile = $request->file('deed');
+            $deedFileName = time() . '_deed.' . $deedFile->getClientOriginalExtension();
+            $deedFile->move(public_path('tenant_documents/deed'), $deedFileName);
+            $document->deed = 'tenant_documents/deed/' . $deedFileName;
+        }
+    
+        if ($request->hasFile('police_form')) {
+            if ($document->police_form && file_exists(public_path($document->police_form))) {
+                unlink(public_path($document->police_form));
+            }
+            $policeFormFile = $request->file('police_form');
+            $policeFormFileName = time() . '_police_form.' . $policeFormFile->getClientOriginalExtension();
+            $policeFormFile->move(public_path('tenant_documents/police_form'), $policeFormFileName);
+            $document->police_form = 'tenant_documents/police_form/' . $policeFormFileName;
+        }
+    
         $document->save();
-
+    
         return redirect()->route('tenant-document.index')->with('success', 'Document updated successfully');
     }
+    
+    
 
     /**
      * Display the specified resource.
