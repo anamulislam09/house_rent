@@ -12,6 +12,7 @@ use App\Models\Tenant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PDF;
 
 class CollectionController extends Controller
@@ -21,38 +22,56 @@ class CollectionController extends Controller
     {
         $currentDate = Carbon::now()->format('Y-m');
         $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status', 1)->get();
-        $collections = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('bill_setup_date', $currentDate)->groupBy('tenant_id')->orderBy('id', 'DESC')->get();
+        $collections = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('collections.collection_date', 'like', $currentDate . '%')->groupBy('tenant_id')->orderBy('id', 'DESC')->get();
 
         return view('admin.collections.index', compact('tenants', 'collections'));
     }
 
-    public function CollectionDetails($tenant_id, $bill_setup_date)   // show collection details
+    public function CollectionDetails($tenant_id, $collection_date)
     {
-        $currentDate = Carbon::now()->format('Y-m');
-        $collections_details = Collection::where('client_id', Auth::guard('admin')->user()->id)->where('tenant_id', $tenant_id)->where('bill_setup_date', $bill_setup_date)->groupBy('tenant_id')->orderBy('id', 'DESC')->get();
+        $collections_details = Collection::where('client_id', Auth::guard('admin')->user()->id)
+            ->where('tenant_id', $tenant_id)
+            ->where('collections.collection_date', 'like', $collection_date . '%')
+            ->orderBy('id', 'DESC')
+            ->get();
+
         return view('admin.collections.collection_details', compact('collections_details'));
     }
 
     public function AllCollectionfilter($tenantId = null, $date = null)   // get all collection  by filter
-    {
-        $clientId = Auth::guard('admin')->user()->id;
-        $query = Collection::query()
-            ->where('collections.client_id', $clientId)
-            ->join('flats', 'collections.flat_id', '=', 'flats.id')
-            ->join('tenants', 'collections.tenant_id', '=', 'tenants.id')
-            ->join('buildings', 'flats.building_id', '=', 'buildings.id')
-            ->select('collections.*', 'flats.flat_name', 'tenants.name as tenant_name', 'tenants.id as tenant_id', 'buildings.name as building_name');
-        if ($tenantId) {
-            $query->where('collections.tenant_id', $tenantId);
-        }
+{
+    $clientId = Auth::guard('admin')->user()->id;
+    $query = Collection::query()
+        ->where('collections.client_id', $clientId)
+        ->where('collections.client_id', $clientId)
+        ->join('flats', 'collections.flat_id', '=', 'flats.id')
+        ->join('tenants', 'collections.tenant_id', '=', 'tenants.id')
+        ->join('buildings', 'flats.building_id', '=', 'buildings.id')
+        ->select(
+            'tenants.name as tenant_name', 
+            'tenants.id as tenant_id', 
+            'buildings.name as building_name',
+            'collections.collection_date as collection_date',
+            'collections.collection_master_id as collection_master_id',
+            DB::raw('SUM(collections.total_current_month_rent) as total_current_month_rent'),
+            DB::raw('SUM(collections.previous_due) as previous_due'),
+            DB::raw('SUM(collections.total_collection_amount) as total_collection_amount'),
+            DB::raw('SUM(collections.total_collection) as total_collection'),
+            DB::raw('SUM(collections.current_due) as current_due')
+        )
+        ->groupBy('tenants.id', 'tenants.name', 'buildings.name');
 
-        if ($date) {
-            $query->where('collections.bill_setup_date', 'like', $date . '%');
-        }
-
-        $bills = $query->get();
-        return response()->json($bills);
+    if ($tenantId) {
+        $query->where('collections.tenant_id', $tenantId);
     }
+
+    if ($date) {
+        $query->where('collections.collection_date', 'like', $date . '%');
+    }
+
+    $bills = $query->get();
+    return response()->json($bills);
+}
 
     /**
      * Show the form for creating a new resource.
@@ -193,10 +212,6 @@ class CollectionController extends Controller
         ]);
         return $pdf->stream('Money_Receipt_Rent.pdf');
     }
-
-
-
-
 
     // unique id serial function
     public function formatSrl($srl)

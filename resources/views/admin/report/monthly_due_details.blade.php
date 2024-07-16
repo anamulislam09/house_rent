@@ -16,17 +16,12 @@
                         <th>Tenant Name</th>
                         <th>Flat Name</th>
                         <th>Building Name</th>
-                        <th>Collection Date</th>
-                        <th>Collection Month</th>
-                        <th class="text-right">Current Month Rent</th>
-                        <th class="text-right">Previous Due</th>
-                        <th class="text-right">Bill Amount</th>
-                        <th class="text-right">Collection</th>
-                        <th class="text-right">Current Due</th>
+                        <th>Date</th>
+                        <th class="text-right">Due</th>
                     </tr>
                 </thead>
                 <tbody id="billsTable">
-                    @foreach ($collections_details as $key => $item)
+                    @foreach ($due_details as $key => $item)
                         @php
                             $flat = App\Models\Flat::where('client_id', $item->client_id)
                                 ->where('id', $item->flat_id)
@@ -43,12 +38,7 @@
                             <td>{{ $tenant }}</td>
                             <td>{{ $flat->flat_name }}</td>
                             <td>{{ $building }}</td>
-                            <td class="text-right">{{ $item->collection_date }}</td>
                             <td class="text-right">{{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
-                            <td class="text-right">{{ $item->total_current_month_rent }}</td>
-                            <td class="text-right">{{ $item->previous_due }}</td>
-                            <td class="text-right">{{ $item->total_collection_amount }}</td>
-                            <td class="text-right">{{ $item->total_collection }}</td>
                             <td class="text-right">{{ $item->current_due }}</td>
                         </tr>
                     @endforeach

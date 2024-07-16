@@ -56,7 +56,7 @@
                             <div class="card-header bg-primary">
                                 <div class="row ">
                                     <div class="col-lg-10 col-sm-12">
-                                        <h3 class="card-title text" style="width:100%; text-align:center">All Collection
+                                        <h3 class="card-title text" style="width:100%; text-align:center">Monthly Collection
                                         </h3>
                                     </div>
                                 </div>
@@ -90,9 +90,9 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <a href="" class="btn btn-info btn-sm" id="generateBtn" target="_blank"
+                                {{-- <a href="" class="btn btn-info btn-sm" id="generateBtn" target="_blank"
                                     style="display: none;">Money
-                                    Receipt</a>
+                                    Receipt</a> --}}
 
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped mt-3">
@@ -102,18 +102,18 @@
                                                 <th>Tenant Name</th>
                                                 {{-- <th>Flat Name</th>
                                                 <th>Building Name</th> --}}
-                                                <th>Collection date</th>
-                                                <th>Collection month</th>
+                                                <th>Date</th>
+                                                {{-- <th>Collection month</th> --}}
                                                 {{-- <th class="text-right">Current Month Rent</th> --}}
                                                 {{-- <th class="text-right">Previous Due</th> --}}
-                                                <th class="text-right">Bill Amount</th>
                                                 <th class="text-right">Collection</th>
-                                                <th class="text-right">Current Due</th>
+                                                {{-- <th class="text-right">Collection</th>
+                                                <th class="text-right">Current Due</th> --}}
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="billsTable">
-                                            @foreach ($collections as $key => $item)
+                                            @foreach ($bills as $key => $item)
                                                 @php
                                                     $flat = App\Models\Flat::where('client_id', $item->client_id)
                                                         ->where('id', $item->flat_id)
@@ -154,17 +154,17 @@
                                                     <td>{{ $tenant }}</td>
                                                     {{-- <td>{{ $flat->flat_name }}</td>
                                                     <td>{{ $building }}</td> --}}
-                                                    <td class="text-right">{{ $item->collection_date }}</td>
+                                                    {{-- <td class="text-right">{{ $item->collection_date }}</td> --}}
                                                     <td class="text-right">
                                                         {{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
 
-                                                    <td class="text-right">{{ $total_collection_amount }}</td>
                                                     <td class="text-right">{{ $collections }}</td>
-                                                    <td class="text-right">{{ $current_due }}</td>
+                                                    {{-- <td class="text-right">{{ $collections }}</td>
+                                                    <td class="text-right">{{ $current_due }}</td> --}}
                                                     <td class="text-center">
                                                         <a href="" class="btn btn-sm btn-info edit"
                                                             data-tenant_id="{{ $item->tenant_id }}"
-                                                            data-bill_setup_date="{{ $item->collection_date }}"
+                                                            data-bill_setup_date="{{ $item->bill_setup_date }}"
                                                             data-toggle="modal" data-target="#editUser"><i
                                                                 class="fa fa-eye"></i></a>
                                                     </td>
@@ -188,7 +188,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content" id="model-main">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Collection Details</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Collections Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -204,9 +204,9 @@
     <script>
         $('body').on('click', '.edit', function() {
             let tenant_id = $(this).data('tenant_id');
-            let collection_date = $(this).data('bill_setup_date');
+            let bill_setup_date = $(this).data('bill_setup_date');
 
-            $.get("/admin/rent-collection-details/" + tenant_id + "/" + collection_date, function(data) {
+            $.get("/admin/collection/report-details/" + tenant_id + "/" + bill_setup_date, function(data) {
                 $('#modal_body').html(data);
             });
         });
@@ -227,71 +227,57 @@
                 input.value = currentMonth;
             });
 
-            $('#generateBtn').hide();
+            // $('#generateBtn').hide();
 
             $('#filterButton').on('click', function() {
                 const tenantId = $('#tenant').val();
                 const date = $('#date').val();
 
                 $.ajax({
-                    url: `/admin/rent-collection-all/filter/${tenantId}/${date}`,
+                    url: `/admin/collection/report-filter/${tenantId}/${date}`,
                     method: 'GET',
                     success: function(response) {
                         $('tbody').empty();
 
                         if (response.length > 0) {
-                            $('#generateBtn').show();
+                            // $('#generateBtn').show();
 
                             response.forEach((bill, index) => {
-                                const collection_date = new Date(bill.collection_date);
-                                const formattedDate = collection_date
+                                const bill_setup_date = new Date(bill.bill_setup_date);
+                                const formattedDate = bill_setup_date
                                     .toLocaleDateString('en-US', {
                                         year: 'numeric',
                                         month: 'long'
                                     });
 
                                 $('tbody').append(`
-                        <tr>
-                            <td class="text-center">${index + 1}</td>
-                            <td>${bill.tenant_name}</td>
-                            <td>${bill.building_name}</td>
-                            <td class="text-right">${formattedDate}</td>
-                            <td class="text-right">${bill.total_collection_amount}</td>
-                            <td class="text-right">${bill.total_collection}</td>
-                            <td class="text-right">${bill.current_due}</td>
-                            <td class="text-center">
-                                <a href="#" class="btn btn-sm btn-info edit"
-                                   data-tenant_id="${bill.tenant_id}"
-                                   data-bill_setup_date="${bill.collection_date}"
-                                   data-toggle="modal" data-target="#editUser">
-                                   <i class="fa fa-eye"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    `);
+                                    <tr>
+                                        <td class="text-center">${index + 1}</td>
+                                        <td>${bill.tenant_name}</td>
+                                        <td class="text-right">${formattedDate}</td>
+                                        <td class="text-right">${bill.total_collection}</td>
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-sm btn-info edit"
+                                            data-tenant_id="${bill.tenant_id}"
+                                            data-bill_setup_date="${bill.bill_setup_date}"
+                                            data-toggle="modal" data-target="#editUser">
+                                            <i class="fa fa-eye"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                              `);
                             });
-
-                            // Update the href of the generate button with the first bill's collection_master_id
-                            if (response.length > 0) {
-                                $('#generateBtn').attr('href',
-                                    `/admin/collection/money-receipt/${response[0].collection_master_id}`
-                                );
-                            }
                         } else {
-                            $('#generateBtn').hide();
+                            // $('#generateBtn').hide();
                             $('tbody').append(`
-                    <tr>
-                        <td colspan="9" class="text-center">No Collection Available for this Month</td>
-                    </tr>
-                `);
+                                <tr>
+                                    <td colspan="9" class="text-center">No Bills Available for this Month</td>
+                                </tr>
+                            `);
                         }
                     },
                 });
             });
-
-
-
-
         });
     </script>
 @endsection

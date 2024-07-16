@@ -154,7 +154,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     // Collection Setup route 
     Route::get('/rent-collection', [CollectionController::class, 'Index'])->name('rent-collection.index');
-    Route::get('/rent-collection-details/{tenant_id}/{bill_setup_date}', [CollectionController::class, 'CollectionDetails']); //show all collection
+    Route::get('/rent-collection-details/{tenant_id}/{collection_date}', [CollectionController::class, 'CollectionDetails']); //show all collection
     Route::get('/rent-collection-all/filter/{tenantId?}/{date?}', [CollectionController::class, 'AllCollectionfilter']); //bill setup filter using ajax 
     Route::get('/rent-collection/create', [CollectionController::class, 'Create'])->name('rent-collection.create');
     Route::get('/rent-collection/filter/{tenantId?}/{date?}', [CollectionController::class, 'Collectionfilter']); //bill setup filter using ajax 
@@ -231,7 +231,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/income/collection', [IncomeController::class, 'Collection'])->name('income.collection');
     Route::post('/income/collection/store/', [IncomeController::class, 'StoreCollection'])->name('income.collection.store');
 
-
     /*------------------------- Expense voucher route start here-------------------------*/
     // // Expense Management 
     // Route::get('/expense/create-voucher/{id}', [PdfGeneratorController::class, 'CreateVoucher'])->name('expense.voucher.create');
@@ -266,8 +265,16 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     /*--------------- Report route start here ------------------*/
     Route::get('/bills/report', [ReportController::class, 'BillReport'])->name('bills.report');
-    Route::post('/collection/report', [ReportController::class, 'CollectionReport'])->name('collection.report');
-    Route::post('/due/report', [ReportController::class, 'DueReport'])->name('due.report');
+    Route::get('/bills/report-filter/{tenant_id}/{bill_setup_date}', [ReportController::class, 'BillReportFilter']); //get filter data 
+    Route::get('/bills/report-details/{tenant_id}/{bill_setup_date}', [ReportController::class, 'BillReportDetails']); //show all bills details
+   
+    Route::get('/collection/report', [ReportController::class, 'CollectionReport'])->name('collection.report');
+    Route::get('/collection/report-filter/{tenant_id}/{bill_setup_date}', [ReportController::class, 'collectionReportFilter']); //get filter data 
+    Route::get('/collection/report-details/{tenant_id}/{bill_setup_date}', [ReportController::class, 'collectionReportDetails']); //show all bills details
+
+    Route::get('/due/report', [ReportController::class, 'DueReport'])->name('due.report');
+    Route::get('/due/report-filter/{tenant_id}/{bill_setup_date}', [ReportController::class, 'dueReportFilter']); //get filter data 
+    Route::get('/due/report-details/{tenant_id}/{bill_setup_date}', [ReportController::class, 'dueReportDetails']); //show all bills details
 
     Route::get('/expenses/month', [ReportController::class, 'MonthlyExpense'])->name('expenses.month');
     Route::post('/expenses-all/month', [ReportController::class, 'MonthlyAllExpense'])->name('expensesall.month');
