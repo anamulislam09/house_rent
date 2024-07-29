@@ -128,13 +128,13 @@
                 @endif
 
                 @if (Auth::guard('admin')->user()->role == 1)
-                    {{-- Building Management ends here --}}
+                    {{-- Building Manage ends here --}}
                     <li
                         class="nav-item {{ Request::routeIs('building.index') || Request::routeIs('building.create') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
-                                Building Management
+                                Building Manage
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -155,15 +155,15 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- Building Management ends here --}}
+                    {{-- Building Manage ends here --}}
 
-                    {{-- flat Management ends here --}}
+                    {{-- flat Manage ends here --}}
                     <li
                         class="nav-item {{ Request::routeIs('flat.index') || Request::routeIs('flat.create') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
-                                Flat Management
+                                Flat Manage
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -184,15 +184,15 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- flat Management ends here --}}
+                    {{-- flat Manage ends here --}}
 
-                    {{-- tenant Management ends here --}}
+                    {{-- tenant Manage ends here --}}
                     <li
                         class="nav-item {{ Request::routeIs('tenant.index') || Request::routeIs('tenant.create') || Request::routeIs('tenant-document.index') || Request::routeIs('tenant-document.create') || Request::routeIs('tenant-document.edit') || Request::routeIs('tenant-document.show') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
-                                Tenant Management
+                                Tenant Manage
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -220,7 +220,7 @@
                             </li>
                         </ul>
                     </li>
-                    {{-- tenant Management ends here --}}
+                    {{-- tenant Manage ends here --}}
 
                     {{-- Rental Agreement ends here --}}
                     <li
@@ -344,13 +344,13 @@
                     </li>
                     {{-- Report ends here --}}
 
-                    {{-- User management start here --}}
+                    {{-- User Manage start here --}}
                     {{-- <li
                         class="nav-item {{ Request::routeIs('users.index') || Request::routeIs('users.create') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
-                                User Management
+                                User Manage
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -364,15 +364,15 @@
                             </li>
                         </ul>
                     </li> --}}
-                    {{-- User management ends here --}}
+                    {{-- User Manage ends here --}}
 
-                    {{-- Expense management ends here --}}
+                    {{-- Expense Manage ends here --}}
                     <li
                         class="nav-item {{ Request::routeIs('expense.create') || Request::routeIs('expense-summary.index') || Request::routeIs('expense.voucher.create') || Request::routeIs('exp_setup.create') || Request::routeIs('category.index') || Request::routeIs('category.create')? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
-                                Expense Management
+                                Expense Manage
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -436,15 +436,15 @@
                             </li>
                         </ul>
                     </li> --}}
-                    {{-- Expenses Management start here --}}
+                    {{-- Expenses Manage start here --}}
 
-                    {{-- Income Management start here --}}
+                    {{-- Income Manage start here --}}
                     {{-- <li
                         class="nav-item {{ Request::routeIs('income.create') || Request::routeIs('income.collection') || Request::routeIs('income.collection.index') || Request::routeIs('others.income.create') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
-                                Income Management
+                                Income Manage
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
@@ -480,7 +480,7 @@
                             </li>
                         </ul>
                     </li> --}}
-                    {{-- Income Management start here --}}
+                    {{-- Income Manage start here --}}
 
                     {{-- Accounts  start here --}}
                     {{-- <li

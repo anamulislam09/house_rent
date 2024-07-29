@@ -92,7 +92,6 @@
     <script>
         $('body').on('click', '.edit', function() {
             let user_id = $(this).data('id');
-            alert(user_id);
             $.get("category/edit/" + user_id, function(data) {
                 $('#modal_body').html(data);
 

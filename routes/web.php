@@ -237,7 +237,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     // Route::post('/expense/create-voucher/store', [PdfGeneratorController::class, 'CreateVoucherStore'])->name('expense.voucher.store');
     Route::get('/account/voucher/{id}', [PdfGeneratorController::class, 'GenerateVoucher'])->name('expense.voucher.create');  //create single expense voucher
     // Route::post('/expense/generate-voucher', [PdfGeneratorController::class, 'GenerateVoucher'])->name('expense.voucher.generate');
-    Route::post('/expense/generate-voucher-all', [PdfGeneratorController::class, 'GenerateVoucherAll'])->name('expense.voucher.generateall');
+    Route::get('/expense/generate-voucher-all', [PdfGeneratorController::class, 'GenerateVoucherAll'])->name('expense.voucher.generateall');
     // Expense Accounts 
     
     /*------------------------- expense voucher route srtart here-------------------------*/

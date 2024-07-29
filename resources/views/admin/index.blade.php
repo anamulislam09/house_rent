@@ -663,7 +663,7 @@
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="{{ route('expenses.year') }}" class="small-box-footer link">More info <i
+                                <a href="{{ route('expense-summary.index') }}" class="small-box-footer link">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -674,13 +674,13 @@
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{ $balance }} TK</h3>
+                                    <h3>{{$total_collection - $total_exp }} TK</h3>
 
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
                                 </div>
-                                <a href="{{ route('blance.index') }}" class="small-box-footer link">More info <i
+                                <a href="#" class="small-box-footer link">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
