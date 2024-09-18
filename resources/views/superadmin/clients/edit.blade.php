@@ -66,13 +66,12 @@
                                                     @endif
                                                 </div>
                                                 <div class="mb-3 mt-3">
-                                                    <label for="exampleInputEmail1"> Status </label>
-                                                    <select name="" id="" class="form-control" @readonly(true)>
-                                                        <option @if ($data->status == 1) selected @endif>
-                                                            Active</option>
-                                                        <option value="0"
-                                                            @if ($data->status == 0) selected @endif>
-                                                            Deactive</option>
+                                                    <label for="exampleInputEmail1"> Status : </label>
+                                                        @if ($data->status == 1) 
+                                                        <span class="badge badge-success">Active</span>
+                                                        @else
+                                                        <span class="badge badge-danger">InActive</span>
+                                                        @endif
                                                     </select>
                                                 </div>
                                                 <div class="mb-3 mt-3 form">

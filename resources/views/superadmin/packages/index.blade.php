@@ -50,7 +50,7 @@
                                             <tr>
                                                 <th>SL</th>
                                                 <th>Package Name</th>
-                                                <th>Amount</th>
+                                                <th>Amount <span style="font-size: 12px; color:#fb5200;">(tk)</span></th>
                                                 <th>Duration <span style="font-size: 12px; color:#fb5200;">(days)</span>
                                                 </th>
                                                 <th> Action</th>
@@ -61,7 +61,7 @@
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $item->package_name }}</td>
-                                                    <td>{{ $item->amount }}</td>
+                                                    <td class="text-right">{{ number_format($item->amount, 2) }}</td>
                                                     <td>{{ $item->duration }}</td>
                                                     <td>
                                                         {{-- <a href="" class="btn btn-sm btn-info edit" data-id="{{$item->id}}" data-toggle="modal" data-target="#editUser"><i class="fas fa-edit"></i></a> --}}

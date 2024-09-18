@@ -140,33 +140,43 @@
                                     <div class="row">
                                         <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                             <label class="text">From Date</label>
-                                            <input type="month" class="form-control text" name="from_date" id="from_date" required>
+                                            <input type="month" class="form-control text" name="from_date" id="from_date"
+                                                required>
                                         </div>
                                         <div class="form-group col-lg-4 col-md-4 col-sm-12">
                                             <label class="text">To Date</label>
-                                            <input type="month" class="form-control text" name="to_date" id="to_date" required>
+                                            <input type="month" class="form-control text" name="to_date" id="to_date"
+                                                required>
                                         </div>
                                         <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                                            <label class="text">Duration <span class="text-warning text" style="font-size: 12px">(month)</span></label>
-                                            <input type="text" class="form-control text" name="duration" id="duration" required>
+                                            <label class="text">Duration <span class="text-warning text"
+                                                    style="font-size: 12px">(month)</span></label>
+                                            <input type="text" class="form-control text" name="duration" id="duration"
+                                                required>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-lg-3 col-md-3 col-sm-12">
                                             <label class="text">Advanced Deposit</label>
-                                            <input type="text" class="form-control text-right text" name="advanced" placeholder="0.00" required>
+                                            <input type="text" class="form-control text-right text" name="advanced"
+                                                placeholder="0.00" required>
                                         </div>
-                                        <div class="form-group col-lg-3 col-md-3 col-sm-12 form-check" style="margin-top: 35px">
-                                            <input type="checkbox" class="form-check-input text" id="deduct" name="deduct" value="something">
+                                        <div class="form-group col-lg-3 col-md-3 col-sm-12 form-check"
+                                            style="margin-top: 35px">
+                                            <input type="checkbox" class="form-check-input text" id="deduct"
+                                                name="deduct" value="something">
                                             <label class="text">Deducted by month?</label>
                                         </div>
-                                        <div class="form-group col-lg-3 col-md-3 col-sm-12" id="deduct_amount" style="display:none;">
+                                        <div class="form-group col-lg-3 col-md-3 col-sm-12" id="deduct_amount"
+                                            style="display:none;">
                                             <label class="text">Deducted Amount</label>
                                             <input type="text" class="form-control text" name="deduct_amount">
                                         </div>
                                         <div class="form-group col-lg-3 col-md-3 col-sm-12">
-                                            <label class="text">Notice Period <span class="text-warning text" style="font-size: 12px">(month)</span></label>
-                                            <input type="text" class="form-control" name="notice_period" id="" required>
+                                            <label class="text">Notice Period <span class="text-warning text"
+                                                    style="font-size: 12px">(month)</span></label>
+                                            <input type="text" class="form-control" name="notice_period" id=""
+                                                required>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -190,30 +200,30 @@
                 var months = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
                 return months;
             }
-    
+
             // Function to calculate the end date given a start date and a duration in months
             function calculateEndDate(fromDate, duration) {
                 var start = new Date(fromDate);
                 var end = new Date(start.setMonth(start.getMonth() + parseInt(duration)));
                 return end.toISOString().substring(0, 7); // Format as YYYY-MM
             }
-    
+
             // When from_date or to_date changes, calculate the duration
             $('#from_date, #to_date').on('change', function() {
                 var fromDate = $('#from_date').val();
                 var toDate = $('#to_date').val();
-    
+
                 if (fromDate && toDate) {
                     var duration = calculateMonthsBetween(fromDate, toDate);
                     $('#duration').val(duration);
                 }
             });
-    
+
             // When duration changes, calculate the to_date
             $('#duration').on('input', function() {
                 var fromDate = $('#from_date').val();
                 var duration = $('#duration').val();
-    
+
                 if (fromDate && duration) {
                     var toDate = calculateEndDate(fromDate, duration);
                     $('#to_date').val(toDate);
@@ -221,116 +231,118 @@
             });
         });
     </script>
-    
-    
-        <script>
-            $(document).ready(function() {
-                $("#deduct").click(function() {
-                    $("#deduct_amount").toggle();
-                });
-            });
-        </script>
-        {{-- show current month and date --}}
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const dateInputs = document.querySelectorAll('input[type="month"]');
-                const today = new Date();
-                const month = today.getMonth() + 1; // January is 0!
-                const year = today.getFullYear();
-                const formattedMonth = month < 10 ? '0' + month : month;
-                const currentMonth = `${year}-${formattedMonth}`;
-    
-                dateInputs.forEach(input => {
-                    input.value = currentMonth;
-                });
-            });
-        </script>
-    
+
     <script>
-    $(document).ready(function() {
-    $('#flat').hide();
-    $('#Addbtn').hide();
+        $(document).ready(function() {
+            $("#deduct").click(function() {
+                $("#deduct_amount").toggle();
+            });
+        });
+    </script>
+    {{-- show current month and date --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInputs = document.querySelectorAll('input[type="month"]');
+            const today = new Date();
+            const month = today.getMonth() + 1; // January is 0!
+            const year = today.getFullYear();
+            const formattedMonth = month < 10 ? '0' + month : month;
+            const currentMonth = `${year}-${formattedMonth}`;
 
-    let selectedFlats = [];
+            dateInputs.forEach(input => {
+                input.value = currentMonth;
+            });
+        });
+    </script>
 
-    // When building selection changes
-    $("#building_id").change(function() {
-        let building_id = $(this).val();
-        $('#flat').show();
-        $('#Addbtn').show();
+    <script>
+        $(document).ready(function() {
+            $('#flat').hide();
+            $('#Addbtn').hide();
 
-        $.ajax({
-            url: '/admin/get-flat',
-            type: 'post',
-            data: 'building_id=' + building_id + '&_token={{ csrf_token() }}',
-            success: function(result) {
-                $('.building').text(result.building.name);
-                // Append the default option
-                $('.flat').empty();
-                $('.flat').append('<option value="" selected disable>Select Flat</option>');
-                // Iterate over the flats and append options to the select
-                $.each(result.flat, function(index, flat) {
-                    let disabled = selectedFlats.includes(flat.id) ? 'disabled' : '';
-                    $('.flat').append('<option value="' + flat.id + '" ' + disabled + '>' + flat.flat_name + '</option>');
+            let selectedFlats = [];
+
+            // When building selection changes
+            $("#building_id").change(function() {
+                let building_id = $(this).val();
+                $('#flat').show();
+                $('#Addbtn').show();
+
+                $.ajax({
+                    url: '/admin/get-flat',
+                    type: 'post',
+                    data: 'building_id=' + building_id + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        $('.building').text(result.building.name);
+                        // Append the default option
+                        $('.flat').empty();
+                        $('.flat').append(
+                            '<option value="" selected disable>Select Flat</option>');
+                        // Iterate over the flats and append options to the select
+                        $.each(result.flat, function(index, flat) {
+                            let disabled = selectedFlats.includes(flat.id) ?
+                                'disabled' : '';
+                            $('.flat').append('<option value="' + flat.id + '" ' +
+                                disabled + '>' + flat.flat_name + '</option>');
+                        });
+                    }
                 });
-            }
+            });
+
+            // When a flat selection changes
+            $(document).on('change', '.flat', function() {
+                let flat_id = $(this).val();
+                let row = $(this).closest('.rent-row');
+
+                $.ajax({
+                    url: '/admin/get-flat-info',
+                    type: 'post',
+                    data: 'flat_id=' + flat_id + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        row.find('.rent').text(result.flat_info.flat_rent);
+                        row.find('.service_charge').text(result.flat_info.service_charge);
+                        row.find('.utility_bill').text(result.flat_info.utility_bill);
+                    }
+                });
+            });
+
+            // When adding a new row
+            $(document).on('click', '.btn-add', function() {
+                let newRow = $('.rent-row').first().clone();
+                newRow.find('select').val('');
+                newRow.find('.rent, .service_charge, .utility_bill').text(''); // Clear text values
+                newRow.find('td:last').html(
+                    '<button type="button" class="btn btn-danger btn-remove text">Remove</button>');
+
+                // Store the selected flat
+                let selectedFlat = $('.rent-row').last().find('.flat').val();
+                if (selectedFlat) {
+                    selectedFlats.push(selectedFlat);
+                }
+
+                // Disable previously selected flats in the new row
+                newRow.find('.flat option').each(function() {
+                    if (selectedFlats.includes($(this).val())) {
+                        $(this).attr('disabled', 'disabled');
+                    }
+                });
+
+                $('#rent-table-body').append(newRow);
+            });
+
+            // When removing a row
+            $(document).on('click', '.btn-remove', function() {
+                let row = $(this).closest('tr');
+                let removedFlat = row.find('.flat').val();
+
+                // Remove the flat from the selected flats array
+                selectedFlats = selectedFlats.filter(flat => flat !== removedFlat);
+
+                // Enable the removed flat in all selects
+                $('.flat option[value="' + removedFlat + '"]').removeAttr('disabled');
+
+                row.remove();
+            });
         });
-    });
-
-    // When a flat selection changes
-    $(document).on('change', '.flat', function() {
-        let flat_id = $(this).val();
-        let row = $(this).closest('.rent-row');
-
-        $.ajax({
-            url: '/admin/get-flat-info',
-            type: 'post',
-            data: 'flat_id=' + flat_id + '&_token={{ csrf_token() }}',
-            success: function(result) {
-                row.find('.rent').text(result.flat_info.flat_rent);
-                row.find('.service_charge').text(result.flat_info.service_charge);
-                row.find('.utility_bill').text(result.flat_info.utility_bill);
-            }
-        });
-    });
-
-    // When adding a new row
-    $(document).on('click', '.btn-add', function() {
-        let newRow = $('.rent-row').first().clone();
-        newRow.find('select').val('');
-        newRow.find('.rent, .service_charge, .utility_bill').text(''); // Clear text values
-        newRow.find('td:last').html('<button type="button" class="btn btn-danger btn-remove text">Remove</button>');
-
-        // Store the selected flat
-        let selectedFlat = $('.rent-row').last().find('.flat').val();
-        if (selectedFlat) {
-            selectedFlats.push(selectedFlat);
-        }
-
-        // Disable previously selected flats in the new row
-        newRow.find('.flat option').each(function() {
-            if (selectedFlats.includes($(this).val())) {
-                $(this).attr('disabled', 'disabled');
-            }
-        });
-
-        $('#rent-table-body').append(newRow);
-    });
-
-    // When removing a row
-    $(document).on('click', '.btn-remove', function() {
-        let row = $(this).closest('tr');
-        let removedFlat = row.find('.flat').val();
-
-        // Remove the flat from the selected flats array
-        selectedFlats = selectedFlats.filter(flat => flat !== removedFlat);
-
-        // Enable the removed flat in all selects
-        $('.flat option[value="' + removedFlat + '"]').removeAttr('disabled');
-
-        row.remove();
-    });
-});
-
     </script>
 @endsection

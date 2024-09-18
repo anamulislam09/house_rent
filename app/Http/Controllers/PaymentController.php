@@ -32,7 +32,8 @@ class PaymentController extends Controller
 
     public function Store(Request $request)
     {
-        $dueAmount = $request->package_bill - $request->collection_amount;
+        $collection_amount = abs($request->collection_amount);
+        $dueAmount = $request->package_bill - $collection_amount;
 
         $v_id = 1;
         $isExist = Payment::exists();
@@ -47,10 +48,10 @@ class PaymentController extends Controller
         }
         $data['client_id'] = $request->client_id;
         $data['payment_amount'] = $request->package_bill;
-        $data['paid'] = $request->collection_amount;
+        $data['paid'] = $collection_amount;
         if ($Exist) {
             $due_amount = Payment::where('client_id', $request->client_id)->latest()->first();
-            $due = $due_amount->due - $request->collection_amount;
+            $due = $due_amount->due - $collection_amount;
             $data['due'] = $due;
         } else {
             $data['due'] = $dueAmount;
@@ -61,13 +62,13 @@ class PaymentController extends Controller
         $payments = Payment::create($data);
         if ($payments) {
             $balance = DB::table('clients')->where('id', $request->client_id)->first();
-            $balance = $balance->client_balance - $request->collection_amount;
+            $balance = $balance->client_balance - $collection_amount;
             $client['client_balance'] = $balance;
             DB::table('clients')->where('id', $request->client_id)->update($client);
             // $client->save();
         }
 
-        return redirect()->route('collections.all')->with('message', 'Payment Inserted Successfully');
+        return redirect()->route('collections.all')->with('message', 'Payment inserted successfully');
     }
     // unique id serial function
     public function formatSrl($srl)

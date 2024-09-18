@@ -193,7 +193,7 @@
         </div>
         <div class="left-section">
             <h1>Let's you sign in</h1>
-            <p>Welcome to Flat Master</p>
+            <p>Welcome to Easy Rent</p>
             @if (Session::has('message'))
                 <div class="alert alert-danger" role="alert">
                     <strong class="text-danger">{{ Session::get('message') }}!</strong>

@@ -7,7 +7,7 @@
     <title>Admin | Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-   <style>
+    <style>
         body,
         html {
             margin: 0;
@@ -59,6 +59,7 @@
         label {
             /* margin-bottom: 4px; */
             color: #bcdde7;
+            font-size: 13px
         }
 
         .left-section form button {
@@ -89,13 +90,13 @@
             height: auto;
         }
 
-        .link a{
+        .link a {
             font-size: 14px;
             color: rgb(241, 239, 239);
             margin-right: 10px !important;
         }
-        
-        .link a:hover{
+
+        .link a:hover {
             color: rgb(147, 191, 236);
             border-bottom: 1px solid rgb(147, 191, 236);
         }
@@ -109,7 +110,7 @@
             .left-section form input {
                 margin-bottom: 10px;
                 padding: 10px;
-                font-size: 14px;
+                font-size: 12px;
                 border: none;
                 border-radius: 5px;
             }
@@ -145,7 +146,7 @@
             .left-section form input {
                 margin-bottom: 10px;
                 padding: 10px;
-                font-size: 14px;
+                font-size: 12px;
                 border: none;
                 border-radius: 5px;
             }
@@ -189,11 +190,11 @@
 <body>
     <div class="form-wrapper">
         <div class="right-section">
-            <img src="{{ asset('admin/dist/img/logo.JPG') }}" alt="Flat Master Logo">
+            <img src="{{ asset('admin/dist/img/logo.JPG') }}" alt="Logo">
         </div>
         <div class="left-section">
             <h1>Let's you sign up</h1>
-            <p>Welcome to Flat Master</p>
+            <p>Welcome to Easy Rent</p>
             @if (Session::has('message'))
                 <div class="alert alert-danger" role="alert">
                     <strong class="text-danger">{{ Session::get('message') }}!</strong>
@@ -202,22 +203,43 @@
             @endif
             <form method="POST" action="{{ route('admin.store') }}">
                 @csrf
-                <label for="">Name</label>
-                <input type="text" placeholder="Enter Client Name" name="name" required>
-                <label for="">Phone</label>
-                <input type="text" placeholder="Enter Valid Phone Number" name="phone" required>
-                <label for="">Address</label>
-                <input type="text" placeholder="Address" name="address" required>
-                <label for="">NID / NRC Number</label>
-                <input type="text" placeholder="NID / NRC Number" name="nid_no" required>
-                <label for="">Email</label>
-                <input type="email" placeholder="Enter Valide Email" name="email" required>
-                <label for="">Password</label>
-                <input type="password" placeholder="Password" name="password" required>
-                <label for="">Password Confirmation</label>
-                <input type="password" placeholder="Retype Password" name="password_confirmation" required>
-
-                
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12" class="form-group">
+                        <label for="">Name </label>
+                        <input type="text" placeholder="Full Name" class="form-control" name="name"
+                            required>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12" class="form-group">
+                        <label for="">Phone </label>
+                        <input type="text" placeholder="Valid Phone" class="form-control" name="phone"
+                            required>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12" class="form-group">
+                        <label for="">Address </label>
+                        <input type="text" placeholder="Address" class="form-control" name="address" required>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12" class="form-group">
+                        <label for="">NID / NRC Number </label>
+                        <input type="text" placeholder="NID / NRC Number" class="form-control" name="nid_no"
+                            required>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12" class="form-group">
+                        <label for="">Email</label>
+                        <input type="email" placeholder="Valid Email" class="form-control" name="email"
+                            required>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12" class="form-group">
+                        <label for="">Password </label>
+                        <input type="password" placeholder="Password" class="form-control" name="password" required>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12" class="form-group">
+                        <label for="">Password Confirmation </label>
+                        <input type="password" placeholder="Retype Password" class="form-control"
+                            name="password_confirmation" required>
+                    </div>
+                </div>
+                <span style="color: #f96d27; font-size:11px;; margin-top:-5px; font-weight: 600;">Info: All fields are
+                    required. Email will unique.</span>
 
                 <button type="submit">Sign Up</button>
             </form>

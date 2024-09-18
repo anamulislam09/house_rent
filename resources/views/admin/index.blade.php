@@ -46,6 +46,8 @@
         @php
             $currentDate = Carbon\Carbon::now()->format('Y-m');
             $user = App\Models\User::where('client_id', Auth::guard('admin')->user()->id)->count();
+
+            // <----------------------building wise flat start here---------------------->
             $flat = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
             $flat_booked = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('booking_status', 1)
@@ -53,7 +55,10 @@
             $available_flat = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('booking_status', 0)
                 ->count();
+            // <----------------------building wise flat ends here---------------------->
 
+
+            // <----------------------total transaction start here---------------------->
             $buildings = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->get();
             $total_building = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->count();
             $total_exp = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
@@ -65,25 +70,27 @@
                 'total_collection',
             );
 
+            $total_balance = $total_collection_amount - $total_exp;
+            $total_due = $total_collection - $total_collection_amount;
+
             $current_due = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum(
                 'current_due',
             );
 
             $total_income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
-            $manualOpeningBlance = DB::table('opening_balances')
-                ->where('client_id', Auth::guard('admin')->user()->id)
-                ->first();
-            $others_income = DB::table('others_incomes')
-                ->where('client_id', Auth::guard('admin')->user()->id)
-                ->sum('amount');
+            // $manualOpeningBlance = DB::table('opening_balances')
+            //     ->where('client_id', Auth::guard('admin')->user()->id)
+            //     ->first();
+            // $others_income = DB::table('others_incomes')
+            //     ->where('client_id', Auth::guard('admin')->user()->id)
+            //     ->sum('amount');
 
-            $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
-            $clients = App\Models\Client::where('role', 1)->count();
-            $category = App\Models\Category::count();
-            $packages = App\Models\Package::count();
-            $superAdmin = Auth::guard('admin')->user()->id;
+            // $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
 
-            // this month transactions
+            // <----------------------total transaction ends here---------------------->
+
+
+            // <----------------------this month transactions start here---------------------->
             $monthly_collection_amount = App\Models\BillSetup::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('bill_setup_date', $currentDate)
                 ->sum('total_collection_amount');
@@ -92,10 +99,21 @@
                 ->where('bill_setup_date', $currentDate)
                 ->sum('total_collection');
 
+            $monthly_due = $monthly_collection - $monthly_collection_amount; // monthly transaction
+
             $monthly_current_due = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('bill_setup_date', $currentDate)
                 ->sum('current_due');
+                $monthly_current_expense = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
+                ->where('date', $currentDate)
+                ->sum('amount');
 
+                $current_month_balance = $monthly_collection_amount-$monthly_current_expense;
+                
+            // <----------------------this month transactions ends here---------------------->
+
+
+            //  <----------------------Month wise transactions start here---------------------->
             $flats = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
             $tenant = App\Models\Tenant::where('client_id', Auth::guard('admin')->user()->id)->count();
             $expense = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
@@ -111,7 +129,19 @@
             $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
-            $total_colloection = App\Models\Payment::sum('paid');
+                $monthly_balance = 
+
+            // <----------------------Month wise transactions ends here---------------------->
+
+
+            // <---------------------- SuperAdmin data stare here here ---------------------->
+            $clients = App\Models\Client::where('role', 1)->count();
+            $category = App\Models\Category::count();
+            $packages = App\Models\Package::count();
+            $superAdmin = Auth::guard('admin')->user()->id;
+            $total_superAdmin_collection = App\Models\Payment::sum('paid');
+            // <----------------------SuperAdmin data stare here here---------------------->
+
         @endphp
         <!-- Main content -->
         <section class="content">
@@ -170,7 +200,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Total Collection</p>
-                                    <h3>{{ $total_colloection }}</h3>
+                                    <h3>{{ number_format($total_superAdmin_collection, 2) }}</h3>
 
                                 </div>
                                 <div class="icon">
@@ -220,36 +250,6 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        {{-- <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box " style="background: #df8e15">
-                                <div class="inner text-white">
-                                    <p>Available Flat</p>
-                                    <h3 id="flats">{{ $flat }}</h3>
-
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('flat.index') }}" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box " style="background: #df8e15">
-                                <div class="inner text-white">
-                                    <p>Flat Booked</p>
-                                    <h3 id="flats">{{ $flat }}</h3>
-
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('flat.index') }}" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div> --}}
                         <!-- /.col -->
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
@@ -283,23 +283,6 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        <!-- fix for small devices only -->
-                        {{-- <div class="clearfix hidden-md-up"></div>
-                        <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-secondary">
-                                <div class="inner">
-                                    <p>Others Income</p>
-                                    <h3 id="others_income"><sup style="font-size: 14px">TK</sup></h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="#" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div> --}}
-                        <!-- fix for small devices only -->
                         <div class="clearfix hidden-md-up"></div>
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
@@ -315,22 +298,7 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        <!-- fix for small devices only -->
-                        {{-- <div class="clearfix hidden-md-up"></div>
-                        <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-secondary">
-                                <div class="inner">
-                                    <p>Others Income</p>
-                                    <h3 id="others_income"><sup style="font-size: 14px">TK</sup></h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="#" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div> --}}
+                       
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
                             <div class="small-box bg-danger">
@@ -345,7 +313,6 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        <!-- /.col -->
                     </div>
 
                     <div class="row" id="todaydata">
@@ -389,7 +356,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Total Bill Amount</p>
-                                    <h3>{{ $monthly_collection_amount }} TK</h3>
+                                    <h3>{{ number_format($monthly_collection_amount, 2) }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -404,7 +371,7 @@
                             <div class="small-box bg-primary">
                                 <div class="inner">
                                     <p>Total Collection</p>
-                                    <h3>{{ $monthly_collection }} TK</h3>
+                                    <h3>{{ number_format($monthly_collection, 2) }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -420,7 +387,8 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $monthly_collection_amount - $monthly_collection }} TK</h3>
+                                    <h3>{{ $monthly_due < 0 ? '(' . number_format(abs($monthly_due), 2) . ')' : number_format($monthly_due, 2) }}
+                                        TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -430,15 +398,31 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        <!-- /.col -->
+                        
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
+                            <div class="small-box" style="background: #064713; color:white">
+                                <div class="inner">
+                                    <p>Balance</p>
+                                    <h3>{{$current_month_balance < 0 ? '(' . number_format(abs($current_month_balance), 2) . ')' : number_format($current_month_balance, 2)}} TK</h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
                     </div>
 
+                      {{-- building wise flat start here  --}}
                     <div class="card " style="margin-top: 0px !important">
                         <div class="card-header row ">
                             <h4>Total Flats</h4>
                         </div>
                     </div>
-
+                  
                     <div class="row">
                         @foreach ($buildings as $building)
                             @php
@@ -454,7 +438,6 @@
                                     <div class="inner" style="padding: 0px !important;">
                                         <p class="text-center" style="font-size: 20px; margin-bottom:0px">
                                             {{ $building->name }}</p>
-                                        {{-- <h3>{{ $income }}<sup style="font-size: 14px">TK</sup></h3> --}}
                                     </div>
                                     <div class="row">
                                         <div class="col-1"></div>
@@ -463,45 +446,11 @@
                                                 <ul class="mt-1 @if (count($flats) > 3) ul-scrollable @endif"
                                                     style="list-style-type: none; height: 95px;font-size: 14px;">
                                                     @foreach ($flats as $key => $item)
-                                                        {{-- @php
-                                                            if ($item->booking_status) {
-                                                                $agreementDetails = App\Models\RentalAgreementDetails::where(
-                                                                    'flat_id',
-                                                                    $item->id,
-                                                                )
-                                                                    ->latest()
-                                                                    ->first();
-
-                                                                $agreement = App\Models\RentalAgreement::where(
-                                                                    'client_id',
-                                                                    Auth::guard('admin')->user()->id,
-                                                                )
-                                                                    ->where(
-                                                                        'id',
-                                                                        $agreementDetails->rental_agreement_id,
-                                                                    )
-                                                                    ->first();
-
-                                                                $currentDate = Carbon\Carbon::now();
-                                                                $toDate = Carbon\Carbon::createFromFormat(
-                                                                    'Y-m',
-                                                                    $agreement->to_date,
-                                                                );
-                                                                $monthsDifference = $currentDate->diffInMonths($toDate);
-
-                                                                if ($monthsDifference <= 2) {
-                                                                    $item->booking_status = 2;
-                                                                }
-                                                            }
-                                                        @endphp --}}
-
                                                         <li class="mt-1 pb-1"
                                                             style="color: #222; border-bottom:1px solid #c5c3c3 !important">
                                                             {{ $item->flat_name }}
                                                             @if ($item->booking_status == 0)
                                                                 <span class="badge badge-success ml-5">Available</span>
-                                                            {{-- @elseif ($item->booking_status = 2)
-                                                                <span class="badge badge-info ml-5">Available Soon</span> --}}
                                                             @else
                                                                 <span class="badge badge-danger ml-5">Booked</span>
                                                             @endif
@@ -512,12 +461,14 @@
                                         </div>
                                         <div class="col-1"></div>
                                     </div>
-                                    {{-- <a href="{{ route('income.statement') }}" class="small-box-footer link">More info <i
-                                            class="fas fa-arrow-circle-right"></i></a> --}}
                                 </div>
                             </div>
                         @endforeach
                     </div>
+                    {{-- building wise flat ends here  --}}
+
+                    {{-- total transaction start here  --}}
+                    {{-- total transaction start here  --}}
 
                     <div class="card">
                         <div class="card-header">
@@ -608,7 +559,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Total Bill Amount</p>
-                                    <h3>{{ $total_collection_amount }} TK</h3>
+                                    <h3>{{ number_format($total_collection_amount, 2) }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -623,7 +574,7 @@
                             <div class="small-box bg-primary">
                                 <div class="inner">
                                     <p>Total Collection</p>
-                                    <h3>{{ $total_collection }} TK</h3>
+                                    <h3>{{ number_format($total_collection, 2) }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -639,7 +590,8 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $total_collection_amount - $total_collection }} TK</h3>
+                                    <h3>{{ $total_due < 0 ? '(' . number_format(abs($total_due), 2) . ')' : number_format($total_due, 2) }}
+                                        TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -657,7 +609,7 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
-                                    <h3>{{ $total_exp }} TK</h3>
+                                    <h3>{{ number_format($total_exp, 2) }} TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -671,10 +623,11 @@
 
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
-                            <div class="small-box bg-success">
+                            <div class="small-box" style="background: #064713; color:white">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{$total_collection - $total_exp }} TK</h3>
+                                    <h3>{{ $total_balance < 0 ? '(' . number_format(abs($total_balance), 2) . ')' : number_format($total_balance) }}
+                                        TK</h3>
 
                                 </div>
                                 <div class="icon">

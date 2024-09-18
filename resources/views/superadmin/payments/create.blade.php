@@ -46,18 +46,18 @@
                                         <div class="mb-3 mt-3 form">
                                             <label>Package Name</label>
                                             <input type="text" class="form-control" value="" id="package"
-                                                name="package_name">
+                                                name="package_name" placeholder="Package name">
                                         </div>
 
                                         <div class="mb-3 mt-3 form">
                                             <label for="package_bill" class="form-label">Package Bill</label>
-                                            <input type="text" class="form-control" value="" name="package_bill"
+                                            <input type="text" class="form-control" value="" name="package_bill" placeholder="0.00"
                                                 id="package_bill">
                                         </div>
                                         <div class="mb-3 mt-3 form">
                                             <label for="amount" class="form-label">Collection Amount</label>
                                             <input type="text" class="form-control" value="{{ old('amount') }}"
-                                                name="collection_amount" placeholder="Enter amount">
+                                                name="collection_amount" placeholder="0.00">
                                         </div>
                                     </div>
                                 </div>

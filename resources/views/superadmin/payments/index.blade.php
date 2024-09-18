@@ -81,14 +81,10 @@
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $client->name }}</td>
-                                                    <td>{{ $item->payment_amount }}</td>
-                                                    <td>{{ $paidAmount }}</td>
-                                                    <td>
-                                                        @if ($due > 0)
-                                                            <span class="badge badge-danger">{{ $due }}</span>
-                                                        @else
-                                                            <span class="badge badge-primary">{{ $due }}</span>
-                                                        @endif
+                                                    <td class="text-right">{{ number_format($item->payment_amount, 2) }}</td>
+                                                    <td class="text-right">{{ number_format($paidAmount, 2) }}</td>
+                                                    <td class="text-right">
+                                                      {{($due > 0 ? '(' . number_format($due, 2) . ')' : number_format($due, 2))}}
                                                     </td>
                                                     {{-- <td>
                                                         <a href="" class="btn btn-sm btn-info edit"

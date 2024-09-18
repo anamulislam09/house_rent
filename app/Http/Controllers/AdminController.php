@@ -22,8 +22,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
-use Auth;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -71,51 +70,57 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $start_at = 1001;
+        $isExist = Client::where('email', '=', $request->email)->first();
+        if ($isExist) {
+            return redirect()->back()->with('message', 'This email already used. Please try another valid email');
+        } else {
 
-        if ($start_at) {
-            $client = Client::find($start_at);
-            if (!$client) {
-                $data['id'] = $start_at;
+            $start_at = 1001;
+            if ($start_at) {
+                $client = Client::find($start_at);
+                if (!$client) {
+                    $data['id'] = $start_at;
+                }
             }
-        }
 
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['password'] = Hash::make($request->password);
-        $data['address'] = $request->address;
-        $data['phone'] = $request->phone;
-        $data['nid_no'] = $request->nid_no;
-        $otp = Str::random(4);
-        $data['otp'] = $otp;
-        $data['image'] = $request->image;
-        $client = Client::create($data);
+            $data['name'] = $request->name;
+            $data['email'] = $request->email;
+            $data['password'] = Hash::make($request->password);
+            $data['address'] = $request->address;
+            $data['phone'] = $request->phone;
+            $data['nid_no'] = $request->nid_no;
+            $otp = Str::random(4);
+            $data['otp'] = $otp;
+            $data['isVerified'] = 1;
+            $data['image'] = $request->image;
+            $client = Client::create($data);
 
-        if ($client) {
-            $data = Client::latest()->first();
+            // if ($client) {
+            //     $data = Client::latest()->first();
 
-            $post_url = "http://api.smsinbd.com/sms-api/sendsms";
-            $post_values['api_token'] = "V8qsvGXfqBFhS4FozsQq7MyaeqTzXY2es6ufjQ3M";
-            $post_values['senderid'] = "8801969908462";
-            $post_values['message'] = "Your OPT Code is: " . $data->otp;
-            $post_values['contact_number'] = $data->phone;
+            //     $post_url = "http://api.smsinbd.com/sms-api/sendsms";
+            //     $post_values['api_token'] = "V8qsvGXfqBFhS4FozsQq7MyaeqTzXY2es6ufjQ3M";
+            //     $post_values['senderid'] = "8801969908462";
+            //     $post_values['message'] = "Your OPT Code is: " . $data->otp;
+            //     $post_values['contact_number'] = $data->phone;
 
-            $post_string = "";
-            foreach ($post_values as $key => $value) {
-                $post_string .= "$key=" . urlencode($value) . "&";
-            }
-            $post_string = rtrim($post_string, "& ");
+            //     $post_string = "";
+            //     foreach ($post_values as $key => $value) {
+            //         $post_string .= "$key=" . urlencode($value) . "&";
+            //     }
+            //     $post_string = rtrim($post_string, "& ");
 
-            $request = curl_init($post_url);
-            curl_setopt($request, CURLOPT_HEADER, 0);
-            curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($request, CURLOPT_POSTFIELDS, $post_string);
-            curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
-            $post_response = curl_exec($request);
-            curl_close($request);
-            $array =  json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $post_response), true);
+            //     $request = curl_init($post_url);
+            //     curl_setopt($request, CURLOPT_HEADER, 0);
+            //     curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
+            //     curl_setopt($request, CURLOPT_POSTFIELDS, $post_string);
+            //     curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
+            //     $post_response = curl_exec($request);
+            //     curl_close($request);
+            //     $array =  json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $post_response), true);
 
-            return redirect()->route('admin.verfy')->with('message', 'Registration Successfully');
+            // }
+            return redirect()->route('login_form')->with('message', 'Registration Successfully');
         }
     }
 

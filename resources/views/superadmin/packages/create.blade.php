@@ -37,7 +37,7 @@
                                                 name="package_name" placeholder="Enter Package Name" required>
                                         </div>
                                         <div class="mb-3 mt-3 form">
-                                            <label for="amount" class="form-label">Package Amount</label>
+                                            <label for="amount" class="form-label">Package Amount <span style="font-size: 12px; color:#fb5200;">(tk)</span></th></label>
                                             <input type="text" class="form-control" value="{{ old('amount') }}"
                                                 name="amount" placeholder="Enter amount">
                                         </div>
