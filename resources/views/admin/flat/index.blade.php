@@ -39,21 +39,17 @@
     </style>
 
     <div class="content-wrapper">
-        <!-- Main content -->
         <section class="content mt-3">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="card">
-
                             <div class="card-header bg-primary text-center">
                                 <h3 class="card-title" style="width:100%; text-align:center; font-size:14px !important">All
                                     Flats </h3>
                             </div>
-                            <!-- /.card-header -->
                             <div class="card-body">
                                 <table id="example1" class="table table-bordered table-striped">
-                                    {{-- id="example1" class="table table-bordered table-striped" --}}
                                     <thead>
                                         <tr>
                                             <th class="text-center">SL</th>
@@ -113,9 +109,9 @@
                                                 <td>{{ $building->name  }}</td>
                                                 <td>{{ $item->flat_name }}</td>
                                                 <td>Floor {{ $item->flat_location }}</td>
-                                                <td>{{ $item->flat_rent }}</td>
-                                                <td>{{ $item->service_charge }}</td>
-                                                <td>{{ $item->utility_bill }}</td>
+                                                <td class="text-right">{{ number_format($item->flat_rent, 2) }}</td>
+                                                <td class="text-right">{{ number_format($item->service_charge, 2) }}</td>
+                                                <td class="text-right">{{ number_format($item->utility_bill, 2) }}</td>
                                                 <td>
                                                     @if ($item->status == 1)
                                                         <span class="badge badge-success">Active</span>

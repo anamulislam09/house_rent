@@ -51,19 +51,19 @@
                                                 <label for="Building" class="label text">Amount of Building Rent
                                                 </label>
                                                 <input type="text" class="form-control text" value=""
-                                                    name="building_rent" placeholder="Enter Building Rent" required>
+                                                    name="building_rent" placeholder="0.00" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="unit" class="label text">Amount of Service Charge
                                                 </label>
                                                 <input type="text" class="form-control text" value=""
-                                                    name="service_charge" placeholder="Enter Service Charge" required>
+                                                    name="service_charge" placeholder="0.00" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="unit" class="label text">Amount of Utility Bill
                                                 </label>
                                                 <input type="text" class="form-control text" value=""
-                                                    name="utility_bill" placeholder="Enter Utility Bill" required>
+                                                    name="utility_bill" placeholder="0.00" required>
                                             </div>
                                             <div class="">
                                                 <button type="submit" class="btn btn-sm btn-primary text">Submit</button>

@@ -11,19 +11,19 @@
             <div class="form-group ">
                 <label for="Building" class="label text">Amount of Building Rent
                 </label>
-                <input type="text" class="form-control text" value="{{ $data->building_rent }}" name="building_rent"
+                <input type="text" class="form-control text" value="{{ number_format($data->building_rent, 2 ) }}" name="building_rent"
                     required>
             </div>
             <div class="form-group ">
                 <label for="unit" class="label text">Amount of Service Charge
                 </label>
-                <input type="text" class="form-control text" value="{{ $data->service_charge }}"
+                <input type="text" class="form-control text" value="{{ number_format($data->service_charge, 2 ) }}"
                     name="service_charge" required>
             </div>
             <div class="form-group ">
                 <label for="unit" class="label text">Amount of Utility Bill
                 </label>
-                <input type="text" class="form-control text" name="utility_bill" value="{{ $data->utility_bill }}"
+                <input type="text" class="form-control text" name="utility_bill" value="{{ number_format($data->utility_bill, 2 ) }}"
                     required>
             </div>
         </div>

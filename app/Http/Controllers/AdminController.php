@@ -465,6 +465,7 @@ class AdminController extends Controller
         $manualOpeningBalance = DB::table('opening_balances')->where('client_id', Auth::guard('admin')->user()->id)->where('entry_datetime', $date)->first();
         $data['others_income'] = DB::table('others_incomes')->where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
         $data['balance'] = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
+        $data['expense'] = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
 
         return response()->json($data);
     }

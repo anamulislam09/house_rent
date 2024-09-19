@@ -78,7 +78,7 @@
                                                         <label for="unit" class="label text">Amount of Flat Rent
                                                         </label>
                                                         <input type="text" class="form-control text" value=""
-                                                            name="flat_rent" placeholder="Enter Flat Rent" required>
+                                                            name="flat_rent" placeholder="0.00" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -88,7 +88,7 @@
                                                         <label for="unit" class="label text">Amount of Service Charge
                                                         </label>
                                                         <input type="text" class="form-control text" value=""
-                                                            name="service_charge" placeholder="Enter Service Charge"
+                                                            name="service_charge" placeholder="0.00"
                                                             required>
                                                     </div>
                                                 </div>
@@ -97,7 +97,7 @@
                                                         <label for="unit" class="label text">Amount of Utility Bill
                                                         </label>
                                                         <input type="text" class="form-control text" value=""
-                                                            name="utility_bill" placeholder="Enter Utility Bill" required>
+                                                            name="utility_bill" placeholder="0.00" required>
                                                     </div>
                                                 </div>
                                             </div>

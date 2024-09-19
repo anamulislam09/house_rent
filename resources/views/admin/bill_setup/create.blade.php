@@ -66,9 +66,9 @@
                                         <form action="{{ route('bill-setup.store') }}" method="post" id="generate">
                                             @csrf
                                             <div class="row my-4">
-                                                <div class="form-group col-lg-3 col-md-4 col-sm-6 date">
+                                                <div class="form-group form-control-sm col-lg-3 col-md-4 col-sm-6 date">
                                                     <label for="">Tenant</label>
-                                                    <select name="tenant_id" class="form-control text" id=""
+                                                    <select name="tenant_id" class="form-control text select2" id=""
                                                         required>
                                                         <option value="" selected disabled>Select Tenant</option>
                                                         @foreach ($tenants as $tenant)
@@ -76,7 +76,7 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-4 col-sm-6 date">
+                                                <div class="form-group form-control-sm col-lg-3 col-md-4 col-sm-6 date">
                                                     <label class="text">Month</label>
                                                     <input type="month" class="form-control text" name="date"
                                                         id="date" required>

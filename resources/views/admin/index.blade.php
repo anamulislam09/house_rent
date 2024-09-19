@@ -57,7 +57,6 @@
                 ->count();
             // <----------------------building wise flat ends here---------------------->
 
-
             // <----------------------total transaction start here---------------------->
             $buildings = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->get();
             $total_building = App\Models\Building::where('client_id', Auth::guard('admin')->user()->id)->count();
@@ -71,7 +70,7 @@
             );
 
             $total_balance = $total_collection_amount - $total_exp;
-            $total_due = $total_collection - $total_collection_amount;
+            $total_due = $total_collection_amount - $total_collection;
 
             $current_due = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)->sum(
                 'current_due',
@@ -89,7 +88,6 @@
 
             // <----------------------total transaction ends here---------------------->
 
-
             // <----------------------this month transactions start here---------------------->
             $monthly_collection_amount = App\Models\BillSetup::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('bill_setup_date', $currentDate)
@@ -99,19 +97,18 @@
                 ->where('bill_setup_date', $currentDate)
                 ->sum('total_collection');
 
-            $monthly_due = $monthly_collection - $monthly_collection_amount; // monthly transaction
+            $monthly_due = $monthly_collection_amount - $monthly_collection; // monthly transaction
 
             $monthly_current_due = App\Models\Collection::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('bill_setup_date', $currentDate)
                 ->sum('current_due');
-                $monthly_current_expense = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
+            $monthly_current_expense = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', $currentDate)
                 ->sum('amount');
 
-                $current_month_balance = $monthly_collection_amount-$monthly_current_expense;
-                
-            // <----------------------this month transactions ends here---------------------->
+            $current_month_balance = $monthly_collection_amount - $monthly_current_expense;
 
+            // <----------------------this month transactions ends here---------------------->
 
             //  <----------------------Month wise transactions start here---------------------->
             $flats = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
@@ -129,19 +126,16 @@
             $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
-                $monthly_balance = 
+            $monthly_balance =
+                // <----------------------Month wise transactions ends here---------------------->
 
-            // <----------------------Month wise transactions ends here---------------------->
-
-
-            // <---------------------- SuperAdmin data stare here here ---------------------->
-            $clients = App\Models\Client::where('role', 1)->count();
+                // <---------------------- SuperAdmin data stare here here ---------------------->
+                $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
             $packages = App\Models\Package::count();
             $superAdmin = Auth::guard('admin')->user()->id;
             $total_superAdmin_collection = App\Models\Payment::sum('paid');
             // <----------------------SuperAdmin data stare here here---------------------->
-
         @endphp
         <!-- Main content -->
         <section class="content">
@@ -234,6 +228,7 @@
                                     id="date"></h4>
                         </div>
                     </div>
+                    {{-- filter month data start here --}}
                     <div class="row" id="datewiseData">
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
@@ -253,7 +248,7 @@
                         <!-- /.col -->
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
-                            <div class="small-box bg-warning">
+                            <div class="small-box" style="background: #8805b0">
                                 <div class="inner text-white">
                                     <p>Total tenant</p>
                                     <h3 id="tenant"><sup style="font-size: 14px"></sup></h3>
@@ -271,7 +266,7 @@
                         <div class="clearfix hidden-md-up"></div>
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
-                            <div class="small-box bg-success">
+                            <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Total Bill Amount</p>
                                     <h3 id="total_collection_amount"> TK</h3>
@@ -298,7 +293,7 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                       
+
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
                             <div class="small-box bg-danger">
@@ -313,8 +308,38 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                    </div>
 
+                        <div class="col-lg-4 col-6">
+                            <div class="small-box" style="background: #aadb09; color:white">
+                                <div class="inner">
+                                    <p>Expense</p>
+                                    <h3 id="monthly_expense">TK</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-6">
+                            <div class="small-box" style="background: #064713; color:white">
+                                <div class="inner">
+                                    <p>Balance</p>
+                                    <h3 id="monthly_balance">TK</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- filter month data ends here --}}
+
+                    {{-- current month data start here --}}
                     <div class="row" id="todaydata">
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
@@ -335,7 +360,7 @@
                         <!-- /.col -->
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
-                            <div class="small-box bg-warning">
+                            <div class="small-box" style="background: #8805b0">
                                 <div class="inner text-white">
                                     <p>Total tenant</p>
                                     <h3>{{ $tenant }}</h3>
@@ -387,7 +412,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $monthly_due < 0 ? '(' . number_format(abs($monthly_due), 2) . ')' : number_format($monthly_due, 2) }}
+                                    <h3>{{ number_format($monthly_due, 2) }}
                                         TK</h3>
 
                                 </div>
@@ -398,13 +423,28 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        
+
+                        <div class="col-lg-4 col-6">
+                            <div class="small-box" style="background: #aadb09; color:white">
+                                <div class="inner">
+                                    <p>Expense</p>
+                                    <h3 id="">{{ number_format($monthly_current_expense, 2) }}TK</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
                             <div class="small-box" style="background: #064713; color:white">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{$current_month_balance < 0 ? '(' . number_format(abs($current_month_balance), 2) . ')' : number_format($current_month_balance, 2)}} TK</h3>
+                                    <h3>{{ $current_month_balance < 0 ? '(' . number_format(abs($current_month_balance), 2) . ')' : number_format($current_month_balance, 2) }}
+                                        TK</h3>
 
                                 </div>
                                 <div class="icon">
@@ -415,14 +455,15 @@
                             </div>
                         </div>
                     </div>
+                    {{-- current month data ends here --}}
 
-                      {{-- building wise flat start here  --}}
+                    {{-- building wise flat start here  --}}
                     <div class="card " style="margin-top: 0px !important">
                         <div class="card-header row ">
                             <h4>Total Flats</h4>
                         </div>
                     </div>
-                  
+
                     <div class="row">
                         @foreach ($buildings as $building)
                             @php
@@ -590,7 +631,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{ $total_due < 0 ? '(' . number_format(abs($total_due), 2) . ')' : number_format($total_due, 2) }}
+                                    <h3>{{number_format($total_due, 2)}}
                                         TK</h3>
 
                                 </div>
@@ -606,7 +647,7 @@
                         <!-- /.col -->
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
-                            <div class="small-box bg-warning">
+                            <div class="small-box" style="background: #aadb09;">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
                                     <h3>{{ number_format($total_exp, 2) }} TK</h3>
@@ -626,7 +667,7 @@
                             <div class="small-box" style="background: #064713; color:white">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{ $total_balance < 0 ? '(' . number_format(abs($total_balance), 2) . ')' : number_format($total_balance) }}
+                                    <h3>{{ $total_balance < 0 ? '(' . number_format(abs($total_balance), 2) . ')' : number_format($total_balance, 2) }}
                                         TK</h3>
 
                                 </div>
@@ -661,15 +702,19 @@
                     url: "{{ url('admin/get-transaction') }}/" + date,
                     dataType: "json",
                     success: function(res) {
+                        let monthly_balance = (res.total_collection_amount - res.expense)
                         console.log(res);
                         $('#flats').text(res.flats);
                         $('#tenant').text(res.tenant);
-                        $('#total_collection_amount').text(res.total_collection_amount);
-                        $('#total_collection').text(res.total_collection);
-                        $('#current_due').text(res.current_due);
-                        // $('#manualOpeningBalance').text(res.manualOpeningBalance);
-                        $('#others_income').text(res.others_income);
-                        $('#balance').text(res.balance);
+                        $('#total_collection_amount').text(parseFloat(res
+                            .total_collection_amount).toFixed(2));
+                        $('#total_collection').text(parseFloat(res.total_collection).toFixed(
+                        2));
+                        $('#current_due').text(parseFloat(res.current_due).toFixed(2));
+                        $('#monthly_expense').text(parseFloat(res.expense).toFixed(2));
+                        $('#monthly_balance').text(monthly_balance < 0 ? '(' + parseFloat(Math
+                            .abs(monthly_balance)).toFixed(2) + ')' : parseFloat(
+                            monthly_balance).toFixed(2));
                     }
                 });
             });

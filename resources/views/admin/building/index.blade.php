@@ -74,9 +74,9 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $item->name }}</td>
-                                        <td>{{ $item->building_rent }}</td>
-                                        <td>{{ $item->service_charge }}</td>
-                                        <td>{{ $item->utility_bill }}</td>
+                                        <td class="text-right">{{ number_format($item->building_rent, 2) }}</td>
+                                        <td class="text-right">{{ number_format($item->service_charge, 2) }}</td>
+                                        <td class="text-right">{{ number_format($item->utility_bill, 2) }}</td>
                                         <td>{{ $auth_id->name }}</td>
                                         <td>{{ $item->date }}</td>
                                         <td>

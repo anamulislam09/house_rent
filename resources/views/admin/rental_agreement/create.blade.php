@@ -45,6 +45,10 @@
             margin-top: -50px;
         }
 
+        #tenant_id{
+            padding: 20px 0px;
+        }
+
         @media screen and (max-width: 767px) {
             .card-title a {
                 font-size: 15px;
@@ -88,18 +92,19 @@
                                 @csrf
                                 <div class="card mt-3">
                                     <div class="card-header row">
-                                        <div class="col-lg-3 col-md-4 col-sm-6">
-                                            <label for="" class="text">Choose Tenant</label>
-                                            <select name="tenant_id" id="" class="form-control text" required>
+                                        <div class="input col-lg-3 col-md-4 col-sm-6">
+                                            <label for="" class="text" style="font-size: 16px">Choose Tenant</label>
+                                            <select name="tenant_id" id="tenant_id" class="form-control form-control-sm text select2" required>
                                                 <option value="" selected disabled>Select Tenant</option>
                                                 @foreach ($tenants as $tenant)
                                                     <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
+
                                         <div class="col-lg-3 col-md-4 col-sm-6">
                                             <label for="" class="text">Choose Building</label>
-                                            <select name="building_id" id="building_id" class="form-control text" required>
+                                            <select name="building_id" id="building_id" class="form-control form-control-sm text select2" required>
                                                 <option value="" selected disabled>Select Building</option>
                                                 @foreach ($buildings as $building)
                                                     <option value="{{ $building->id }}">{{ $building->name }}</option>
@@ -128,9 +133,9 @@
                                                         <option value="" selected disabled>Select Flat</option>
                                                     </select>
                                                 </td>
-                                                <td class="rent"></td>
-                                                <td class="service_charge"></td>
-                                                <td class="utility_bill"></td>
+                                                <td class="rent text-right"></td>
+                                                <td class="service_charge text-right"></td>
+                                                <td class="utility_bill text-right"></td>
                                                 <td id="Addbtn">
                                                     <button type="button" class="btn btn-success btn-add text">Add</button>
                                                 </td>
@@ -299,9 +304,9 @@
                     type: 'post',
                     data: 'flat_id=' + flat_id + '&_token={{ csrf_token() }}',
                     success: function(result) {
-                        row.find('.rent').text(result.flat_info.flat_rent);
-                        row.find('.service_charge').text(result.flat_info.service_charge);
-                        row.find('.utility_bill').text(result.flat_info.utility_bill);
+                        row.find('.rent').text(parseFloat(result.flat_info.flat_rent).toFixed(2));
+                        row.find('.service_charge').text(parseFloat(result.flat_info.service_charge).toFixed(2));
+                        row.find('.utility_bill').text([parseFloat(result.flat_info.utility_bill).toFixed(2)]);
                     }
                 });
             });

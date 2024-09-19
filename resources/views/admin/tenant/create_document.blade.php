@@ -7,6 +7,10 @@
         .table th {
             padding: 0.6rem;
         }
+        .form-group {
+            padding: 2px;
+            margin: 0px;
+        }
 
         .page_404 {
             padding: 40px 0;
@@ -42,6 +46,11 @@
 
         .contant_box_404 {
             margin-top: -50px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #444;
+            line-height: 16px !important;
         }
 
         @media screen and (max-width: 767px) {
@@ -88,7 +97,7 @@
                             <div class="card-header bg-primary text-center">
                                 <h3 class="card-title">
                                     <a href="{{ route('tenant-document.index') }}"class="btn btn-light shadow rounded">
-                                    <span>See All Document</span></a>
+                                        <span>See All Document</span></a>
                                 </h3>
                             </div> <!-- /.card-header -->
                             <div class="card-body">
@@ -99,15 +108,15 @@
                                             @csrf
                                             <div class="form-group text">
                                                 <label for="tenant_id" class="text">Select Tenant</label>
-                                                <select name="tenant_id" class="form-control" id="tenant_id">
+                                                <select name="tenant_id" class="form-control select2" id="tenant_id">
                                                     <option value="" selected disabled>Select Once</option>
                                                     @foreach ($tenants as $tenant)
                                                         <option value="{{ $tenant->id }}">{{ $tenant->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('tenant_id')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
                                             <div class="form-group text">
                                                 <label for="nid" class="text">NID/NRC</label>
@@ -117,7 +126,7 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            <div class="form-group text">   
+                                            <div class="form-group text">
                                                 <label for="tin" class="text">TIN</label>
                                                 <input type="file" name="tin" class="form-control dropify"
                                                     data-height="100">
