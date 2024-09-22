@@ -16,16 +16,16 @@
             </div>
 
             <div class="mb-3 mt-3">
-                <label for="tenant_email" class="form-label"> Tenant Email</label>
+                <label for="tenant_email" class="form-label"> Email</label>
                 <input type="text" class="form-control" value="{{ $data->email }}" name="email">
             </div>
             <div class="mb-3 mt-3">
-                <label for="tenant_phone" class="form-label"> Tenant Phone/Passport</label>
+                <label for="tenant_phone" class="form-label"> Phone/Passport</label>
                 <input type="text" class="form-control" value="{{ $data->phone }}" name="phone">
             </div>
 
             <div class="mb-3 mt-3">
-                <label for="nid_no" class="form-label"> Tenant NID/NRC</label>
+                <label for="nid_no" class="form-label"> NID/NRC</label>
                 <input type="text" class="form-control" value="{{ $data->nid_no }}" name="nid_no">
             </div>
 

@@ -3,17 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Customer;
-use App\Models\Exp_detail;
-use App\Models\Exp_process;
-use App\Models\ExpenseVoucher;
-use App\Models\Flat;
-use App\Models\Income;
-use App\Models\MonthlyBlance;
-use App\Models\OpeningBalance;
-use App\Models\OthersIncome;
-use App\Models\User;
-use App\Models\YearlyBlance;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -25,8 +14,8 @@ class CategoryController extends Controller
     public function Index()
     {
 
-            $data = Category::all();
-            return view('admin.expenses.exp_category.index', compact('data'));
+        $data = Category::where('client_id', Auth::guard('admin')->user()->id)->get();
+        return view('admin.expenses.exp_category.index', compact('data'));
     }
 
     /**
@@ -34,8 +23,7 @@ class CategoryController extends Controller
      */
     public function Create()
     {
-            return view('admin.expenses.exp_category.create');
-
+        return view('admin.expenses.exp_category.create');
     }
 
     /**
@@ -43,6 +31,7 @@ class CategoryController extends Controller
      */
     public function Store(Request $request)
     {
+        $data['client_id'] = Auth::guard('admin')->user()->id;
         $data['name'] = $request->name;
         Category::create($data);
 
@@ -82,6 +71,4 @@ class CategoryController extends Controller
         $data->delete();
         return redirect()->route('category.index')->with('message', 'Category deleted successfully.');
     }
-
-
 }

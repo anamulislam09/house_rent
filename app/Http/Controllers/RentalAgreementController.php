@@ -24,7 +24,7 @@ class RentalAgreementController extends Controller
 
     public function Create()
     {
-        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status',1)->get();
+        $tenants = Tenant::where('client_id', Auth::guard('admin')->user()->id)->where('status',1)->orderBy('id', 'DESC')->get();
         $buildings = Building::where('client_id', Auth::guard('admin')->user()->id)->get();
         return view('admin.rental_agreement.create', compact('tenants', 'buildings'));
     }

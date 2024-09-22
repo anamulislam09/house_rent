@@ -7,7 +7,7 @@ use App\Models\Exp_detail;
 use App\Models\Expense;
 use App\Models\ExpSetup;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class ExpenseController extends Controller
@@ -15,10 +15,10 @@ class ExpenseController extends Controller
     /**
      * Display a listing of the resource.
      */
-// expense setup route start here 
+    // expense setup route start here 
     public function Exp_setup()
     {
-        $exp_cat = Category::get();
+        $exp_cat = Category::where('client_id', Auth::guard('admin')->user()->id)->get();
         $expenses = ExpSetup::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->get();
         return view('admin.expenses.expense.exp_setup', compact('exp_cat', 'expenses'));
     }
@@ -46,7 +46,7 @@ class ExpenseController extends Controller
     public function Exp_setupEdit($id)
     {
         $data = ExpSetup::findOrFail($id);
-        $exp_cat = Category::get();
+        $exp_cat = Category::where('client_id', Auth::guard('admin')->user()->id)->get();
         // dd($data);
         return view('admin.expenses.expense.edit_exp_setup', compact('data', 'exp_cat'));
     }
@@ -77,30 +77,29 @@ class ExpenseController extends Controller
     // }
 
     public function Index()
-{
-    $clientId = Auth::guard('admin')->user()->id;
-    $month = Carbon::now()->month;
-    $year = Carbon::now()->year;
+    {
+        $clientId = Auth::guard('admin')->user()->id;
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
 
-    // Fetch ExpSetup records for the current client
-    $ExpSetups = ExpSetup::where('client_id', $clientId)->orderBy('id', 'DESC')->get();
-    
-    // Pluck the IDs from the ExpSetups collection
-    $expSetupIds = $ExpSetups->pluck('id')->toArray();
+        // Fetch ExpSetup records for the current client
+        $ExpSetups = ExpSetup::where('client_id', $clientId)->orderBy('id', 'DESC')->get();
 
-    // Fetch expense summary for the current month and year, grouped by category
-    $expSummary = Expense::where('client_id', $clientId)
-        ->whereIn('exp_setup_id', $expSetupIds)
-        ->where('month', $month)
-        ->where('year', $year)
-        ->groupBy('exp_setup_id')
-        ->orderBy('id', 'DESC')
-        ->get();
+        // Pluck the IDs from the ExpSetups collection
+        $expSetupIds = $ExpSetups->pluck('id')->toArray();
 
-    // Return the view with the expense summary
-    return view('admin.expenses.expense.expense_summary', compact('expSummary'));
-}
+        // Fetch expense summary for the current month and year, grouped by category
+        $expSummary = Expense::where('client_id', $clientId)
+            ->whereIn('exp_setup_id', $expSetupIds)
+            ->where('month', $month)
+            ->where('year', $year)
+            ->groupBy('exp_setup_id')
+            ->orderBy('id', 'DESC')
+            ->get();
 
+        // Return the view with the expense summary
+        return view('admin.expenses.expense.expense_summary', compact('expSummary'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -120,32 +119,25 @@ class ExpenseController extends Controller
      */
     public function Store(Request $request)
     {
-        $month = Carbon::now()->month;
-        $year = Carbon::now()->year;
+        // if ($request->tenant_id) {
+            $month = Carbon::now()->month;
+            $year = Carbon::now()->year;
 
-        $data['client_id'] = Auth::guard('admin')->user()->id;
-        $data['year'] = $year;
-        $data['month'] = $month;
-        $data['exp_setup_id'] = $request->exp_setup_id;
-        $data['amount'] = abs($request->amount);
-        $data['date'] = date('Y-m');
-        $data['auth_id'] = Auth::guard('admin')->user()->id;
-        // dd($data);
-        $exp = Expense::create($data);
+            $data['client_id'] = Auth::guard('admin')->user()->id;
+            $data['year'] = $year;
+            $data['month'] = $month;
+            $data['exp_setup_id'] = $request->exp_setup_id;
+            $data['amount'] = abs($request->amount);
+            $data['date'] = date('Y-m');
+            $data['auth_id'] = Auth::guard('admin')->user()->id;
+            $exp = Expense::create($data);
 
-        if (!$exp) {
-            return redirect()->back()->with('message', 'Something went wrong');
-        } else {
-            return redirect()->back()->with('message', 'Expense creted successfully');
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Exp_detail $exp_detail)
-    {
-        //
+            if (!$exp) {
+                return redirect()->back()->with('message', 'Something went wrong');
+            } else {
+                return redirect()->back()->with('message', 'Expense creted successfully');
+            }
+        // }
     }
 
     /**

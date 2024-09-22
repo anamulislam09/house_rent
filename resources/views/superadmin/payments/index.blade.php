@@ -58,33 +58,34 @@
                                         <thead>
                                             <tr style="border-top: 1px solid #ddd">
                                                 <th>SL</th>
+                                                <th>Date</th>
                                                 <th>Client Name</th>
                                                 <th>Package Amount</th>
                                                 <th>Collection Amount</th>
                                                 <th>Due</th>
-                                                {{-- <th> Action</th> --}}
                                         </thead>
                                         <tbody>
                                             @foreach ($payments as $key => $item)
                                                 @php
-                                                    $client = App\Models\Client::where(
-                                                        'id',
-                                                        $item->client_id,
-                                                    )->first();
+                                                    $client = App\Models\Client::where('id', $item->client_id)->first();
                                                     $paidAmount = App\Models\Payment::where(
                                                         'client_id',
                                                         $item->client_id,
                                                     )->sum('paid');
-                                                    // dd($costomer);
                                                     $due = $item->payment_amount - $paidAmount;
+
+                                                    $monthName = date('F', strtotime($item->date)); // 'F' gives the full month name
+                                                    $year = date('Y', strtotime($item->date));
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
+                                                    <td>{{ $monthName}} {{$year}}</td>
                                                     <td>{{ $client->name }}</td>
-                                                    <td class="text-right">{{ number_format($item->payment_amount, 2) }}</td>
+                                                    <td class="text-right">{{ number_format($item->payment_amount, 2) }}
+                                                    </td>
                                                     <td class="text-right">{{ number_format($paidAmount, 2) }}</td>
                                                     <td class="text-right">
-                                                      {{($due > 0 ? '(' . number_format($due, 2) . ')' : number_format($due, 2))}}
+                                                        {{ $due > 0 ? '(' . number_format($due, 2) . ')' : number_format($due, 2) }}
                                                     </td>
                                                     {{-- <td>
                                                         <a href="" class="btn btn-sm btn-info edit"

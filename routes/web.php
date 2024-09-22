@@ -192,12 +192,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     Route::get('/expense-summary', [ExpenseController::class, 'Index'])->name('expense-summary.index');
 
-    // // Expense setup route 
-    // Route::get('/expense-setup', [ExpSetupController::class, 'ExpenseSetupIndex'])->name('expense.setup');
-    // Route::post('/expense-setup/create', [ExpSetupController::class, 'ExpenseSetupCreate'])->name('expense.setup.create');
-    // Route::get('/expense-setup/edit/{id}', [ExpSetupController::class, 'ExpenseSetupEdit'])->name('expense.setup.edit');
-    // Route::post('/expense-setup/update', [ExpSetupController::class, 'ExpenseSetupUpdate'])->name('expense.setup.update');
-
     // setup history route 
     Route::get('/expense-setup/history', [ExpSetupController::class, 'ExpenseSetupHistory'])->name('expense.setup.history');
     Route::get('/expense-setup/history/all/{exp_id}', [ExpSetupController::class, 'ExpenseSetupHistoryAll']);
@@ -211,7 +205,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     // report route start here 
     // Route::get('/expenses/all', [ExpProcessController::class, 'Index'])->name('expenses.process');
-    Route::get('/expenses/month', [ExpDetailController::class, 'MonthlyExpense'])->name('expenses.month');
+    Route::get('/expenses-report', [ReportController::class, 'ExpenseReports'])->name('expenses.report.index');
+    Route::post('/expense-report/show', [ReportController::class, 'ExpenseReportShow'])->name('expenses.report.show');
+
+    // Route::prefix('expenses-report')->controller(ReportController::class)->group(function () {
+    //     Route::match(['get', 'post'], '', 'ExpenseReports')->name('expenses.reports.index');
+    // });
 
     // account route start here 
     Route::get('/ledger-posting', [LadgerController::class, 'Index'])->name('ledgerPosting.index');
@@ -233,8 +232,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     /*------------------------- Expense voucher route start here-------------------------*/
     // // Expense Management 
-    // Route::get('/expense/create-voucher/{id}', [PdfGeneratorController::class, 'CreateVoucher'])->name('expense.voucher.create');
-    // Route::post('/expense/create-voucher/store', [PdfGeneratorController::class, 'CreateVoucherStore'])->name('expense.voucher.store');
     Route::get('/account/voucher/{id}', [PdfGeneratorController::class, 'GenerateVoucher'])->name('expense.voucher.create');  //create single expense voucher
     // Route::post('/expense/generate-voucher', [PdfGeneratorController::class, 'GenerateVoucher'])->name('expense.voucher.generate');
     Route::get('/expense/generate-voucher-all', [PdfGeneratorController::class, 'GenerateVoucherAll'])->name('expense.voucher.generateall');

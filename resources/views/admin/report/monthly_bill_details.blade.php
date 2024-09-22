@@ -41,9 +41,9 @@
                             <td>{{ $flat->flat_name }}</td>
                             <td>{{ $building }}</td>
                             <td class="text-right">{{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
-                            <td class="text-right">{{ $item->total_current_month_rent }}</td>
-                            <td class="text-right">{{ $item->previous_due }}</td>
-                            <td class="text-right">{{ $item->total_collection_amount }}</td>
+                            <td class="text-right">{{ number_format($item->total_current_month_rent , 2) }}</td>
+                            <td class="text-right">{{ number_format($item->previous_due , 2) }}</td>
+                            <td class="text-right">{{ number_format($item->total_collection_amount , 2) }}</td>
                          
                         </tr>
                     @endforeach

@@ -7,7 +7,7 @@ use App\Models\Flat;
 use App\Models\User;
 use Illuminate\Http\Request;
 use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class FlatController extends Controller
@@ -64,10 +64,15 @@ class FlatController extends Controller
     // storer method start here 
     public function Update(Request $request)
     {
+        // dd($request);
+        $flat_rent = abs($request->flat_rent);
+        $service_charge = abs($request->service_charge);
+        $utility_bill = abs($request->utility_bill);
+
         $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('id', $request->id)->first();
-        $data['flat_rent'] = abs($request->flat_rent);
-        $data['service_charge'] = abs($request->service_charge);
-        $data['utility_bill'] = abs($request->utility_bill);
+        $data['flat_rent'] = $flat_rent;
+        $data['service_charge'] = $service_charge;
+        $data['utility_bill'] = $utility_bill;
         $data['status'] = $request->status ? 1 : 0;
         $data->save();
 

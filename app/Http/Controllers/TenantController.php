@@ -15,7 +15,7 @@ class TenantController extends Controller
      */
     public function Index()
     {
-        $data = Tenant::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $data = Tenant::where('client_id', Auth::guard('admin')->user()->id)->orderBy('id', 'DESC')->get();
         return view('admin.tenant.index', compact('data'));
     }
 

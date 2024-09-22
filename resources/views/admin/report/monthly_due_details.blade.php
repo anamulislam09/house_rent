@@ -39,7 +39,7 @@
                             <td>{{ $flat->flat_name }}</td>
                             <td>{{ $building }}</td>
                             <td class="text-right">{{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
-                            <td class="text-right">{{ $item->current_due }}</td>
+                            <td class="text-right">{{ number_format($item->current_due, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -286,7 +286,7 @@
                 return '';
             }
 
-            $word = numberToWord($inv->total_rent_collection);
+            $word = numberToWord($inv->deposit);
         @endphp
 
         <div class="body">
@@ -300,7 +300,7 @@
                 <strong><span
                         style="border-bottom: 2px dotted #000; padding:0px 70px">{{ $word }}</span></strong>In
                 Cash <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
-                        {{ $inv->total_rent_collection }}</span></strong> for rent from Flat <strong><span
+                        {{ $inv->deposit }}</span></strong> for rent from Flat <strong><span
                         style="border-bottom: 2px dotted #000; padding:0px 30px">
                         @foreach ($agreementDetails as $agreement)
                             @php

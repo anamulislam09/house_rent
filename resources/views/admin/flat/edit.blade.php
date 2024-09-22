@@ -34,22 +34,21 @@
                 <div class="form-group col-lg-6">
                     <label for="unit" class="label text">Amount of Flat Rent
                     </label>
-                    <input type="text" class="form-control text" value="{{ number_format($flat->flat_rent, 2) }}" name="flat_rent"
-                        placeholder="Enter Flat Rent" required>
+                    <input type="text" class="form-control text" value="{{ $flat->flat_rent }}" name="flat_rent" required>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-6">
                     <label for="unit" class="label text">Amount of Service Charge
                     </label>
-                    <input type="text" class="form-control text" value="{{ number_format($flat->service_charge, 2) }}"
+                    <input type="text" class="form-control text" value="{{ $flat->service_charge }}"
                         name="service_charge">
                 </div>
                 <div class="form-group col-lg-6">
                     <label for="unit" class="label text">Amount of Utility Bill
                     </label>
-                    <input type="text" class="form-control text" value="{{ number_format($flat->utility_bill, 2) }}"
-                        name="utility_bill" placeholder="Enter Utility Bill" required>
+                    <input type="text" class="form-control text" value="{{ $flat->utility_bill }}"
+                        name="utility_bill" required>
                 </div>
             </div>
             <div class="mb-3 mt-3">

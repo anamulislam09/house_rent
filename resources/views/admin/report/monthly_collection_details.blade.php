@@ -17,7 +17,8 @@
                         <th>Flat Name</th>
                         <th>Building Name</th>
                         <th>Date</th>
-                        <th class="text-right">Total Due</th>
+                        <th class="text-right">Collection Amount</th>
+                        <th class="text-right">Total Amount</th>
                     </tr>
                 </thead>
                 <tbody id="billsTable">
@@ -39,9 +40,8 @@
                             <td>{{ $flat->flat_name }}</td>
                             <td>{{ $building }}</td>
                             <td class="text-right">{{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
-                            <td class="text-right">{{ $item->total_collection_amount }}</td>
-                            <td class="text-right">{{ $item->total_collection }}</td>
-                         
+                            <td class="text-right">{{ number_format($item->total_collection_amount, 2) }}</td>
+                            <td class="text-right">{{ number_format($item->total_collection, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>

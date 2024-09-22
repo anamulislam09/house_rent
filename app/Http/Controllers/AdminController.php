@@ -430,11 +430,7 @@ class AdminController extends Controller
         if (Auth::guard('admin')->user()->role == 0) {
             Expense::where('client_id', $request->id)->delete();
             ExpenseVoucher::where('client_id', $request->id)->delete();
-            Exp_process::where('client_id', $request->id)->delete();
             Balance::where('client_id', $request->id)->delete();
-            Income::where('client_id', $request->id)->delete();
-            OpeningBalance::where('client_id', $request->id)->delete();
-            OthersIncome::where('client_id', $request->id)->delete();
             User::where('client_id', $request->id)->delete();
             Flat::where('client_id', $request->id)->delete();
             Vendor::where('client_id', $request->id)->delete();
@@ -461,7 +457,6 @@ class AdminController extends Controller
         $data['available_flat'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->where('booking_status', 1)->count();
         $data['tenant'] = Tenant::where('client_id', Auth::guard('admin')->user()->id)->count();
         $data['expense'] = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
-        $data['income'] = Income::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('paid');
         $manualOpeningBalance = DB::table('opening_balances')->where('client_id', Auth::guard('admin')->user()->id)->where('entry_datetime', $date)->first();
         $data['others_income'] = DB::table('others_incomes')->where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
         $data['balance'] = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');

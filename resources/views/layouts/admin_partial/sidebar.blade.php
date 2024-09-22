@@ -310,7 +310,7 @@
                     {{-- Collections ends here --}}
                     {{-- Report start here --}}
                     <li
-                        class="nav-item {{ Request::routeIs('bills.report') || Request::routeIs('collection.report') || Request::routeIs('due.report') ? 'menu-open active' : '' }}">
+                        class="nav-item {{ Request::routeIs('bills.report') || Request::routeIs('collection.report') || Request::routeIs('due.report') || Request::routeIs('expenses.report*') ? 'menu-open active' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
@@ -338,6 +338,13 @@
                                     class="nav-link {{ Request::routeIs('due.report') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>Monthly Due</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('expenses.report.index') }}"
+                                    class="nav-link {{ Request::routeIs('expenses.report*') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Expense Report</p>
                                 </a>
                             </li>
                         </ul>
@@ -399,13 +406,13 @@
                                     <p>Expense Entry</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="{{ route('expense-summary.index') }}"
                                     class="nav-link {{ Request::routeIs('expense-summary.index') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>Expense Summary</p>
                                 </a>
-                            </li>
+                            </li> --}}
                         </ul>
                     </li>
 

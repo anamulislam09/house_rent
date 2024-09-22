@@ -11,7 +11,7 @@ class PaymentController extends Controller
 {
     public function Index()
     {
-        $payments = Payment::groupBy('client_id')->get();
+        $payments = Payment::groupBy('client_id', 'year', 'month')->get();
         return view('superadmin.payments.index', compact('payments'));
     }
 

@@ -76,7 +76,7 @@
                 'current_due',
             );
 
-            $total_income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
+            // $total_income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
             // $manualOpeningBlance = DB::table('opening_balances')
             //     ->where('client_id', Auth::guard('admin')->user()->id)
             //     ->first();
@@ -116,9 +116,9 @@
             $expense = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
-            $income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)
-                ->where('date', date('Y-m'))
-                ->sum('paid');
+            // $income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)
+            //     ->where('date', date('Y-m'))
+            //     ->sum('paid');
             $others_income = DB::table('others_incomes')
                 ->where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
@@ -130,7 +130,7 @@
                 // <----------------------Month wise transactions ends here---------------------->
 
                 // <---------------------- SuperAdmin data stare here here ---------------------->
-                $clients = App\Models\Client::where('role', 1)->count();
+            $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
             $packages = App\Models\Package::count();
             $superAdmin = Auth::guard('admin')->user()->id;
@@ -158,34 +158,17 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        <!-- /.col -->
-                        <div class="col-lg-4 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <p>Total Category</p>
-                                    <h3>{{ $category }}</h3>
-
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                                <a href="{{ route('category.index') }}" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Total Packages</p>
                                     <h3>{{ $packages }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="{{ route('category.index') }}" class="small-box-footer link">More info <i
+                                <a href="{{ route('package.all') }}" class="small-box-footer link">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -458,11 +441,16 @@
                     {{-- current month data ends here --}}
 
                     {{-- building wise flat start here  --}}
-                    <div class="card " style="margin-top: 0px !important">
-                        <div class="card-header row ">
-                            <h4>Total Flats</h4>
+                    <div class="card" style="margin-top: 0px !important;">
+                        <div class="card-header row">
+                            @if (isset($buildings) && $buildings->count() > 0)
+                                <h4>Total Flats</h4>
+                            @else
+                                <h4>No Flat Available</h4>
+                            @endif
                         </div>
                     </div>
+
 
                     <div class="row">
                         @foreach ($buildings as $building)
@@ -631,7 +619,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Due</p>
-                                    <h3>{{number_format($total_due, 2)}}
+                                    <h3>{{ number_format($total_due, 2) }}
                                         TK</h3>
 
                                 </div>
@@ -706,15 +694,15 @@
                         console.log(res);
                         $('#flats').text(res.flats);
                         $('#tenant').text(res.tenant);
-                        $('#total_collection_amount').text(parseFloat(res
-                            .total_collection_amount).toFixed(2));
+                        $('#total_collection_amount').text(parseFloat(res.total_collection_amount).toFixed(2));
                         $('#total_collection').text(parseFloat(res.total_collection).toFixed(
-                        2));
+                            2));
                         $('#current_due').text(parseFloat(res.current_due).toFixed(2));
                         $('#monthly_expense').text(parseFloat(res.expense).toFixed(2));
                         $('#monthly_balance').text(monthly_balance < 0 ? '(' + parseFloat(Math
                             .abs(monthly_balance)).toFixed(2) + ')' : parseFloat(
                             monthly_balance).toFixed(2));
+
                     }
                 });
             });

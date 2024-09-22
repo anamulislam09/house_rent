@@ -21,7 +21,7 @@ class ExpSetupController extends Controller
      */
     public function ExpenseSetupIndex()
     {
-        $expenses = Category::get();
+        $expenses = Category::where('client_id', Auth::guard('admin')->user()->id)->get();
         $vendor = Vendor::where('client_id', Auth::guard('admin')->user()->id)->get();
         $data = ExpSetup::where('client_id', Auth::guard('admin')->user()->id)->get();
         return view('admin.expenses.expense-setup.index', compact('expenses', 'data', 'vendor'));
@@ -60,9 +60,7 @@ class ExpSetupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -77,7 +75,7 @@ class ExpSetupController extends Controller
      */
     public function ExpenseSetupEdit($id)
     {
-        $expenses = Category::get();
+        $expenses = Category::where('client_id', Auth::guard('admin')->user()->id)->get();
         $vendor = Vendor::where('client_id', Auth::guard('admin')->user()->id)->get();
         $exp = ExpSetup::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
         return view('admin.expenses.expense-setup.edit', compact('expenses', 'exp', 'vendor'));

@@ -90,9 +90,6 @@
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                {{-- <a href="" class="btn btn-info btn-sm" id="generateBtn" target="_blank"
-                                    style="display: none;">Money
-                                    Receipt</a> --}}
 
                                 <div class="table-responsive">
                                     <table id="example1" class="table table-bordered table-striped mt-3">
@@ -100,15 +97,8 @@
                                             <tr>
                                                 <th> SL</th>
                                                 <th>Tenant Name</th>
-                                                {{-- <th>Flat Name</th>
-                                                <th>Building Name</th> --}}
                                                 <th>Date</th>
-                                                {{-- <th>Collection month</th> --}}
-                                                {{-- <th class="text-right">Current Month Rent</th> --}}
-                                                {{-- <th class="text-right">Previous Due</th> --}}
                                                 <th class="text-right">Due</th>
-                                                {{-- <th class="text-right">Collection</th>
-                                                <th class="text-right">Current Due</th> --}}
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -152,15 +142,10 @@
                                                 <tr>
                                                     <td class="text-center">{{ $key + 1 }}</td>
                                                     <td>{{ $tenant }}</td>
-                                                    {{-- <td>{{ $flat->flat_name }}</td>
-                                                    <td>{{ $building }}</td> --}}
-                                                    {{-- <td class="text-right">{{ $item->collection_date }}</td> --}}
                                                     <td class="text-right">
                                                         {{ date('F Y', strtotime($item->bill_setup_date)) }}</td>
 
-                                                    <td class="text-right">{{ $current_due }}</td>
-                                                    {{-- <td class="text-right">{{ $collections }}</td>
-                                                    <td class="text-right">{{ $current_due }}</td> --}}
+                                                    <td class="text-right">{{ number_format($current_due, 2) }}</td>
                                                     <td class="text-center">
                                                         <a href="" class="btn btn-sm btn-info edit"
                                                             data-tenant_id="{{ $item->tenant_id }}"
@@ -255,7 +240,7 @@
                                         <td class="text-center">${index + 1}</td>
                                         <td>${bill.tenant_name}</td>
                                         <td class="text-right">${formattedDate}</td>
-                                        <td class="text-right">${bill.current_due}</td>
+                                        <td class="text-right">${parseFloat(bill.current_due).toFixed(2)}</td>
                                         <td class="text-center">
                                             <a href="#" class="btn btn-sm btn-info edit"
                                             data-tenant_id="${bill.tenant_id}"
