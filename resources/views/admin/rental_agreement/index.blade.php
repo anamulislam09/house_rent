@@ -76,6 +76,7 @@
                                             <th>SL</th>
                                             <th>Tenant Name</th>
                                             <th>Building</th>
+                                            <th>Advanced Amount</th>
                                             <th>Created Date</th>
                                             <th>Created By</th>
                                             <th>Status</th>
@@ -96,7 +97,8 @@
                                                 <td>{{$key+1}}</td>
                                                 <td>{{ $tenant }}</td>
                                                 <td>{{ $building }}</td>
-                                                <td>{{ $item->created_date }}</td>
+                                                <td class="text-right">{{ number_format($item->advanced, 2) }}</td>
+                                                <td class="text-center">{{ $item->created_date }}</td>
                                                 <td>{{ $created_by }}</td>
                                                 <td>
                                                     @if ($item->status == 0)

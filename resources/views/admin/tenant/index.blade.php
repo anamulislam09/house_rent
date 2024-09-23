@@ -100,7 +100,7 @@
                                                 <td>{{ $item->nid_no }}</td>
                                                 <td>{{ $item->email }}</td>
                                                 <td>{{ $item->address }}</td>
-                                                <td>{{ $item->Balance ? $item->Balance: 0 }}</td>
+                                                <td>{{ $item->balance ? number_format($item->balance, 2): 0 }}</td>
                                                 <td>
                                                     @if ($item->status == 0)
                                                         <span class="badge badge-danger">Deactive</span>

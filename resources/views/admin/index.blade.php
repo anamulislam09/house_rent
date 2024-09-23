@@ -84,7 +84,7 @@
             //     ->where('client_id', Auth::guard('admin')->user()->id)
             //     ->sum('amount');
 
-            // $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
+            $total_advanced_amount = App\Models\Tenant::where('client_id', Auth::guard('admin')->user()->id)->sum('balance');
 
             // <----------------------total transaction ends here---------------------->
 
@@ -130,7 +130,7 @@
                 // <----------------------Month wise transactions ends here---------------------->
 
                 // <---------------------- SuperAdmin data stare here here ---------------------->
-            $clients = App\Models\Client::where('role', 1)->count();
+                $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
             $packages = App\Models\Package::count();
             $superAdmin = Auth::guard('admin')->user()->id;
@@ -585,6 +585,23 @@
                         <div class="clearfix hidden-md-up"></div>
                         <div class="col-lg-4 col-6">
                             <!-- small box -->
+                            <div class="small-box" style="background:#04986e;">
+                                <div class="inner">
+                                    <p>Advance Amount</p>
+                                    <h3>{{ number_format($total_advanced_amount, 2) }} TK</h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="{{ route('rent-collection.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Total Bill Amount</p>
@@ -694,7 +711,8 @@
                         console.log(res);
                         $('#flats').text(res.flats);
                         $('#tenant').text(res.tenant);
-                        $('#total_collection_amount').text(parseFloat(res.total_collection_amount).toFixed(2));
+                        $('#total_collection_amount').text(parseFloat(res
+                            .total_collection_amount).toFixed(2));
                         $('#total_collection').text(parseFloat(res.total_collection).toFixed(
                             2));
                         $('#current_due').text(parseFloat(res.current_due).toFixed(2));
